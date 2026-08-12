@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS502 - Fundamentals of Algorithms (Lectures 44-45)</title>
+    <style>
+        :root {
+            --primary: #1e3a8a; /* Deep Academic Blue */
+            --secondary: #3b82f6; /* Bright Blue */
+            --accent: #f59e0b; /* Warning/Highlight Yellow */
+            --bg-color: #f8fafc;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --card-bg: #ffffff;
+            --border-light: #e2e8f0;
+            --success: #10b981;
+            --code-bg: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem 1rem;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 1rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--secondary);
+            color: white;
+            padding-left: 1.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 3rem 4rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Typography */
+        h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; border-bottom: 3px solid var(--secondary); padding-bottom: 0.5rem; }
+        h2 { font-size: 2rem; color: var(--primary); margin-top: 3rem; margin-bottom: 1rem; }
+        h3 { font-size: 1.5rem; color: var(--secondary); margin-top: 2rem; margin-bottom: 0.5rem; }
+        p { margin-bottom: 1rem; }
+
+        /* UI Components */
+        .concept-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border-left: 6px solid var(--secondary);
+        }
+
+        .definition-box {
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .definition-box strong {
+            color: #0369a1;
+            font-size: 1.1rem;
+        }
+
+        .urdu-text {
+            background-color: #fffbeb;
+            padding: 1rem;
+            border-radius: 8px;
+            font-style: italic;
+            color: #92400e;
+            border-left: 4px solid var(--accent);
+            margin-top: 0.5rem;
+        }
+
+        /* Pseudocode Block */
+        .pseudo-block {
+            background-color: var(--code-bg);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .pseudo-block .keyword { color: #c678dd; font-weight: bold; }
+        .pseudo-block .func { color: #61afef; }
+        .pseudo-block .comment { color: #7f848e; font-style: italic; }
+
+        /* Complexity Box */
+        .complexity-box {
+            background-color: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .complexity-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        /* Algorithm Flow Step */
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .flow-number {
+            background: var(--secondary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* Quick Revision Box */
+        .revision-box {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 3rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .revision-box h3 {
+            color: white;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        
+        .revision-box ul {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .revision-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Math Display */
+        .math-display {
+            text-align: center;
+            margin: 1.5rem 0;
+            font-size: 1.1em;
+            overflow-x: auto;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .summary-card {
+            background: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-top: 4px solid var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 1rem; }
+            .main-content { margin-left: 0; padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS502 Notes</h2>
+        <ul>
+            <li><a href="#lec44">Lecture 44: Set Cover Approximation</a></li>
+            <li><a href="#lec45">Lecture 45: Course Summary & Review</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- ================= LECTURE 44 ================= -->
+        <section id="lec44">
+            <h1>Lecture 44: Set Cover Approximation</h1>
+
+            <div class="concept-card">
+                <h3>The Set Cover Problem</h3>
+                <div class="definition-box">
+                    <strong>Technical Definition:</strong> Given a universe $U$ of $n$ elements and a collection $S$ of subsets of $U$, find the minimum number of subsets from $S$ whose union equals the entire universe $U$. This problem is NP-Complete.
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Farz karein aapko ek software banana hai jismein 10 mukhtalif skills chahiyein (Universe $U$). Aapke paas bohat se logon ki CVs hain, aur har banday ko kuch skills aati hain (Subsets). Aapko kam se kam log hire karne hain taake tamam 10 skills cover ho jayen. Chuke ye NP-Complete problem hai, iska exact best solution nikalna bohat time leta hai, isliye hum iski Approximation karte hain.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>The Greedy Approximation Algorithm</h3>
+                <p>Since finding the perfect minimum set cover is too slow, we use a Greedy Algorithm that repeatedly picks the set that covers the most <em>uncovered</em> elements.</p>
+                
+                <div class="pseudo-block">
+<span class="func">Greedy-Set-Cover</span>(U, S)
+    C = &empty;                          <span class="comment">// This will store the selected sets</span>
+    Uncovered = U                  <span class="comment">// Initially, all elements are uncovered</span>
+    
+    <span class="keyword">while</span> Uncovered is not empty:
+        <span class="comment">// Pick the subset S_i that covers the most elements currently in 'Uncovered'</span>
+        Select S_i &isin; S that maximizes |S_i &cap; Uncovered|
+        
+        C = C &cup; {S_i}                <span class="comment">// Add this set to our selection</span>
+        Uncovered = Uncovered - S_i  <span class="comment">// Remove the newly covered elements</span>
+        
+    <span class="keyword">return</span> C
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Algorithm Complexity & Approximation Ratio</h3>
+                
+                <div class="flow-step">
+                    <div class="flow-number">1</div>
+                    <div><strong>Approximation Ratio:</strong> The greedy algorithm does not guarantee a constant ratio like 2 (as seen in Vertex Cover). Instead, its approximation ratio is $\rho(n) = \ln(|U|) + 1$. This means the error grows slightly as the universe gets larger, but it grows very slowly (logarithmically).</div>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="flow-number">2</div>
+                    <div><strong>Why logarithmic?</strong> Every time we pick a set, we cover a fraction of the remaining elements. The mathematics of removing a fraction repeatedly leads directly to the Harmonic series, which bounds to the natural logarithm $\ln(n)$.</div>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-badge">O(|U| &times; |S|)</div>
+                    <div>
+                        <strong>Time Complexity:</strong> At each step, we might need to check the intersection of each remaining set with the remaining uncovered elements. This can be implemented in time proportional to the sum of the sizes of all sets, giving a polynomial time bound.
+                    </div>
+                </div>
+                
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Greedy approach ka formula seedha hai: "Jo banda sab se zyada nayi skills laya, usay rakh lo". Jab tak sari skills poori nahi hotin, yehi karte raho. Iski guarantee $\ln(n)$ hai. Agar universe mein 1000 items hain, toh $\ln(1000) \approx 7$. Yani hamara greedy solution optimal solution se maximum 7 guna (7 times) bada hoga, jo real-world scenarios mein qabil-e-qabool (acceptable) hota hai.
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 44 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Problem:</strong> Pick minimum subsets to cover all items in a universe.</li>
+                    <li><strong>Greedy Strategy:</strong> Always pick the subset covering the maximum number of <em>uncovered</em> elements.</li>
+                    <li><strong>Approximation Factor:</strong> $\rho(n) = \ln(n) + 1$. It is a logarithmic bound, not a constant bound.</li>
+                    <li><strong>Application:</strong> Crew scheduling, facility location, and resource allocation.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 45 ================= -->
+        <section id="lec45">
+            <h1>Lecture 45: Course Summary & Review</h1>
+
+            <div class="concept-card">
+                <h3>The Journey of CS502</h3>
+                <p>Algorithms are the heart of Computer Science. Writing code is easy, but writing code that runs efficiently (in terms of time and memory) requires a deep understanding of algorithmic design paradigms. This course took you from basic sorting to the boundaries of what computers can and cannot solve.</p>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Is course ka maqsad aapko sirf coding sikhana nahi tha, balke ek "Problem Solver" banana tha. Agar aapko ek masla diya jaye, toh aap sochain ke isay Divide & Conquer se hal karun, Greedy se, ya DP se? Aur agar problem NP-Complete nikle, toh phir Approximation lagayen.
+                </div>
+            </div>
+
+            <h2>Core Paradigms (The Big Three)</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3 style="margin-top: 0; color: var(--primary);">1. Divide & Conquer</h3>
+                    <p><strong>Concept:</strong> Break problem into independent subproblems, solve recursively, combine results.</p>
+                    <p><strong>Classic Examples:</strong></p>
+                    <ul>
+                        <li>Merge Sort ($O(n \log n)$)</li>
+                        <li>Quick Sort</li>
+                    </ul>
+                </div>
+                <div class="summary-card">
+                    <h3 style="margin-top: 0; color: var(--primary);">2. Greedy Algorithms</h3>
+                    <p><strong>Concept:</strong> Make the locally optimal choice at each step without looking ahead. Fast, but doesn't always guarantee a global optimal.</p>
+                    <p><strong>Classic Examples:</strong></p>
+                    <ul>
+                        <li>Activity Selection</li>
+                        <li>Huffman Encoding</li>
+                        <li>Kruskal's & Prim's (MST)</li>
+                        <li>Dijkstra's (Shortest Path)</li>
+                    </ul>
+                </div>
+                <div class="summary-card">
+                    <h3 style="margin-top: 0; color: var(--primary);">3. Dynamic Programming</h3>
+                    <p><strong>Concept:</strong> Overlapping subproblems. Save answers in a table to avoid redundant work.</p>
+                    <p><strong>Classic Examples:</strong></p>
+                    <ul>
+                        <li>Edit Distance</li>
+                        <li>Matrix Chain Multiplication</li>
+                        <li>0/1 Knapsack</li>
+                        <li>Floyd-Warshall</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 3rem;">Graph Algorithms Summary</h2>
+            <table>
+                <tr>
+                    <th>Algorithm</th>
+                    <th>Purpose</th>
+                    <th>Complexity</th>
+                    <th>Key Feature</th>
+                </tr>
+                <tr>
+                    <td><strong>BFS</strong></td>
+                    <td>Traversal / Shortest Path (unweighted)</td>
+                    <td>$O(V + E)$</td>
+                    <td>Uses a Queue (Level-by-level)</td>
+                </tr>
+                <tr>
+                    <td><strong>DFS</strong></td>
+                    <td>Traversal / Topo Sort / SCC</td>
+                    <td>$O(V + E)$</td>
+                    <td>Uses a Stack / Recursion (Goes deep)</td>
+                </tr>
+                <tr>
+                    <td><strong>Kruskal's</strong></td>
+                    <td>Minimum Spanning Tree (MST)</td>
+                    <td>$O(E \log V)$</td>
+                    <td>Sorts edges, uses Disjoint Sets</td>
+                </tr>
+                <tr>
+                    <td><strong>Prim's</strong></td>
+                    <td>Minimum Spanning Tree (MST)</td>
+                    <td>$O(E \log V)$</td>
+                    <td>Grows tree from root, uses Priority Queue</td>
+                </tr>
+                <tr>
+                    <td><strong>Dijkstra's</strong></td>
+                    <td>Single-Source Shortest Path</td>
+                    <td>$O(E \log V)$</td>
+                    <td>Fails on negative edges, Greedy</td>
+                </tr>
+                <tr>
+                    <td><strong>Bellman-Ford</strong></td>
+                    <td>Single-Source Shortest Path</td>
+                    <td>$O(V \times E)$</td>
+                    <td>Handles negative edges, detects cycles</td>
+                </tr>
+                <tr>
+                    <td><strong>Floyd-Warshall</strong></td>
+                    <td>All-Pairs Shortest Path</td>
+                    <td>$O(V^3)$</td>
+                    <td>Dynamic Programming, simple loops</td>
+                </tr>
+            </table>
+
+            <div class="concept-card" style="margin-top: 3rem;">
+                <h3>Complexity Theory (P vs NP)</h3>
+                <p>Understanding the limits of computation is just as important as knowing how to compute.</p>
+                <ul>
+                    <li><strong>P:</strong> Problems we can <em>solve</em> quickly (Polynomial time).</li>
+                    <li><strong>NP:</strong> Problems where we can <em>verify</em> a given answer quickly.</li>
+                    <li><strong>NP-Complete (NPC):</strong> The hardest problems in NP. If you can solve one NPC problem in polynomial time, you prove P = NP. (Examples: SAT, Clique, Vertex Cover, TSP).</li>
+                    <li><strong>Approximation:</strong> When faced with an NPC problem, we settle for algorithms that run fast and guarantee an answer that is within a specific ratio (like $2\times$ or $\ln(n)$) of the optimal.</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>🎓 Final Word on CS502</h3>
+                <ul>
+                    <li><strong>Analyze Before You Code:</strong> Always determine the Time $O()$ and Space complexity before writing a large program.</li>
+                    <li><strong>Data Structures Matter:</strong> An algorithm is only as good as the data structure powering it (e.g., Dijkstra needs a Min-Heap, Kruskal needs Union-Find).</li>
+                    <li><strong>Don't Re-invent the Wheel:</strong> If your problem looks like finding the shortest path, map it to a Graph and run standard algorithms.</li>
+                    <li><strong>Accept NP-Completeness:</strong> If a problem is too hard, don't waste time looking for a magic optimal solution. Use Heuristics or Approximations.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS502 - Fundamentals of Algorithms (Lectures 19-23)</title>
+    <style>
+        :root {
+            --primary: #1e3a8a; /* Deep Academic Blue */
+            --secondary: #3b82f6; /* Bright Blue */
+            --accent: #f59e0b; /* Warning/Highlight Yellow */
+            --bg-color: #f8fafc;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --card-bg: #ffffff;
+            --border-light: #e2e8f0;
+            --success: #10b981;
+            --code-bg: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem 1rem;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 1rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--secondary);
+            color: white;
+            padding-left: 1.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 3rem 4rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Typography */
+        h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; border-bottom: 3px solid var(--secondary); padding-bottom: 0.5rem; }
+        h2 { font-size: 2rem; color: var(--primary); margin-top: 3rem; margin-bottom: 1rem; }
+        h3 { font-size: 1.5rem; color: var(--secondary); margin-top: 2rem; margin-bottom: 0.5rem; }
+        p { margin-bottom: 1rem; }
+
+        /* UI Components */
+        .concept-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border-left: 6px solid var(--secondary);
+        }
+
+        .definition-box {
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .definition-box strong {
+            color: #0369a1;
+            font-size: 1.1rem;
+        }
+
+        .urdu-text {
+            background-color: #fffbeb;
+            padding: 1rem;
+            border-radius: 8px;
+            font-style: italic;
+            color: #92400e;
+            border-left: 4px solid var(--accent);
+            margin-top: 0.5rem;
+        }
+
+        /* Pseudocode Block */
+        .pseudo-block {
+            background-color: var(--code-bg);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .pseudo-block .keyword { color: #c678dd; font-weight: bold; }
+        .pseudo-block .func { color: #61afef; }
+        .pseudo-block .comment { color: #7f848e; font-style: italic; }
+
+        /* Complexity Box */
+        .complexity-box {
+            background-color: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .complexity-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: var(--card-bg);
+        }
+        
+        th, td {
+            border: 1px solid var(--border-light);
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .highlight-cell {
+            background-color: #fef08a;
+            font-weight: bold;
+        }
+
+        /* Quick Revision Box */
+        .revision-box {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 3rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .revision-box h3 {
+            color: white;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        
+        .revision-box ul {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .revision-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Algorithm Flow Step */
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .flow-number {
+            background: var(--secondary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 1rem; }
+            .main-content { margin-left: 0; padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS502 Notes</h2>
+        <ul>
+            <li><a href="#lec19">Lecture 19: Dynamic Programming & Edit Distance (Intro)</a></li>
+            <li><a href="#lec20">Lecture 20: Edit Distance Algorithm</a></li>
+            <li><a href="#lec21">Lecture 21: Matrix Chain Multiplication (Concept)</a></li>
+            <li><a href="#lec22">Lecture 22: Matrix Chain DP & Knapsack Intro</a></li>
+            <li><a href="#lec23">Lecture 23: 0/1 Knapsack Problem (DP)</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- ================= LECTURE 19 ================= -->
+        <section id="lec19">
+            <h1>Lecture 19: Dynamic Programming & Edit Distance (Intro)</h1>
+
+            <div class="concept-card">
+                <h3>What is Dynamic Programming (DP)?</h3>
+                <div class="definition-box">
+                    <strong>Technical Definition:</strong> Dynamic Programming is an algorithmic technique for solving an optimization problem by breaking it down into simpler overlapping subproblems and storing the solutions to these subproblems to avoid redundant computations (a process called <em>Memoization</em> or <em>Tabulation</em>).
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> DP ek aisi technique hai jahan hum ek baday aur mushkil problem ko chotay hisso (subproblems) mein divide karte hain. Greedy approach ki tarah nahi, balki yahan subproblems aapas mein overlap karte hain (yaani ek subproblem baar baar use hota hai). Hum un chotay problems ka answer ek table/array mein save kar lete hain taake dobara calculate na karna pare. Is se time bach jata hai.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Why do we need it?</h3>
+                <p>Simple recursion often calculates the same subproblem multiple times, leading to Exponential time complexity <strong>O(2<sup>n</sup>)</strong>. DP saves past results, converting exponential time to polynomial time like <strong>O(n<sup>2</sup>)</strong> or <strong>O(n)</strong>.</p>
+            </div>
+
+            <div class="concept-card">
+                <h3>Problem Statement: The Edit Distance Problem</h3>
+                <p>Given two strings, what is the minimum number of operations required to transform the first string into the second string?</p>
+                
+                <div class="definition-box">
+                    <strong>Operations allowed:</strong>
+                    <ul>
+                        <li><strong>Insertion:</strong> Add a new character.</li>
+                        <li><strong>Deletion:</strong> Remove a character.</li>
+                        <li><strong>Replacement/Substitution:</strong> Replace one character with another.</li>
+                    </ul>
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Farz karein aapke paas do words hain. Aapko pehle word ko badal kar dusra word banana hai. Aap 3 kaam kar sakte hain: koi naya letter daalna (Insert), koi letter delete karna, ya kisi letter ko replace karna. Hum chahte hain ke kam se kam steps mein yeh kaam ho jaye. Is minimum cost ko "Edit Distance" kehte hain.
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 19 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Core Concept:</strong> Dynamic Programming (DP) is for overlapping subproblems + optimal substructure.</li>
+                    <li><strong>Difference from Divide & Conquer:</strong> D&C divides into <em>independent</em> subproblems. DP handles <em>overlapping</em> subproblems.</li>
+                    <li><strong>Edit Distance:</strong> Minimum cost to convert String A to String B using Insert, Delete, and Replace.</li>
+                    <li><strong>Common Mistake:</strong> Thinking DP always uses recursion. DP can be Bottom-Up (Tabulation using loops) which is usually better for saving memory overhead.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 20 ================= -->
+        <section id="lec20">
+            <h1>Lecture 20: Edit Distance Algorithm & Trace</h1>
+
+            <div class="concept-card">
+                <h3>Algorithm Idea</h3>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Edit distance ko solve karne ke liye hum ek 2D array (Table) `E` banate hain. Agar pehli string `x` ki length `m` hai, aur dusri string `y` ki length `n` hai, toh matrix ka size `(m+1) x (n+1)` hoga.
+                    Hum table ko row-by-row fill karte hain. Kisi bhi cell `E[i,j]` ka matlab hai ke `x` ke pehle `i` characters ko `y` ke pehle `j` characters mein badalne ki minimum cost kya hai.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>The Recursive Formula (Heart of DP)</h3>
+                <p>To find the value of <code>E[i, j]</code>, we take the <strong>minimum</strong> of three choices:</p>
+                <div class="pseudo-block">
+E[i, j] = min(
+    E[i-1, j] + 1,       <span class="comment">// Deletion</span>
+    E[i, j-1] + 1,       <span class="comment">// Insertion</span>
+    E[i-1, j-1] + diff   <span class="comment">// Replacement (diff = 0 if chars match, 1 if they don't)</span>
+)
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Step-by-Step Example: "BAT" to "BIT"</h3>
+                <p>Let string 1 = "BAT" (length 3), String 2 = "BIT" (length 3). Matrix size = 4x4.</p>
+                
+                <div class="flow-step">
+                    <div class="flow-number">1</div>
+                    <div><strong>Initialization:</strong> Row 0 and Col 0 represent comparing with an empty string. If you have "BAT" and want an empty string, you need 3 deletions (cost=3). So, initialize row 0 and col 0 with 0, 1, 2, 3...</div>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="flow-number">2</div>
+                    <div><strong>Filling Cell [1,1] (B vs B):</strong> Chars match. diff = 0. Min of (Insert: 1+1=2, Delete: 1+1=2, Replace: 0+0=0). Value is 0.</div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">3</div>
+                    <div><strong>Filling Cell [2,2] (A vs I):</strong> Chars don't match. diff = 1. Value becomes min of neighbors + 1.</div>
+                </div>
+
+                <table>
+                    <tr>
+                        <th></th>
+                        <th>empty (0)</th>
+                        <th>B (1)</th>
+                        <th>I (2)</th>
+                        <th>T (3)</th>
+                    </tr>
+                    <tr>
+                        <th>empty (0)</th>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <th>B (1)</th>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <th>A (2)</th>
+                        <td>2</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <th>T (3)</th>
+                        <td>3</td>
+                        <td>2</td>
+                        <td>2</td>
+                        <td class="highlight-cell">1</td>
+                    </tr>
+                </table>
+                <p>The final answer is at the bottom right cell <code>E[m, n]</code>, which is <strong>1</strong> (Just replace 'A' with 'I').</p>
+            </div>
+
+            <div class="concept-card">
+                <h3>Algorithm Complexity</h3>
+                <div class="complexity-box">
+                    <div class="complexity-badge">O(m × n)</div>
+                    <div>
+                        <strong>Time Complexity:</strong> We fill a table of size `m` by `n`. Each cell takes constant time `O(1)` to compute the minimum of 3 values. Total time is `O(m*n)`.
+                        <br>
+                        <strong>Space Complexity:</strong> `O(m*n)` to store the 2D table.
+                        <div class="urdu-text">
+                            <strong>Roman Urdu:</strong> Agar `x` ki length `m` hai aur `y` ki `n`, toh humein poori table fill karni hai jisme `m*n` boxes hain. Har box fill karne mein fixed chota sa time lagta hai, isiliye total time `m*n` hua.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 20 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Equation:</strong> <code>min(delete, insert, replace)</code> from previous subproblems.</li>
+                    <li><strong>Base Cases:</strong> Comparing with an empty string means cost is equal to the length of the current string.</li>
+                    <li><strong>Complexity:</strong> Time O(mn), Space O(mn).</li>
+                    <li><strong>What must be remembered:</strong> If characters match, the replace cost (diagonal step) is <code>+0</code>. If they don't, it is <code>+1</code>.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 21 ================= -->
+        <section id="lec21">
+            <h1>Lecture 21: Matrix Chain Multiplication (Concept)</h1>
+
+            <div class="concept-card">
+                <h3>What is it?</h3>
+                <div class="definition-box">
+                    <strong>Technical Definition:</strong> The Matrix Chain Multiplication problem is an optimization problem that finds the most efficient way to multiply a given sequence of matrices. The problem is not actually to perform the multiplications, but merely to decide the sequence of the matrix multiplications involved.
+                </div>
+                <p>Matrix multiplication is <strong>associative</strong>: <code>(A × B) × C = A × (B × C)</code>. The final result is the same, but the <strong>number of scalar operations</strong> (cost) depends heavily on the parenthesization order.</p>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Jab humein 3 ya us se zyada matrices ko multiply karna ho, toh bracket lagane ke tareeqay se answer toh same aata hai, lekin calculations ki tadaad bohat differ kar sakti hai. Humara maqsad hai aisi brackets lagana jis se total multiplications sab se kam ho jayen.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Basic Rule of Matrix Multiplication</h3>
+                <p>If Matrix A has dimensions <strong>p × q</strong> and Matrix B has dimensions <strong>q × r</strong>, they can be multiplied.</p>
+                <p>The resulting matrix C has dimensions <strong>p × r</strong>.</p>
+                <p>Total number of scalar multiplications required = <strong>p × q × r</strong>.</p>
+            </div>
+
+            <div class="concept-card">
+                <h3>Simple Example of The Problem</h3>
+                <p>Consider 3 matrices:</p>
+                <ul>
+                    <li><strong>A:</strong> 10 × 100</li>
+                    <li><strong>B:</strong> 100 × 5</li>
+                    <li><strong>C:</strong> 5 × 50</li>
+                </ul>
+                <p><strong>Case 1: (A × B) × C</strong></p>
+                <ul>
+                    <li>A×B cost = 10 × 100 × 5 = 5,000. Result is 10×5 matrix.</li>
+                    <li>(AB)×C cost = 10 × 5 × 50 = 2,500.</li>
+                    <li><strong>Total Cost = 5,000 + 2,500 = 7,500 operations.</strong></li>
+                </ul>
+                
+                <p><strong>Case 2: A × (B × C)</strong></p>
+                <ul>
+                    <li>B×C cost = 100 × 5 × 50 = 25,000. Result is 100×50 matrix.</li>
+                    <li>A×(BC) cost = 10 × 100 × 50 = 50,000.</li>
+                    <li><strong>Total Cost = 25,000 + 50,000 = 75,000 operations.</strong></li>
+                </ul>
+                
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Dekhein! Sirf brackets badalne se Case 1 (7,500) Case 2 (75,000) se 10 guna zyada tez hai. Isliye correct order find karna zaroori hai.
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 21 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Problem:</strong> Find the optimal parenthesization order, NOT the actual multiplied matrix.</li>
+                    <li><strong>Cost Formula:</strong> Multiplying a (p×q) matrix with a (q×r) matrix takes <strong>p*q*r</strong> multiplications.</li>
+                    <li><strong>Brute Force fails:</strong> The number of ways to parenthesize `n` matrices is the Catalan number, which grows exponentially O(4<sup>n</sup>/n<sup>1.5</sup>). Hence, we need DP!</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 22 ================= -->
+        <section id="lec22">
+            <h1>Lecture 22: Matrix Chain DP & Knapsack Intro</h1>
+
+            <div class="concept-card">
+                <h3>Matrix Chain DP Algorithm Idea</h3>
+                <p>Let <code>m[i, j]</code> be the minimum number of scalar multiplications needed to compute the matrix product from <code>A<sub>i</sub></code> to <code>A<sub>j</sub></code>.</p>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Hum check karte hain ke matrices ke sequence ko kahan se split (todna) faidamand hoga. Farz karein `k` wo point hai jahan hum split lagate hain (i <= k < j). Hum har possible `k` ke liye cost nikalte hain aur sab se choti cost ko save kar lete hain.
+                </div>
+                
+                <div class="pseudo-block">
+<span class="comment">// Recurrence Relation:</span>
+m[i, j] = 0   <span class="keyword">if</span> i == j   <span class="comment">// Ek matrix ko multiply karne ki cost 0 hoti hai</span>
+m[i, j] = min( m[i,k] + m[k+1,j] + p_{i-1}*p_k*p_j ) <span class="keyword">for</span> k = i <span class="keyword">to</span> j-1
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Complexity of Matrix Chain DP</h3>
+                <div class="complexity-box">
+                    <div class="complexity-badge">O(n<sup>3</sup>)</div>
+                    <div>
+                        <strong>Time Complexity:</strong> There are O(n<sup>2</sup>) subproblems (cells in the upper triangle of the table). For each cell, we test O(n) possible splitting points `k`. Total time is O(n<sup>3</sup>).
+                        <br>
+                        <strong>Space Complexity:</strong> O(n<sup>2</sup>) for the table `m[i,j]`.
+                        <div class="urdu-text">
+                            <strong>Roman Urdu:</strong> Table mein n*n cells hain. Aur har cell ko fill karne ke liye hum loop lagate hain `k` par (jo `n` tak ja sakta hai). Isliye total time `n * n * n = n^3` ho jata hai.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Introduction to The Knapsack Problem</h3>
+                <div class="definition-box">
+                    <strong>The Scenario:</strong> A thief robs a store and has a knapsack (bag) that can carry a maximum weight <em>W</em>. There are <em>n</em> items in the store, each with a weight <em>w<sub>i</sub></em> and a value (price) <em>v<sub>i</sub></em>. The thief wants to maximize the total value stolen without exceeding the weight limit.
+                </div>
+                
+                <h3>Two Variations of Knapsack</h3>
+                <ol>
+                    <li><strong>Fractional Knapsack:</strong> The thief can take fractions of an item (like taking 1 kg of sugar from a 5 kg bag). 
+                        <br><em>Solution:</em> <strong>Greedy Algorithm</strong> works here. Calculate Value/Weight ratio, sort, and take the highest ratio items first.
+                    </li>
+                    <li style="margin-top: 10px;"><strong>0/1 Knapsack:</strong> The item is indivisible. The thief must either take the whole item (1) or leave it (0). (Like a TV or a laptop).
+                        <br><em>Solution:</em> Greedy fails. <strong>Dynamic Programming</strong> is required.
+                    </li>
+                </ol>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Agar saman tor kar (fractions) le jaya ja sake (jese cheeni, daal), toh Greedy best hai (mehngi cheez pehle uthao). Lekin agar cheez solid hai (jese laptop), to Greedy fail ho jati hai, kyunke ho sakta hai ek bhari mehngi cheez lene se bag bhar jaye aur aap zyada faide wali choti 2-3 cheezein na le sakein. Wahan humein DP lagani parti hai.
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 22 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Matrix DP State:</strong> `m[i,j]` stores min cost to multiply matrices i to j.</li>
+                    <li><strong>Matrix Split:</strong> We check all `k` and take the minimum. Time Complexity is O(n³).</li>
+                    <li><strong>Knapsack Problem:</strong> Maximize value within weight limit W.</li>
+                    <li><strong>Fractional = Greedy:</strong> Sort by Value/Weight ratio. O(n log n).</li>
+                    <li><strong>0/1 Knapsack = DP:</strong> Cannot take partial items. Greedy strategy does not guarantee an optimal solution.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 23 ================= -->
+        <section id="lec23">
+            <h1>Lecture 23: 0/1 Knapsack Problem (DP Approach)</h1>
+
+            <div class="concept-card">
+                <h3>The DP Idea</h3>
+                <p>We create a 2D array <code>V[i, w]</code>. It stores the maximum value that can be obtained using the first <code>i</code> items, given a weight limit <code>w</code>.</p>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Har item par hamare paas 2 choices hoti hain: 
+                    1. <strong>Leave it:</strong> Item bag mein na daalein. Total value utni hi rahegi jitni pichle items se thi.
+                    2. <strong>Take it:</strong> Item bag mein daal lein. Humein is item ki value mil jayegi, lekin bag ki capacity `w_i` se kam ho jayegi.
+                    Hum in dono choices mein se jo zyada faida (max) de, usko select karte hain.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>The Recursive Formula</h3>
+                <div class="pseudo-block">
+<span class="keyword">if</span> w_i > w (Item is heavier than current limit) :
+    V[i, w] = V[i-1, w]   <span class="comment">// Have to leave it</span>
+
+<span class="keyword">else</span> :
+    V[i, w] = max(
+        V[i-1, w],                     <span class="comment">// Case 1: Leave item</span>
+        V[i-1, w - w_i] + v_i          <span class="comment">// Case 2: Take item</span>
+    )
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Step-by-Step Example</h3>
+                <p><strong>Max Capacity (W) = 5. Items (n) = 3</strong></p>
+                <ul>
+                    <li>Item 1: Weight = 1, Value = 60</li>
+                    <li>Item 2: Weight = 2, Value = 100</li>
+                    <li>Item 3: Weight = 3, Value = 120</li>
+                </ul>
+                
+                <table>
+                    <tr>
+                        <th>i \ w</th>
+                        <th>0</th>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                        <th>5</th>
+                    </tr>
+                    <tr>
+                        <th>0 (No items)</th>
+                        <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+                    </tr>
+                    <tr>
+                        <th>1 (w=1, v=60)</th>
+                        <td>0</td>
+                        <td>60</td>
+                        <td>60</td>
+                        <td>60</td>
+                        <td>60</td>
+                        <td>60</td>
+                    </tr>
+                    <tr>
+                        <th>2 (w=2, v=100)</th>
+                        <td>0</td>
+                        <td>60</td>
+                        <td>100</td>
+                        <td>160</td>
+                        <td>160</td>
+                        <td>160</td>
+                    </tr>
+                    <tr>
+                        <th>3 (w=3, v=120)</th>
+                        <td>0</td>
+                        <td>60</td>
+                        <td>100</td>
+                        <td>160</td>
+                        <td>180</td>
+                        <td class="highlight-cell">220</td>
+                    </tr>
+                </table>
+                <p><strong>Trace for Cell V[3, 5]:</strong> Using item 3 (weight 3, val 120) with capacity 5. <br>
+                Leave it: V[2, 5] = 160.<br>
+                Take it: V[2, 5-3] + 120 = V[2, 2] + 120 = 100 + 120 = 220.<br>
+                Max(160, 220) = <strong>220</strong>. So the optimal solution gives a value of 220.</p>
+            </div>
+
+            <div class="concept-card">
+                <h3>Algorithm Complexity</h3>
+                <div class="complexity-box">
+                    <div class="complexity-badge">O(n × W)</div>
+                    <div>
+                        <strong>Time Complexity:</strong> We fill a table of size `n` (number of items) by `W` (maximum weight). Each cell takes O(1). Thus, O(n * W).
+                        <br>
+                        <strong>Space Complexity:</strong> O(n * W) to store the DP matrix.
+                        <div class="urdu-text">
+                            <strong>Roman Urdu:</strong> Table mein rows ki tadad items `n` ke barabar hai, aur columns capacity `W` ke barabar. Har khana (cell) fill karne mein constant time lagta hai. Isliye total time `n * W` hai. Isey "Pseudo-polynomial" time bhi kehte hain, kyunke `W` ek number ki value hai, size nahi.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 23 - Quick Revision</h3>
+                <ul>
+                    <li><strong>0/1 Knapsack DP State:</strong> <code>V[i, w]</code> = max value using first `i` items with max weight `w`.</li>
+                    <li><strong>Formula:</strong> <code>max(leave_it, take_it)</code>. Taking the item means adding its value and subtracting its weight from remaining capacity.</li>
+                    <li><strong>Complexity:</strong> O(n * W). It is pseudo-polynomial because the runtime depends on the numeric value of W, not the number of digits in W.</li>
+                    <li><strong>What must be remembered:</strong> Always check if <code>w_i > w</code>. If the item itself is heavier than the current bag capacity, you CANNOT take it (only the "leave it" option applies).</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

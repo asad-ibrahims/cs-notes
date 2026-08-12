@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS502 - Fundamentals of Algorithms (Lectures 24-28)</title>
+    <style>
+        :root {
+            --primary: #1e3a8a; /* Deep Academic Blue */
+            --secondary: #3b82f6; /* Bright Blue */
+            --accent: #f59e0b; /* Warning/Highlight Yellow */
+            --bg-color: #f8fafc;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --card-bg: #ffffff;
+            --border-light: #e2e8f0;
+            --success: #10b981;
+            --code-bg: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem 1rem;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 1rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--secondary);
+            color: white;
+            padding-left: 1.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 3rem 4rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Typography */
+        h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; border-bottom: 3px solid var(--secondary); padding-bottom: 0.5rem; }
+        h2 { font-size: 2rem; color: var(--primary); margin-top: 3rem; margin-bottom: 1rem; }
+        h3 { font-size: 1.5rem; color: var(--secondary); margin-top: 2rem; margin-bottom: 0.5rem; }
+        p { margin-bottom: 1rem; }
+
+        /* UI Components */
+        .concept-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border-left: 6px solid var(--secondary);
+        }
+
+        .definition-box {
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .definition-box strong {
+            color: #0369a1;
+            font-size: 1.1rem;
+        }
+
+        .urdu-text {
+            background-color: #fffbeb;
+            padding: 1rem;
+            border-radius: 8px;
+            font-style: italic;
+            color: #92400e;
+            border-left: 4px solid var(--accent);
+            margin-top: 0.5rem;
+        }
+
+        /* Pseudocode Block */
+        .pseudo-block {
+            background-color: var(--code-bg);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .pseudo-block .keyword { color: #c678dd; font-weight: bold; }
+        .pseudo-block .func { color: #61afef; }
+        .pseudo-block .comment { color: #7f848e; font-style: italic; }
+
+        /* Complexity Box */
+        .complexity-box {
+            background-color: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .complexity-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: var(--card-bg);
+        }
+        
+        th, td {
+            border: 1px solid var(--border-light);
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .highlight-cell {
+            background-color: #fef08a;
+            font-weight: bold;
+        }
+
+        /* Quick Revision Box */
+        .revision-box {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 3rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .revision-box h3 {
+            color: white;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        
+        .revision-box ul {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .revision-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Algorithm Flow Step */
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .flow-number {
+            background: var(--secondary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 1rem; }
+            .main-content { margin-left: 0; padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS502 Notes</h2>
+        <ul>
+            <li><a href="#lec24">Lecture 24: Greedy Algorithms (Activity Selection)</a></li>
+            <li><a href="#lec25">Lecture 25: Huffman Encoding</a></li>
+            <li><a href="#lec26">Lecture 26: Graph Terminology & Representation</a></li>
+            <li><a href="#lec27">Lecture 27: Breadth-First Search (BFS)</a></li>
+            <li><a href="#lec28">Lecture 28: Depth-First Search (DFS)</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- ================= LECTURE 24 ================= -->
+        <section id="lec24">
+            <h1>Lecture 24: Greedy Algorithms & Activity Selection</h1>
+
+            <div class="concept-card">
+                <h3>What is a Greedy Algorithm?</h3>
+                <div class="definition-box">
+                    <strong>Technical Definition:</strong> A Greedy Algorithm is a paradigm that builds up a solution piece by piece, always choosing the next piece that offers the most immediate (local) benefit. It never reconsiders its choices.
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Greedy approach ka matlab hai "lalach". Yeh algorithm future ka nahi sochta. Har step par jo choice usay sab se behtar nazar aati hai (local optimum), wo usay select kar leta hai. Is umeed par ke inhi choti best choices se final answer bhi best aayega (global optimum). Yeh DP (Dynamic Programming) se fast hota hai lekin har problem mein optimal solution nahi deta.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Problem: The Activity Selection Problem</h3>
+                <p><strong>Problem Statement:</strong> You have a single resource (e.g., a lecture hall) and a set of <em>n</em> activities. Each activity has a start time (<code>s_i</code>) and a finish time (<code>f_i</code>). The goal is to select the maximum number of non-overlapping activities.</p>
+                
+                <h3>The Greedy Idea</h3>
+                <p>Sort the activities by their <strong>finish times</strong>. Always pick the activity that finishes earliest and doesn't overlap with the previously selected activity. Why? Because finishing early leaves the resource available for the maximum number of future activities.</p>
+                
+                <div class="pseudo-block">
+<span class="func">Greedy-Activity-Selector</span>(s, f)
+    n = length[s]
+    Sort activities by finish times (f_1 ≤ f_2 ≤ ... ≤ f_n)
+    
+    A = {a_1}  <span class="comment">// Select the first activity</span>
+    j = 1      <span class="comment">// j keeps track of the last selected activity</span>
+    
+    <span class="keyword">for</span> i = 2 <span class="keyword">to</span> n:
+        <span class="keyword">if</span> s[i] ≥ f[j]:  <span class="comment">// If current activity starts AFTER the last one finished</span>
+            A = A U {a_i}  <span class="comment">// Add to selection</span>
+            j = i          <span class="comment">// Update last selected</span>
+    <span class="keyword">return</span> A
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Step-by-Step Example</h3>
+                <p>Suppose activities are already sorted by finish time:</p>
+                <table>
+                    <tr>
+                        <th>Activity (i)</th> <th>1</th> <th>2</th> <th>3</th> <th>4</th> <th>5</th>
+                    </tr>
+                    <tr>
+                        <th>Start (s)</th> <td>1</td> <td>3</td> <td>0</td> <td>5</td> <td>8</td>
+                    </tr>
+                    <tr>
+                        <th>Finish (f)</th> <td>4</td> <td>5</td> <td>6</td> <td>7</td> <td>9</td>
+                    </tr>
+                </table>
+                
+                <div class="flow-step">
+                    <div class="flow-number">1</div>
+                    <div><strong>i=1:</strong> Select Activity 1 (Finishes at 4). <strong>Selection = {1}</strong>. Resource is busy until time 4.</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-number">2</div>
+                    <div><strong>i=2:</strong> Starts at 3. Overlaps (3 < 4). <strong>Reject.</strong></div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-number">3</div>
+                    <div><strong>i=3:</strong> Starts at 0. Overlaps (0 < 4). <strong>Reject.</strong></div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-number">4</div>
+                    <div><strong>i=4:</strong> Starts at 5. Valid (5 > 4). Select Activity 4. <strong>Selection = {1, 4}</strong>. Resource busy until time 7.</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-number">5</div>
+                    <div><strong>i=5:</strong> Starts at 8. Valid (8 > 7). Select Activity 5. <strong>Selection = {1, 4, 5}</strong>.</div>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Algorithm Complexity</h3>
+                <div class="complexity-box">
+                    <div class="complexity-badge">O(n log n)</div>
+                    <div>
+                        <strong>Time Complexity:</strong> Sorting the activities takes `O(n log n)`. The single pass through the activities takes `O(n)`. Total time is dominated by sorting, so `O(n log n)`.
+                        <div class="urdu-text">
+                            <strong>Roman Urdu:</strong> Agar activities pehle se time ke hisaab se sorted (tarteeb mein) hoon, toh time sirf `O(n)` lagta hai kyunke humein bas ek dafa loop chalana parta hai. Lekin aam taur par pehle sort karna parta hai, isliye `O(n log n)`.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 24 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Core Concept:</strong> Greedy makes the locally optimal choice.</li>
+                    <li><strong>Activity Selection:</strong> Maximize non-overlapping tasks.</li>
+                    <li><strong>Greedy Strategy:</strong> ALWAYS pick the task that <em>finishes earliest</em>.</li>
+                    <li><strong>Complexity:</strong> O(n log n) due to sorting.</li>
+                    <li><strong>Important:</strong> Picking by earliest start time or shortest duration does NOT always give the optimal result. Finish time is the proven optimal greedy choice.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 25 ================= -->
+        <section id="lec25">
+            <h1>Lecture 25: Huffman Encoding (Greedy)</h1>
+
+            <div class="concept-card">
+                <h3>What is it?</h3>
+                <div class="definition-box">
+                    <strong>Technical Definition:</strong> Huffman coding is a lossless data compression algorithm. It assigns variable-length binary codes to characters based on their frequencies. Most frequent characters get the shortest codes, and least frequent get the longest codes.
+                </div>
+                <p>It generates <strong>Prefix-free codes</strong>: No code is a prefix of another code. This ensures there is no ambiguity when decoding the binary string back to characters.</p>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Normal ASCII mein har character 8 bits leta hai, chahay wo 'a' ho jo bar bar aata hai, ya 'z' jo bohat kam aata hai. Huffman Encoding ek clever (Greedy) tareeqa hai jismein jo letter zyada use hota hai usay chota code (jaise 2 bits) milta hai, aur jo kam use hota hai usay lamba code milta hai. Is se poori file ka size chota (compress) ho jata hai.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>The Huffman Algorithm</h3>
+                <div class="pseudo-block">
+<span class="func">Huffman</span>(C)
+    n = |C|
+    Q = build_min_priority_queue(C)  <span class="comment">// Ordered by frequency</span>
+    
+    <span class="keyword">for</span> i = 1 <span class="keyword">to</span> n - 1:
+        allocate a new node z
+        z.left = x = Extract-Min(Q)  <span class="comment">// Get lowest frequency node</span>
+        z.right = y = Extract-Min(Q) <span class="comment">// Get second lowest frequency node</span>
+        z.freq = x.freq + y.freq     <span class="comment">// Combine frequencies</span>
+        Insert(Q, z)                 <span class="comment">// Put the combined node back in queue</span>
+        
+    <span class="keyword">return</span> Extract-Min(Q)            <span class="comment">// Return the root of the tree</span>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Step-by-Step Example</h3>
+                <p>Given characters and their frequencies: <code>A: 5, B: 9, C: 12, D: 13, E: 16, F: 45</code>.</p>
+                
+                <div class="flow-step">
+                    <div class="flow-number">1</div>
+                    <div><strong>Initial Min-Queue:</strong> [A:5, B:9, C:12, D:13, E:16, F:45]</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-number">2</div>
+                    <div>Take two minimums: A(5) and B(9). Merge into node <strong>AB(14)</strong>. <br>Queue becomes: [C:12, D:13, AB:14, E:16, F:45]</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-number">3</div>
+                    <div>Take two minimums: C(12) and D(13). Merge into node <strong>CD(25)</strong>. <br>Queue becomes: [AB:14, E:16, CD:25, F:45]</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-number">4</div>
+                    <div>Take minimums: AB(14) and E(16). Merge into <strong>ABE(30)</strong>. <br>Queue becomes: [CD:25, ABE:30, F:45]</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-number">5</div>
+                    <div>Continue this process until 1 node is left (the root of the Huffman Tree). Going Left gives bit `0`, going Right gives bit `1`.</div>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Algorithm Complexity</h3>
+                <div class="complexity-box">
+                    <div class="complexity-badge">O(n log n)</div>
+                    <div>
+                        <strong>Time Complexity:</strong> Building the initial priority queue takes `O(n)`. The loop runs `n-1` times, and each `Extract-Min` and `Insert` operation in a min-heap takes `O(log n)`. Total time is `O(n log n)`.
+                        <div class="urdu-text">
+                            <strong>Roman Urdu:</strong> Humne characters ko frequencies ke hisaab se sort rakhne ke liye ek Priority Queue (Min-Heap) use kiya hai. Heap mein se min nikalne aur naya node dalne ka time `log n` hota hai. Ye kaam `n` dafa hota hai, toh total time `n log n`.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 25 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Goal:</strong> File Compression (variable-length coding).</li>
+                    <li><strong>Algorithm Type:</strong> Greedy approach.</li>
+                    <li><strong>Prefix-Free:</strong> No code is the start of another, avoiding ambiguity.</li>
+                    <li><strong>Tree Construction:</strong> Always merge the two nodes with the <em>lowest frequencies</em>.</li>
+                    <li><strong>Complexity:</strong> O(n log n) due to Priority Queue / Heap operations.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 26 ================= -->
+        <section id="lec26">
+            <h1>Lecture 26: Graph Terminology & Representation</h1>
+
+            <div class="concept-card">
+                <h3>What is a Graph?</h3>
+                <div class="definition-box">
+                    <strong>Technical Definition:</strong> A graph <em>G = (V, E)</em> is a mathematical structure consisting of a set of Vertices <em>V</em> (or nodes) and a set of Edges <em>E</em> that connect pairs of vertices.
+                </div>
+                <ul>
+                    <li><strong>Directed Graph (Digraph):</strong> Edges have a direction (like a one-way street). $(u, v)$ means an edge from u to v.</li>
+                    <li><strong>Undirected Graph:</strong> Edges have no direction (like a two-way street). $(u, v)$ is the same as $(v, u)$.</li>
+                    <li><strong>Weighted Graph:</strong> Edges have a weight (cost, distance, etc.) associated with them.</li>
+                </ul>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Graph asal mein networks ko represent karne ka tareeqa hai. Jese cities (vertices) aur unke darmiyan roads (edges). Agar road one-way hai, toh wo Directed graph hai. Agar aana-jana dono side allowed hain, toh Undirected graph hai.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>How is a Graph Represented?</h3>
+                <p>Computers cannot "look" at a picture of a graph. We need to store it in memory. There are two primary ways:</p>
+                
+                <h3>1. Adjacency Matrix</h3>
+                <p>A 2D array <code>A</code> of size <em>|V| × |V|</em>. <code>A[i][j] = 1</code> if there is an edge from vertex <em>i</em> to vertex <em>j</em>, otherwise <code>A[i][j] = 0</code>.</p>
+                <div class="complexity-box">
+                    <div>
+                        <strong>Space Complexity:</strong> <code>O(V<sup>2</sup>)</code>. (A 500-vertex graph needs a 500x500 matrix).<br>
+                        <strong>Pros:</strong> Checking if an edge exists between <em>u</em> and <em>v</em> is extremely fast <code>O(1)</code>.<br>
+                        <strong>Cons:</strong> Wastes a lot of memory if the graph is <em>sparse</em> (has very few edges), because mostly it will store 0s.
+                    </div>
+                </div>
+
+                <br>
+                <h3>2. Adjacency List (Standard Choice)</h3>
+                <p>An array of size <em>|V|</em> where each index represents a vertex, and contains a linked list of all the vertices it is connected to (its neighbors).</p>
+                <div class="complexity-box">
+                    <div>
+                        <strong>Space Complexity:</strong> <code>O(V + E)</code>. (It only stores the edges that actually exist).<br>
+                        <strong>Pros:</strong> Extremely memory efficient for sparse graphs. Finding all neighbors of a vertex is fast.<br>
+                        <strong>Cons:</strong> Checking if a specific edge (u, v) exists takes <code>O(degree(u))</code> time (you have to traverse the list).
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 26 - Quick Revision</h3>
+                <ul>
+                    <li><strong>V:</strong> Vertices (Nodes). <strong>E:</strong> Edges (Links).</li>
+                    <li><strong>Adjacency Matrix:</strong> 2D Array. Space: `O(V²)`. Best for dense graphs.</li>
+                    <li><strong>Adjacency List:</strong> Array of linked lists. Space: `O(V + E)`. Best for sparse graphs.</li>
+                    <li><strong>Common Mistake:</strong> Forgetting that in an <em>undirected</em> graph's Adjacency List, an edge between A and B must appear twice (in A's list and B's list).</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 27 ================= -->
+        <section id="lec27">
+            <h1>Lecture 27: Breadth-First Search (BFS)</h1>
+
+            <div class="concept-card">
+                <h3>What is BFS?</h3>
+                <div class="definition-box">
+                    <strong>Technical Definition:</strong> BFS is a graph traversal algorithm that explores the graph level-by-level, starting from a source vertex. It visits all direct neighbors of the source first, then the neighbors of those neighbors, and so on.
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> BFS pani ki lehar (wave) ki tarah kaam karta hai. Jis node se hum shuru karte hain, pehle uske tamam direct padosiyon (neighbors) ke paas jata hai (Level 1). Phir un padosiyon ke padosiyon ke paas (Level 2). Yeh algorithm shortest path (kam se kam edges wala raasta) find karne ke liye istemal hota hai.
+                </div>
+                <p><strong>Core Concept:</strong> BFS uses a <strong>Queue (FIFO)</strong> data structure to keep track of nodes to visit.</p>
+            </div>
+
+            <div class="concept-card">
+                <h3>Colors in Graph Traversal</h3>
+                <p>To keep track of progress and avoid infinite loops, nodes are colored:</p>
+                <ul>
+                    <li><strong>White:</strong> Undiscovered (Not visited yet).</li>
+                    <li><strong>Gray:</strong> Discovered, but its neighbors are not fully explored yet (Currently in the Queue).</li>
+                    <li><strong>Black:</strong> Fully explored (Removed from the Queue, all neighbors visited).</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h3>The BFS Algorithm</h3>
+                <div class="pseudo-block">
+<span class="func">BFS</span>(G, s)  <span class="comment">// Graph G, Source vertex s</span>
+    <span class="keyword">for</span> each vertex u in V[G] - {s}:
+        color[u] = WHITE
+        d[u] = infinity      <span class="comment">// Distance from source</span>
+        π[u] = NIL           <span class="comment">// Parent node</span>
+        
+    color[s] = GRAY
+    d[s] = 0
+    π[s] = NIL
+    
+    Q = Empty Queue
+    Enqueue(Q, s)
+    
+    <span class="keyword">while</span> Q is not empty:
+        u = Dequeue(Q)
+        <span class="keyword">for</span> each neighbor v of u:
+            <span class="keyword">if</span> color[v] == WHITE:      <span class="comment">// Unvisited neighbor found</span>
+                color[v] = GRAY        <span class="comment">// Mark discovered</span>
+                d[v] = d[u] + 1        <span class="comment">// Distance is parent's dist + 1</span>
+                π[v] = u               <span class="comment">// Set parent pointer</span>
+                Enqueue(Q, v)
+        color[u] = BLACK               <span class="comment">// Node u is completely processed</span>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Algorithm Complexity</h3>
+                <div class="complexity-box">
+                    <div class="complexity-badge">O(V + E)</div>
+                    <div>
+                        <strong>Time Complexity:</strong> Each vertex is enqueued and dequeued exactly once <code>O(V)</code>. The inner loop iterates over the adjacency list of each vertex. The sum of all adjacency list lengths is proportional to the number of edges <code>O(E)</code>. Total time = <code>O(V + E)</code>.
+                        <div class="urdu-text">
+                            <strong>Roman Urdu:</strong> Kyunke hum har node (V) ko Queue mein ek dafa dalte aur nikalte hain, aur graph ke har edge (E) ko ziyada se ziyada 2 dafa check karte hain, isliye total time V aur E ke sum ke barabar hota hai. Agar Adjacency Matrix use karein, toh time <code>O(V²)</code> ho jata.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 27 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Data Structure:</strong> BFS relies strictly on a <strong>Queue</strong>.</li>
+                    <li><strong>Exploration Style:</strong> Level-by-level (Wave-front).</li>
+                    <li><strong>Main Application:</strong> Finding the Shortest Path in an unweighted graph.</li>
+                    <li><strong>Complexity:</strong> O(V + E) with Adjacency List.</li>
+                    <li><strong>Node Colors:</strong> White (New) -> Gray (In Queue) -> Black (Done).</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 28 ================= -->
+        <section id="lec28">
+            <h1>Lecture 28: Depth-First Search (DFS)</h1>
+
+            <div class="concept-card">
+                <h3>What is DFS?</h3>
+                <div class="definition-box">
+                    <strong>Technical Definition:</strong> DFS is a graph traversal algorithm that explores as deeply as possible along each branch before backtracking. It relies heavily on recursion (which implicitly uses a Stack).
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> DFS ek bhool-bhulaiya (maze) mein rasta dhoondne ki tarah hai. Aap ek raste par tab tak chalte rehte hain jab tak dead-end na aa jaye. Jab aage jane ka rasta na mile, toh aap peeche (backtrack) aate hain aur koi aur rasta try karte hain. BFS "wide" jata tha, DFS "deep" jata hai.
+                </div>
+                <p><strong>Core Concept:</strong> DFS uses a <strong>Stack (LIFO)</strong> mechanism (usually via recursion calls).</p>
+            </div>
+
+            <div class="concept-card">
+                <h3>Timestamps in DFS</h3>
+                <p>Unlike BFS which uses distances, DFS assigns two important timestamps to every vertex. A global <code>time</code> variable ticks up every time a node is discovered or finished.</p>
+                <ul>
+                    <li><strong>d[u] (Discovery Time):</strong> The time when vertex `u` is first visited (turns GRAY).</li>
+                    <li><strong>f[u] (Finish Time):</strong> The time when DFS has completely explored all of `u`'s neighbors and backtracks (turns BLACK).</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h3>The DFS Algorithm</h3>
+                <div class="pseudo-block">
+<span class="func">DFS</span>(G)
+    <span class="keyword">for</span> each vertex u in V[G]:
+        color[u] = WHITE
+        π[u] = NIL
+    time = 0
+    
+    <span class="keyword">for</span> each vertex u in V[G]:
+        <span class="keyword">if</span> color[u] == WHITE:
+            DFS-Visit(u)
+
+<span class="func">DFS-Visit</span>(u)
+    color[u] = GRAY         <span class="comment">// Mark discovered</span>
+    time = time + 1
+    d[u] = time             <span class="comment">// Record discovery time</span>
+    
+    <span class="keyword">for</span> each neighbor v of u:
+        <span class="keyword">if</span> color[v] == WHITE:
+            π[v] = u
+            DFS-Visit(v)    <span class="comment">// Recursively visit neighbor (Go Deep!)</span>
+            
+    color[u] = BLACK        <span class="comment">// Mark finished</span>
+    time = time + 1
+    f[u] = time             <span class="comment">// Record finish time</span>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Algorithm Complexity</h3>
+                <div class="complexity-box">
+                    <div class="complexity-badge">O(V + E)</div>
+                    <div>
+                        <strong>Time Complexity:</strong> The initialization takes `O(V)`. <code>DFS-Visit</code> is called exactly once for each vertex (because it only runs on WHITE nodes). The inner loop of <code>DFS-Visit</code> looks at every edge once (in a directed graph) or twice (in undirected). Total time = <code>O(V + E)</code>.
+                        <div class="urdu-text">
+                            <strong>Roman Urdu:</strong> BFS ki tarah, yahan bhi har node ek dafa visit hota hai, aur har edge check hoti hai. Isliye iska time bhi O(V + E) hi rehta hai (agar Adjacency List use ho).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 28 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Data Structure:</strong> DFS relies on a <strong>Stack</strong> (via Recursion).</li>
+                    <li><strong>Exploration Style:</strong> Go as deep as possible, then backtrack.</li>
+                    <li><strong>Timestamps:</strong> Every node gets a discovery time `d[u]` and a finish time `f[u]`. These are crucial for advanced algorithms (like Topological Sort or finding Strongly Connected Components).</li>
+                    <li><strong>Parenthesis Theorem:</strong> For any two nodes `u` and `v`, their `[d, f]` intervals are either entirely disjoint, or one is completely contained within the other.</li>
+                    <li><strong>Complexity:</strong> O(V + E) with Adjacency List.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

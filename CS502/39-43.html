@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS502 - Fundamentals of Algorithms (Lectures 39-43)</title>
+    <style>
+        :root {
+            --primary: #1e3a8a; /* Deep Academic Blue */
+            --secondary: #3b82f6; /* Bright Blue */
+            --accent: #f59e0b; /* Warning/Highlight Yellow */
+            --bg-color: #f8fafc;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --card-bg: #ffffff;
+            --border-light: #e2e8f0;
+            --success: #10b981;
+            --code-bg: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem 1rem;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 1rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--secondary);
+            color: white;
+            padding-left: 1.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 3rem 4rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Typography */
+        h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; border-bottom: 3px solid var(--secondary); padding-bottom: 0.5rem; }
+        h2 { font-size: 2rem; color: var(--primary); margin-top: 3rem; margin-bottom: 1rem; }
+        h3 { font-size: 1.5rem; color: var(--secondary); margin-top: 2rem; margin-bottom: 0.5rem; }
+        p { margin-bottom: 1rem; }
+
+        /* UI Components */
+        .concept-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border-left: 6px solid var(--secondary);
+        }
+
+        .definition-box {
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .definition-box strong {
+            color: #0369a1;
+            font-size: 1.1rem;
+        }
+
+        .urdu-text {
+            background-color: #fffbeb;
+            padding: 1rem;
+            border-radius: 8px;
+            font-style: italic;
+            color: #92400e;
+            border-left: 4px solid var(--accent);
+            margin-top: 0.5rem;
+        }
+
+        /* Pseudocode Block */
+        .pseudo-block {
+            background-color: var(--code-bg);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .pseudo-block .keyword { color: #c678dd; font-weight: bold; }
+        .pseudo-block .func { color: #61afef; }
+        .pseudo-block .comment { color: #7f848e; font-style: italic; }
+
+        /* Complexity Box */
+        .complexity-box {
+            background-color: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .complexity-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        /* Algorithm Flow Step */
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .flow-number {
+            background: var(--secondary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* Quick Revision Box */
+        .revision-box {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 3rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .revision-box h3 {
+            color: white;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        
+        .revision-box ul {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .revision-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Math Display */
+        .math-display {
+            text-align: center;
+            margin: 1.5rem 0;
+            font-size: 1.1em;
+            overflow-x: auto;
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 1rem; }
+            .main-content { margin-left: 0; padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS502 Notes</h2>
+        <ul>
+            <li><a href="#lec39">Lecture 39: Reductions (3-SAT to Clique)</a></li>
+            <li><a href="#lec40">Lecture 40: Vertex Cover Problem</a></li>
+            <li><a href="#lec41">Lecture 41: Coping with NP-Completeness</a></li>
+            <li><a href="#lec42">Lecture 42: Vertex Cover Approximation</a></li>
+            <li><a href="#lec43">Lecture 43: TSP Approximation Algorithm</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- ================= LECTURE 39 ================= -->
+        <section id="lec39">
+            <h1>Lecture 39: NP-Completeness Reductions (3-SAT to Clique)</h1>
+
+            <div class="concept-card">
+                <h3>What is the Clique Problem?</h3>
+                <div class="definition-box">
+                    <strong>Technical Definition:</strong> A clique in an undirected graph $G = (V, E)$ is a subset of vertices $V' \subseteq V$ such that every pair of vertices in $V'$ is connected by an edge. In other words, $V'$ forms a complete subgraph. The Clique Problem asks: Does $G$ contain a clique of size $k$?
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Clique ka matlab hai doston ka ek aisa group jahan har koi doosre ko janta ho. Graph theory mein, ye un nodes ka set hai jahan har node baqi tamam nodes ke sath edge se jura ho. Problem ye hai ke kya graph mein $k$ size ka koi aisa group mojood hai? Yeh ek NP-Complete problem hai.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Proving Clique is NP-Complete</h3>
+                <p>To prove a problem is NP-Complete, we must reduce a known NP-Complete problem into it. Here, we reduce <strong>3-CNF SAT</strong> to the <strong>Clique</strong> problem.</p>
+                <div class="math-display">
+                    $$3\text{-SAT} \le_P \text{Clique}$$
+                </div>
+                
+                <h3>The Reduction Process (How it works)</h3>
+                <p>Given a 3-SAT formula $\Phi$ with $k$ clauses, we construct a graph $G$ such that $G$ has a clique of size $k$ <em>if and only if</em> $\Phi$ is satisfiable.</p>
+                
+                <div class="flow-step">
+                    <div class="flow-number">1</div>
+                    <div><strong>Create Vertices:</strong> For each clause (e.g., $C_r = l_1 \lor l_2 \lor l_3$), we create 3 vertices in our graph $G$. Since there are $k$ clauses, we get $3k$ vertices grouped into $k$ clusters.</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-number">2</div>
+                    <div><strong>Add Edges:</strong> We draw an edge between vertex $v_i$ (from cluster $C_i$) and vertex $v_j$ (from cluster $C_j$) IF:
+                        <ul>
+                            <li>They are in <strong>different</strong> clusters ($i \neq j$).</li>
+                            <li>They are <strong>consistent</strong> (i.e., we don't connect a literal $x$ to its negation $\bar{x}$).</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-number">3</div>
+                    <div><strong>The Logic:</strong> If the formula is satisfiable, each clause must have at least one TRUE literal. Selecting that one TRUE vertex from each of the $k$ clusters gives us $k$ vertices. Because they are all consistent (none are negations of each other), there will be edges between all of them, forming a clique of size $k$.</div>
+                </div>
+                
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Hum formula ki har clause ke liye 3 nodes banate hain. Hum un nodes ko aapas mein jorte (edge lagate) hain jo ek doosre ke dushman na hon (jese $x$ aur $\bar{x}$ ek sath TRUE nahi ho sakte, isliye inme edge nahi lagti). Agar formula TRUE ho sakta hai, toh har clause se ek TRUE literal uthane par ek $k$ size ka clique ban jayega! Is tarah humne prove kiya ke agar Clique solve ho jaye, toh 3-SAT bhi solve ho sakta hai.
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 39 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Clique:</strong> A fully connected subset of vertices in a graph.</li>
+                    <li><strong>Reduction Goal:</strong> Prove Clique is NP-Complete by translating 3-SAT into it.</li>
+                    <li><strong>Graph Construction:</strong> Nodes = literals. Edges = consistent literals in different clauses.</li>
+                    <li><strong>Result:</strong> Formula is satisfiable $\iff$ Graph has a clique of size $k$.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 40 ================= -->
+        <section id="lec40">
+            <h1>Lecture 40: Vertex Cover Problem</h1>
+
+            <div class="concept-card">
+                <h3>What is the Vertex Cover Problem?</h3>
+                <div class="definition-box">
+                    <strong>Technical Definition:</strong> A Vertex Cover of an undirected graph $G = (V, E)$ is a subset of vertices $V' \subseteq V$ such that every edge $(u, v) \in E$ is incident to at least one vertex in $V'$ (i.e., either $u \in V'$ or $v \in V'$ or both). The problem asks: Is there a vertex cover of size at most $k$?
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Vertex Cover un nodes ka set hai jo graph ki HAR edge (line) ko touch karte hain. Farz karein edges galiyan (streets) hain aur nodes unke end-points hain. Aapko kam se kam guards (nodes) kharay karne hain taake har gali pe nazar rakhi ja sake.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Proving Vertex Cover is NP-Complete</h3>
+                <p>We prove this by reducing the <strong>Clique</strong> problem to the <strong>Vertex Cover</strong> problem.</p>
+                <div class="math-display">
+                    $$\text{Clique} \le_P \text{Vertex Cover}$$
+                </div>
+                
+                <h3>The Complement Graph ($\bar{G}$)</h3>
+                <p>Given a graph $G=(V, E)$, its complement $\bar{G} = (V, \bar{E})$ has the exact same vertices, but it has edges exactly where $G$ does NOT have edges.</p>
+                <div class="math-display">
+                    $$\bar{E} = \{ (u,v) \mid u \neq v \text{ and } (u,v) \notin E \}$$
+                </div>
+
+                <h3>The Reduction Theorem</h3>
+                <p>A graph $G$ has a clique of size $k$ <em>if and only if</em> its complement graph $\bar{G}$ has a vertex cover of size $|V| - k$.</p>
+                
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Agar $G$ mein $k$ dost hain jo sab ek doosre se jurey hain (Clique), toh uske "Ulte Graph" ($\bar{G}$) mein un doston ke darmiyan koi edge nahi hogi. Iska matlab hai $\bar{G}$ ki sari edges baqi bache hue $|V| - k$ nodes se nikal rahi hongi. Is liye wo baqi nodes ek perfect "Vertex Cover" ban jayenge. Is simple math se prove ho gaya ke Vertex Cover bhi NP-Complete hai.
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 40 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Vertex Cover:</strong> A set of nodes touching every edge in the graph.</li>
+                    <li><strong>Reduction Used:</strong> $\text{Clique} \le_P \text{Vertex Cover}$.</li>
+                    <li><strong>Core Logic:</strong> Size of Clique in $G$ is $k \iff$ Size of Vertex Cover in $\bar{G}$ is $|V| - k$.</li>
+                    <li><strong>Status:</strong> Vertex Cover is NP-Complete.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 41 ================= -->
+        <section id="lec41">
+            <h1>Lecture 41: Coping with NP-Completeness</h1>
+
+            <div class="concept-card">
+                <h3>The Reality of NP-Completeness</h3>
+                <p>When a problem is proven to be NP-Complete, it means it is highly unlikely that a polynomial-time algorithm (like $O(n^2)$ or $O(n^3)$) exists to find the <em>exact optimal</em> solution. However, in real-world engineering, we still need to solve these problems (like delivery routing, scheduling, etc.).</p>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Jab pata chal jaye ke problem NP-Complete hai, toh iska matlab hai "Computer ke bas ki baat nahi" (agar data bada ho). Lekin real life mein companiyon ko apne kaam chalane hote hain. Isliye hum thori compromise (samjhota) karte hain.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Three Main Strategies to Cope</h3>
+                
+                <div class="flow-step">
+                    <div class="flow-number">1</div>
+                    <div><strong>Use Small Inputs (Brute Force / Branch-and-Bound):</strong><br>
+                    If the input size $n$ is very small, exponential algorithms $O(2^n)$ or $O(n!)$ might still finish in a few seconds. We can use smart exhaustive search techniques like <em>Branch-and-Bound</em> which prune bad paths early.</div>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="flow-number">2</div>
+                    <div><strong>Heuristics (No Guarantees):</strong><br>
+                    Algorithms like Genetic Algorithms, Simulated Annealing, or A* Search. They try to find a "good" solution quickly. They often work well in practice, but they provide <strong>zero mathematical guarantee</strong> on how close the answer is to the true optimal.</div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">3</div>
+                    <div><strong>Approximation Algorithms (Guaranteed Bounds):</strong><br>
+                    This is the most scientifically rigorous approach. We design a polynomial-time algorithm that gives a sub-optimal solution, but we mathematically PROVE that the solution is within a certain factor (ratio) of the true optimal.</div>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Approximation Ratio ($\rho(n)$)</h3>
+                <div class="definition-box">
+                    An algorithm has an approximation ratio of $\rho(n)$ if, for any input of size $n$, the cost $C$ of the solution produced is bounded by the optimal cost $C^*$ as follows:
+                    <div class="math-display">
+                        $$\max \left( \frac{C}{C^*}, \frac{C^*}{C} \right) \le \rho(n)$$
+                    </div>
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Approximation Ratio ka maqsad ye batana hai ke aapka formula zyada se zyada kitni ghalti karega. Agar $\rho(n) = 2$ hai, iska matlab hai algorithm jo jawab dega wo asal perfect jawab se kabhi bhi double se zyada bura nahi hoga.
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 41 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Problem:</strong> NP-Complete problems take $O(2^n)$ time for exact optimal solutions.</li>
+                    <li><strong>Heuristics:</strong> Fast, but no guarantees on accuracy.</li>
+                    <li><strong>Approximation Algorithms:</strong> Fast (Polynomial Time) AND provides a mathematical upper-bound on the error.</li>
+                    <li><strong>Approximation Ratio $\rho(n)$:</strong> The worst-case ratio between the algorithm's output and the true optimal answer.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 42 ================= -->
+        <section id="lec42">
+            <h1>Lecture 42: Vertex Cover Approximation Algorithm</h1>
+
+            <div class="concept-card">
+                <h3>The Objective</h3>
+                <p>Since finding the <em>minimum</em> Vertex Cover is NP-Complete, we want a polynomial-time algorithm that finds a vertex cover that is not too much larger than the absolute minimum.</p>
+            </div>
+
+            <div class="concept-card">
+                <h3>The Approximation Algorithm (Greedy Approach)</h3>
+                <div class="pseudo-block">
+<span class="func">Approx-Vertex-Cover</span>(G)
+    C = &empty;                          <span class="comment">// The vertex cover set</span>
+    E' = E[G]                      <span class="comment">// Make a copy of all edges</span>
+    
+    <span class="keyword">while</span> E' is not empty:
+        Let (u, v) be an arbitrary edge of E'
+        C = C &cup; {u, v}               <span class="comment">// Add BOTH endpoints to the cover</span>
+        
+        <span class="comment">// Remove every edge from E' that touches either u or v</span>
+        Remove from E' every edge incident on u or v
+        
+    <span class="keyword">return</span> C                       <span class="comment">// Return the cover</span>
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Algorithm bohat simple hai. Graph ki kisi bhi ek edge ko pakro. Us edge ke <strong>dono</strong> kono (nodes) ko apne answer (Cover) mein daal lo. Ab kyunke ye dono nodes cover ho gaye hain, in se juri hui jitni bhi aur edges thin, un sab ko list se delete kar do. Ye kaam tab tak karo jab tak sari edges khatam na ho jayen.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Proving the Approximation Ratio is 2</h3>
+                <p>Let $C^*$ be the true optimal minimum vertex cover, and let $C$ be the cover returned by our algorithm. We want to prove that $|C| \le 2 |C^*|$.</p>
+                <ul>
+                    <li>Let $A$ be the set of edges that our algorithm specifically picked in the <code>while</code> loop.</li>
+                    <li>By our algorithm's design, no two edges in $A$ share a common vertex (because as soon as we picked an edge, we deleted all other edges touching its vertices).</li>
+                    <li>Therefore, to cover the edges in $A$, ANY valid vertex cover (including the optimal one $C^*$) MUST contain at least one endpoint from every edge in $A$. So, $|C^*| \ge |A|$.</li>
+                    <li>Our algorithm greedily adds <strong>both</strong> endpoints of every edge in $A$. So the size of our cover is exactly $|C| = 2 |A|$.</li>
+                    <li>Combining these equations: $|C| = 2 |A| \le 2 |C^*|$.</li>
+                </ul>
+                <div class="math-display">
+                    $$|C| \le 2 \cdot |C^*|$$
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Kyunke optimal solution $C^*$ ko bhi in edges ko cover karne ke liye har edge se kam az kam 1 node uthana tha, aur humne jaldi mein (greedily) 2 nodes utha liye, toh hamara answer worst-case mein optimal se sirf double (2 times) bada hoga. Isay <strong>2-Approximation Algorithm</strong> kehte hain.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Algorithm Complexity</h3>
+                <div class="complexity-box">
+                    <div class="complexity-badge">O(V + E)</div>
+                    <div>
+                        <strong>Time Complexity:</strong> Implementing this with Adjacency Lists allows us to traverse each edge and vertex a constant number of times. It runs in linear time $O(V + E)$.
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 42 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Algorithm:</strong> Pick an edge, add BOTH endpoints to cover, delete incident edges. Repeat.</li>
+                    <li><strong>Complexity:</strong> Extremely fast, $O(V + E)$.</li>
+                    <li><strong>Approximation Factor:</strong> $\rho(n) = 2$. It is guaranteed to be at most twice the size of the optimal minimum cover.</li>
+                    <li><strong>Key Logic:</strong> The edges picked are disjoint. Optimal MUST pick at least 1 node per disjoint edge; we picked 2. Thus, $2 \times$ ratio.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 43 ================= -->
+        <section id="lec43">
+            <h1>Lecture 43: TSP Approximation Algorithm</h1>
+
+            <div class="concept-card">
+                <h3>The Traveling Salesperson Problem (TSP)</h3>
+                <div class="definition-box">
+                    <strong>Technical Definition:</strong> Given a complete graph with weighted edges, find a Hamiltonian Cycle (a tour that visits every vertex exactly once and returns to the start) with the minimum total weight.
+                </div>
+                <p>TSP is NP-Complete. To approximate it, we must assume the <strong>Triangle Inequality</strong> holds for the edge weights. This means taking a direct route is always faster or equal to taking a detour.</p>
+                <div class="math-display">
+                    $$c(u, w) \le c(u, v) + c(v, w) \quad \text{for all } u,v,w \in V$$
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> TSP ka matlab hai ek salesman ko tamam shehron ka chakar laga kar wapis aana hai, sab se kam petrol kharch kar ke. Triangle inequality ka matlab hai ke Shehar A se Shehar C direct jana, hamesha A se B aur phir B se C jane ke muqable mein sasta (ya barabar) hoga.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>The Approximation Algorithm (Using MST)</h3>
+                <div class="pseudo-block">
+<span class="func">Approx-TSP-Tour</span>(G, c)
+    1. Select a root vertex r &isin; V[G]
+    2. Compute a Minimum Spanning Tree (MST) T for G from root r 
+       (using Prim's Algorithm)
+    3. Let L be the list of vertices visited in a Preorder tree walk of T
+    4. <span class="keyword">return</span> the Hamiltonian cycle H that visits the vertices in the order L
+                </div>
+                
+                <div class="flow-step">
+                    <div class="flow-number">1</div>
+                    <div><strong>Find MST:</strong> A Minimum Spanning Tree connects all cities with the absolute minimum cost, but it has branches (it's not a single circle/tour). Cost of MST $c(T) \le c(H^*)$ (where $H^*$ is optimal TSP tour).</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-number">2</div>
+                    <div><strong>Full Walk (DFS):</strong> If you walk down every branch of the MST and walk back up, you visit every edge twice. Total cost $= 2 \cdot c(T)$.</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-number">3</div>
+                    <div><strong>Preorder & Shortcuts:</strong> Instead of walking back through already visited nodes, we skip them and go directly to the next unvisited node (Preorder traversal). Because of the <em>Triangle Inequality</em>, this shortcut is guaranteed to be shorter than walking back!</div>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Proving the Approximation Ratio is 2</h3>
+                <p>Let $H^*$ be the optimal TSP tour. Let $T$ be the MST.</p>
+                <p>1. If we remove one edge from $H^*$, it becomes a spanning tree. Since $T$ is the <em>minimum</em> spanning tree, its weight must be less than or equal to this broken tour. Thus: $c(T) \le c(H^*)$.</p>
+                <p>2. A full walk (visiting every edge of $T$ twice) has a cost $W = 2 \cdot c(T)$.</p>
+                <p>3. Our algorithm's tour $H$ shortcuts the full walk. By triangle inequality, shortcuts don't increase cost. Thus $c(H) \le W$.</p>
+                <p>4. Putting it together:</p>
+                <div class="math-display">
+                    $$c(H) \le W = 2 \cdot c(T) \le 2 \cdot c(H^*)$$
+                </div>
+                <div class="math-display">
+                    $$c(H) \le 2 \cdot c(H^*)$$
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Kyunke hamara MST optimal tour se sasta tha, aur humne MST ke raston par double chalne (Full walk) ka plan banaya jo optimal se $2\times$ ho gaya. Phir humne shortcut maray jinse karcha aur kam hua. Isliye guarantee hai ke hamara final tour optimal tour ke $2\times$ karchay se hamesha kam ya barabar hoga.
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 43 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Constraint:</strong> This approximation only works if weights follow the <strong>Triangle Inequality</strong>.</li>
+                    <li><strong>Algorithm:</strong> 1) Find MST. 2) Do a Preorder Walk (DFS). 3) Connect nodes in that order.</li>
+                    <li><strong>Approximation Factor:</strong> $\rho(n) = 2$.</li>
+                    <li><strong>Key Logic:</strong> Cost of MST is less than optimal tour. Walking MST twice is $2 \times$ optimal. Shortcuts only reduce this cost.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

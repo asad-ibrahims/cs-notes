@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS502 - Fundamentals of Algorithms (Lectures 29-33)</title>
+    <style>
+        :root {
+            --primary: #1e3a8a; /* Deep Academic Blue */
+            --secondary: #3b82f6; /* Bright Blue */
+            --accent: #f59e0b; /* Warning/Highlight Yellow */
+            --bg-color: #f8fafc;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --card-bg: #ffffff;
+            --border-light: #e2e8f0;
+            --success: #10b981;
+            --code-bg: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem 1rem;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 1rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--secondary);
+            color: white;
+            padding-left: 1.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 3rem 4rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Typography */
+        h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; border-bottom: 3px solid var(--secondary); padding-bottom: 0.5rem; }
+        h2 { font-size: 2rem; color: var(--primary); margin-top: 3rem; margin-bottom: 1rem; }
+        h3 { font-size: 1.5rem; color: var(--secondary); margin-top: 2rem; margin-bottom: 0.5rem; }
+        p { margin-bottom: 1rem; }
+
+        /* UI Components */
+        .concept-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border-left: 6px solid var(--secondary);
+        }
+
+        .definition-box {
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .definition-box strong {
+            color: #0369a1;
+            font-size: 1.1rem;
+        }
+
+        .urdu-text {
+            background-color: #fffbeb;
+            padding: 1rem;
+            border-radius: 8px;
+            font-style: italic;
+            color: #92400e;
+            border-left: 4px solid var(--accent);
+            margin-top: 0.5rem;
+        }
+
+        /* Pseudocode Block */
+        .pseudo-block {
+            background-color: var(--code-bg);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .pseudo-block .keyword { color: #c678dd; font-weight: bold; }
+        .pseudo-block .func { color: #61afef; }
+        .pseudo-block .comment { color: #7f848e; font-style: italic; }
+
+        /* Complexity Box */
+        .complexity-box {
+            background-color: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .complexity-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Quick Revision Box */
+        .revision-box {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 3rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .revision-box h3 {
+            color: white;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        
+        .revision-box ul {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .revision-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 1rem; }
+            .main-content { margin-left: 0; padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS502 Notes</h2>
+        <ul>
+            <li><a href="#lec29">Lecture 29: DAGs & Topological Sort</a></li>
+            <li><a href="#lec30">Lecture 30: Strongly Connected Components</a></li>
+            <li><a href="#lec31">Lecture 31: Single-Source Shortest Path</a></li>
+            <li><a href="#lec32">Lecture 32: Dijkstra's Algorithm</a></li>
+            <li><a href="#lec33">Lecture 33: Minimum Spanning Trees (Kruskal)</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- ================= LECTURE 29 ================= -->
+        <section id="lec29">
+            <h1>Lecture 29: DAGs & Topological Sort</h1>
+
+            <div class="concept-card">
+                <h3>Directed Acyclic Graphs (DAGs)</h3>
+                <div class="definition-box">
+                    <strong>Technical Definition:</strong> A Directed Acyclic Graph (DAG) is a directed graph with no directed cycles. That means if you start at vertex <em>v</em> and follow the directed edges, you can never return to <em>v</em>.
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> DAG ek aisa graph hai jismein arrows (directions) hoti hain, lekin koi cycle nahi hoti. Yaani aap jahan se chalna shuru karein, ghoom kar wapis ussi jagah nahi aa sakte. Yeh aksar "Dependencies" show karne ke liye use hota hai (jaise CS502 parhne ke liye pehle CS201 aur CS301 pass karna zaroori hai).
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>What is Topological Sort?</h3>
+                <p>A topological sort of a DAG is a linear ordering of its vertices such that for every directed edge <em>uv</em> (from vertex <em>u</em> to vertex <em>v</em>), <em>u</em> comes before <em>v</em> in the ordering.</p>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Asan lafzon mein: Agar kaam B karne se pehle kaam A karna zaroori hai (A &rarr; B), toh Topological sort unhe is tarteeb mein rakhega ke A hamesha B se pehle aaye.
+                </div>
+                
+                <h3>The Algorithm using DFS</h3>
+                <div class="pseudo-block">
+<span class="func">Topological-Sort</span>(G)
+    1. Call DFS(G) to compute finish times f[v] for each vertex v
+    2. As each vertex is finished (color turns BLACK), 
+       insert it onto the front of a linked list.
+    3. <span class="keyword">return</span> the linked list of vertices.
+                </div>
+                <p><strong>Idea:</strong> A vertex that finishes <em>later</em> in DFS should appear <em>earlier</em> in the topological sort. We sort vertices in <strong>descending order of their finish times</strong>.</p>
+            </div>
+
+            <div class="concept-card">
+                <h3>Algorithm Complexity</h3>
+                <div class="complexity-box">
+                    <div class="complexity-badge">&Theta;(V + E)</div>
+                    <div>
+                        <strong>Time Complexity:</strong> We just run standard DFS, which takes $\Theta(V + E)$. Inserting an element at the front of a linked list takes $\Theta(1)$ per vertex. So the total time is completely bounded by the DFS traversal time.
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 29 - Quick Revision</h3>
+                <ul>
+                    <li><strong>DAG:</strong> Directed graph with NO cycles.</li>
+                    <li><strong>Topological Sort:</strong> Ordering of vertices respecting dependencies. Only possible on DAGs.</li>
+                    <li><strong>Trick:</strong> Run DFS. Sort nodes by their finish times <code>f[v]</code> in <em>descending</em> order.</li>
+                    <li><strong>Complexity:</strong> Same as DFS: $\Theta(V + E)$.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 30 ================= -->
+        <section id="lec30">
+            <h1>Lecture 30: Strongly Connected Components (SCC)</h1>
+
+            <div class="concept-card">
+                <h3>What is a Strongly Connected Component?</h3>
+                <div class="definition-box">
+                    <strong>Technical Definition:</strong> In a directed graph, a Strongly Connected Component (SCC) is a maximal set of vertices such that for every pair of vertices <em>u</em> and <em>v</em> in the set, there is a directed path from <em>u</em> to <em>v</em> AND a directed path from <em>v</em> to <em>u</em>.
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Ek SCC un nodes ka group hai jahan har node baqi tamam nodes tak (arrows ke zariye) pohanch sakta hai, aur wahan se wapis bhi aa sakta hai. Ek baray graph mein chotay chotay "strongly connected" islands (groups) ho sakte hain.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>The Graph Transpose ($G^T$)</h3>
+                <p>The transpose of a graph $G = (V, E)$ is $G^T = (V, E^T)$, where $E^T = \{(v, u) \in V \times V : (u, v) \in E\}$.</p>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Graph transpose ka simple matlab hai: Graph mein jitne bhi arrows hain, unki direction ulti (reverse) kar do. A to B tha, toh B to A kar do. Important baat: G aur $G^T$ ke SCCs bilkul same hote hain.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Algorithm to Find SCCs (Kosaraju's Algorithm)</h3>
+                <div class="pseudo-block">
+<span class="func">Strongly-Connected-Components</span>(G)
+    1. Call DFS(G) to compute finish times f[u] for each vertex.
+    2. Compute G<sup>T</sup> (transpose the graph).
+    3. Call DFS(G<sup>T</sup>), but in the main loop of DFS, 
+       visit the vertices in order of decreasing f[u] (from step 1).
+    4. Output the vertices of each tree in the depth-first forest 
+       from step 3 as a separate SCC.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Algorithm Complexity</h3>
+                <div class="complexity-box">
+                    <div class="complexity-badge">&Theta;(V + E)</div>
+                    <div>
+                        <strong>Time Complexity:</strong> 
+                        <br>Step 1 (DFS) takes $\Theta(V + E)$.
+                        <br>Step 2 (Transpose) takes $\Theta(V + E)$ if using Adjacency Lists.
+                        <br>Step 3 (DFS on $G^T$) takes $\Theta(V + E)$.
+                        <br>Total time is linear: $\Theta(V + E)$.
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 30 - Quick Revision</h3>
+                <ul>
+                    <li><strong>SCC:</strong> A cluster of nodes where everyone can reach everyone else.</li>
+                    <li><strong>Graph Transpose ($G^T$):</strong> Reversing all the edges of a graph.</li>
+                    <li><strong>Algorithm:</strong> 2 passes of DFS. 1st on original graph, 2nd on Transposed graph (in decreasing order of finish times).</li>
+                    <li><strong>Complexity:</strong> $\Theta(V+E)$. Very efficient!</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 31 ================= -->
+        <section id="lec31">
+            <h1>Lecture 31: Single-Source Shortest Path (Intro)</h1>
+
+            <div class="concept-card">
+                <h3>The Problem</h3>
+                <p>Given a weighted directed graph $G=(V, E)$ and a source vertex $s$, we want to find the shortest (minimum total weight) path from $s$ to every other vertex $v \in V$.</p>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Asal zindagi mein jese Google Maps kaam karta hai. Aapka current location "Source" node hai, aur aapko shehar ke har dusre ilaqay tak jane ka sab se chota / sasta raasta nikalna hai. Edges par jo "Weight" hota hai wo distance, time, ya toll-tax kuch bhi ho sakta hai.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Negative Weights and Cycles</h3>
+                <ul>
+                    <li>If a graph has negative weight edges, some shortest path algorithms (like Dijkstra) will fail.</li>
+                    <li>If a graph has a <strong>Negative Weight Cycle</strong> (a loop where the sum of weights is negative), the shortest path is mathematically undefined (because you can keep looping forever to get a path weight of $-\infty$).</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h3>Edge Relaxation (Crucial Concept)</h3>
+                <div class="definition-box">
+                    <strong>Technical Definition:</strong> The process of relaxing an edge $(u, v)$ consists of testing whether we can improve the shortest path to $v$ found so far by going through $u$.
+                </div>
+                <div class="pseudo-block">
+<span class="func">Relax</span>(u, v, w)
+    <span class="keyword">if</span> d[v] > d[u] + w(u, v):
+        d[v] = d[u] + w(u, v)   <span class="comment">// Update shortest distance</span>
+        &pi;[v] = u                <span class="comment">// Update parent to u</span>
+                </div>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> "Relax" karne ka matlab simple yeh hai: Agar `v` tak pohanchne ka current raasta (d[v]) lamba hai, aur `u` ke zariye `v` tak jane ka raasta (d[u] + w) chota hai, toh purane raaste ko bhool jao aur naye chote raaste ko save kar lo.
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 31 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Problem:</strong> Find shortest distance from one start node to all others.</li>
+                    <li><strong>Negative Cycles:</strong> Make shortest path impossible (keeps decreasing).</li>
+                    <li><strong>Relaxation:</strong> Updating the distance estimate if a shorter path is found. <code>d[v] = min(d[v], d[u] + w(u,v))</code>.</li>
+                    <li><strong>Base Init:</strong> Start by setting <code>d[s]=0</code> and all other <code>d[v]=&infin;</code>.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 32 ================= -->
+        <section id="lec32">
+            <h1>Lecture 32: Dijkstra's Algorithm</h1>
+
+            <div class="concept-card">
+                <h3>What is Dijkstra's Algorithm?</h3>
+                <p>Dijkstra's algorithm solves the single-source shortest-paths problem on a weighted, directed graph <strong>when all edge weights are non-negative</strong>. It is a <em>Greedy Algorithm</em>.</p>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Yeh algorithm greedy hai. Yeh hamesha us node ko select karta hai jo abhi tak ke hisaab se sab se qareeb (minimum distance) hai. Phir wahan kharay ho kar apne tamam padosiyon ko dekhta hai aur unke raaston ko "Relax" karta hai. Chuke weights negative nahi hote, isliye ek dafa node "final" ho jaye toh usay dobara check karne ki zaroorat nahi parti.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>The Algorithm</h3>
+                <div class="pseudo-block">
+<span class="func">Dijkstra</span>(G, w, s)
+    Initialize-Single-Source(G, s)   <span class="comment">// d[s]=0, all other d[v]=&infin;</span>
+    S = &empty;                        <span class="comment">// S contains vertices with final shortest paths</span>
+    Q = V[G]                       <span class="comment">// Q is a Min-Priority Queue keyed by d-values</span>
+    
+    <span class="keyword">while</span> Q is not empty:
+        u = Extract-Min(Q)         <span class="comment">// Get node with smallest distance</span>
+        S = S &cup; {u}                <span class="comment">// Add it to final set</span>
+        
+        <span class="keyword">for</span> each vertex v in Adj[u]: <span class="comment">// For all neighbors of u</span>
+            Relax(u, v, w)         <span class="comment">// Relax the edge (u, v)</span>
+            <span class="comment">// If relaxed, decrease-key operation implicitly happens in Q</span>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Algorithm Complexity</h3>
+                <p>The time complexity heavily depends on how the Min-Priority Queue <code>Q</code> is implemented.</p>
+                <ul>
+                    <li><strong>Simple Array:</strong> Extract-Min takes $O(V)$, done $V$ times = $O(V^2)$. Relax updates take $O(1)$ per edge, total $O(E)$. Overall: <strong>$O(V^2 + E) = O(V^2)$</strong>. (Good for dense graphs).</li>
+                    <li><strong>Binary Min-Heap:</strong> Extract-Min takes $O(\log V)$, done $V$ times. Relax (Decrease-Key) takes $O(\log V)$, done $E$ times. Overall: <strong>$O((V + E) \log V)$</strong>. (Standard implementation, good for sparse graphs).</li>
+                    <li><strong>Fibonacci Heap:</strong> Decrease-Key takes amortized $O(1)$. Overall: <strong>$O(V \log V + E)$</strong>. (Fastest theoretically).</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 32 - Quick Revision</h3>
+                <ul>
+                    <li><strong>Dijkstra's Algorithm:</strong> Greedy approach for shortest paths.</li>
+                    <li><strong>Constraint:</strong> Fails if there are <strong>negative weight edges</strong>.</li>
+                    <li><strong>Key Step:</strong> Extract the minimum distance node, lock it in set $S$, and Relax all its outgoing edges.</li>
+                    <li><strong>Complexity:</strong> Usually $O((V+E)\log V)$ using a binary min-heap.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr style="margin: 4rem 0; border: 1px solid #e2e8f0;">
+
+        <!-- ================= LECTURE 33 ================= -->
+        <section id="lec33">
+            <h1>Lecture 33: Minimum Spanning Trees (Kruskal's Algorithm)</h1>
+
+            <div class="concept-card">
+                <h3>What is a Minimum Spanning Tree (MST)?</h3>
+                <p>Given a connected, undirected, and weighted graph $G$, a <strong>Spanning Tree</strong> is a subgraph that connects all vertices together without any cycles. A <strong>Minimum Spanning Tree (MST)</strong> is a spanning tree where the total sum of edge weights is minimized.</p>
+                <div class="urdu-text">
+                    <strong>Roman Urdu:</strong> Farz karein aapne ek naye shehar ke tamam gharon ko bijli ki taron (wires) se jorna hai. Wires lagane ka karcha (cost/weight) har ghar ke darmiyan mukhtalif hai. Aap chahte hain ke aisi tarkeeb se taar bichaayein ke tamam ghar connect bhi ho jayen aur total karcha sab se kam aaye. Koi cycle nahi banni chahiye kyunke cycle mein faltu taar zaya hoti hai. Isay MST kehte hain.
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Kruskal's Algorithm (Greedy Approach)</h3>
+                <p>Kruskal's algorithm builds the MST by selecting edges in increasing order of their weights, as long as adding an edge does not form a cycle.</p>
+                
+                <h3>Disjoint-Set Data Structure (Union-Find)</h3>
+                <p>To quickly check if adding an edge forms a cycle, we use a Disjoint-Set structure.</p>
+                <ul>
+                    <li><code>Find-Set(u)</code>: Returns the representative (parent) of the set containing <em>u</em>. If <code>Find-Set(u) == Find-Set(v)</code>, they are already connected. Adding an edge between them would create a cycle!</li>
+                    <li><code>Union(u, v)</code>: Merges the two sets containing <em>u</em> and <em>v</em> into one.</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h3>The Algorithm</h3>
+                <div class="pseudo-block">
+<span class="func">MST-Kruskal</span>(G, w)
+    A = &empty;                                 <span class="comment">// A will hold the MST edges</span>
+    <span class="keyword">for</span> each vertex v in V[G]:
+        Make-Set(v)                         <span class="comment">// Put each vertex in its own set</span>
+        
+    Sort edges of E in non-decreasing order by weight w
+    
+    <span class="keyword">for</span> each edge (u, v) in the sorted list:
+        <span class="keyword">if</span> Find-Set(u) &ne; Find-Set(v):      <span class="comment">// If they are in different trees (NO CYCLE)</span>
+            A = A &cup; {(u, v)}                <span class="comment">// Add edge to MST</span>
+            Union(u, v)                     <span class="comment">// Merge the two trees</span>
+            
+    <span class="keyword">return</span> A
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3>Algorithm Complexity</h3>
+                <div class="complexity-box">
+                    <div class="complexity-badge">O(E log E) or O(E log V)</div>
+                    <div>
+                        <strong>Time Complexity:</strong> Sorting the edges takes $O(E \log E)$. The disjoint-set operations (Find-Set and Union) take $O(E \alpha(V))$ where $\alpha$ is the very slowly growing inverse Ackermann function. Thus, the time is dominated by the sorting step: <strong>$O(E \log E)$</strong>. Since $E \le V^2$, $O(\log E) = O(\log V^2) = O(2 \log V) = O(\log V)$. Thus we can also write it as <strong>$O(E \log V)$</strong>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>⚡ Lecture 33 - Quick Revision</h3>
+                <ul>
+                    <li><strong>MST:</strong> Connect all vertices, minimum total cost, NO cycles.</li>
+                    <li><strong>Kruskal's Algorithm:</strong> Greedy. Sort edges, pick smallest valid edge.</li>
+                    <li><strong>Cycle Detection:</strong> Handled efficiently using <strong>Disjoint Sets (Union-Find)</strong>.</li>
+                    <li><strong>Union-Find Rule:</strong> If <code>Find(u) == Find(v)</code>, picking edge (u,v) will cause a cycle.</li>
+                    <li><strong>Complexity:</strong> $O(E \log V)$, mostly due to the edge sorting step.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>
