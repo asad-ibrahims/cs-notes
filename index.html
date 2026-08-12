@@ -1,334 +1,546 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>CS Notes Hub</title>
-
-<style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    body {
-        font-family: Arial, sans-serif;
-        background: #f5f7fb;
-        color: #172033;
-        line-height: 1.6;
-    }
-
-    .hero {
-        background: linear-gradient(135deg, #0b1f3a, #173b67);
-        color: white;
-        padding: 70px 20px 60px;
-        text-align: center;
-    }
-
-    .hero h1 {
-        font-size: 42px;
-        margin-bottom: 10px;
-    }
-
-    .hero p {
-        font-size: 17px;
-        opacity: 0.85;
-    }
-
-    .container {
-        max-width: 1150px;
-        margin: 45px auto;
-        padding: 0 20px;
-    }
-
-    .search {
-        width: 100%;
-        padding: 16px 20px;
-        border: 1px solid #d7dce5;
-        border-radius: 14px;
-        font-size: 16px;
-        margin-bottom: 35px;
-        outline: none;
-        background: white;
-    }
-
-    .search:focus {
-        border-color: #173b67;
-    }
-
-    .subject {
-        background: white;
-        border-radius: 20px;
-        padding: 30px;
-        margin-bottom: 30px;
-        box-shadow: 0 10px 30px rgba(20, 35, 60, 0.08);
-        border: 1px solid #e7eaf0;
-    }
-
-    .subject-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
-        gap: 15px;
-    }
-
-    .subject h2 {
-        font-size: 25px;
-        color: #0b1f3a;
-    }
-
-    .subject-title {
-        color: #657085;
-        font-size: 14px;
-        margin-top: 3px;
-    }
-
-    .badge {
-        background: #eaf1fb;
-        color: #173b67;
-        padding: 7px 13px;
-        border-radius: 30px;
-        font-size: 13px;
-        font-weight: bold;
-        white-space: nowrap;
-    }
-
-    .lectures {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 14px;
-    }
-
-    .lecture {
-        display: block;
-        text-decoration: none;
-        color: #172033;
-        background: #f8faff;
-        border: 1px solid #e2e8f2;
-        border-radius: 14px;
-        padding: 18px;
-        transition: 0.2s ease;
-    }
-
-    .lecture:hover {
-        transform: translateY(-3px);
-        background: #eef4fc;
-        border-color: #9bb7d9;
-    }
-
-    .lecture strong {
-        display: block;
-        color: #173b67;
-        margin-bottom: 4px;
-    }
-
-    .lecture span {
-        font-size: 13px;
-        color: #6d7788;
-    }
-
-    footer {
-        text-align: center;
-        padding: 35px 20px 50px;
-        color: #7a8495;
-        font-size: 14px;
-    }
-
-    @media (max-width: 600px) {
-        .hero h1 {
-            font-size: 32px;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS Notes Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Academic Color Palette */
+            --primary-color: #1a365d; /* Deep Navy */
+            --secondary-color: #2b6cb0; /* Lighter Blue */
+            --accent-color: #ebf8ff; /* Very Light Blue */
+            --text-main: #2d3748;
+            --text-light: #718096;
+            --bg-body: #f7fafc;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-hover: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition-speed: 0.3s;
         }
 
-        .subject {
-            padding: 22px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .site-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 4px solid var(--accent-color);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .site-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .site-subtitle {
+            font-size: 1.1rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-md);
+            transition: box-shadow var(--transition-speed), background-color var(--transition-speed);
+        }
+
+        .search-input:focus {
+            outline: none;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(235, 248, 255, 0.5);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            width: 20px;
+            height: 20px;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Subject Section Styles */
+        .subject-section {
+            margin-bottom: 4rem;
         }
 
         .subject-header {
-            align-items: flex-start;
-            flex-direction: column;
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
         }
-    }
-</style>
-</head>
 
+        .subject-code {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-right: 1rem;
+        }
+
+        .subject-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .note-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed), border-color var(--transition-speed);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .note-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--secondary-color);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .batch-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .status-badge {
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .card-action {
+            display: inline-flex;
+            align-items: center;
+            color: var(--secondary-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            transition: color var(--transition-speed);
+        }
+
+        .card-action svg {
+            margin-left: 0.5rem;
+            width: 16px;
+            height: 16px;
+            transition: transform var(--transition-speed);
+        }
+
+        .note-card:hover .card-action {
+            color: var(--primary-color);
+        }
+
+        .note-card:hover .card-action svg {
+            transform: translateX(4px);
+        }
+
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px dashed var(--border-color);
+        }
+
+        .site-footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 2rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .subject-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .subject-code {
+                margin-bottom: 0.25rem;
+            }
+            .site-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
 <body>
 
-<section class="hero">
-    <h1>📚 CS Notes Hub</h1>
-    <p>Digital Logic Design • Fundamentals of Algorithms • Web Design & Development</p>
-</section>
-
-<main class="container">
-
-    <input
-        type="text"
-        id="search"
-        class="search"
-        placeholder="Search subject or lecture batch..."
-    >
-
-    <!-- CS302 -->
-    <section class="subject searchable">
-        <div class="subject-header">
-            <div>
-                <h2>CS302</h2>
-                <div class="subject-title">Digital Logic Design</div>
+    <header class="site-header">
+        <div class="header-content">
+            <h1 class="site-title">📚 CS Notes Hub</h1>
+            <p class="site-subtitle">Digital Logic Design • Fundamentals of Algorithms • Web Design & Development</p>
+            
+            <div class="search-container">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search for a subject or lecture batch (e.g., CS302, 19-23)..." autocomplete="off">
             </div>
-            <div class="badge">6 Lecture Batches</div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div id="noResults" class="no-results">
+            No notes found matching your search.
         </div>
 
-        <div class="lectures">
-
-            <a class="lecture" href="CS302/19-23.html">
-                <strong>Lectures 19–23</strong>
-                <span>Open Notes →</span>
-            </a>
-
-            <a class="lecture" href="CS302/24-28.html">
-                <strong>Lectures 24–28</strong>
-                <span>Open Notes →</span>
-            </a>
-
-            <a class="lecture" href="CS302/29-33.html">
-                <strong>Lectures 29–33</strong>
-                <span>Open Notes →</span>
-            </a>
-
-            <a class="lecture" href="CS302/34-38.html">
-                <strong>Lectures 34–38</strong>
-                <span>Open Notes →</span>
-            </a>
-
-            <a class="lecture" href="CS302/39-42.html">
-                <strong>Lectures 39–42</strong>
-                <span>Open Notes →</span>
-            </a>
-
-            <a class="lecture" href="CS302/43-45.html">
-                <strong>Lectures 43–45</strong>
-                <span>Open Notes →</span>
-            </a>
-
-        </div>
-    </section>
-
-
-    <!-- CS502 -->
-    <section class="subject searchable">
-        <div class="subject-header">
-            <div>
-                <h2>CS502</h2>
-                <div class="subject-title">Fundamentals of Algorithms</div>
+        <section class="subject-section" data-subject="CS302 Digital Logic Design">
+            <div class="subject-header">
+                <h2 class="subject-code">CS302</h2>
+                <span class="subject-title">Digital Logic Design</span>
             </div>
-            <div class="badge">6 Lecture Batches</div>
-        </div>
+            <div class="notes-grid">
+                <a href="CS302/19-23.html" class="note-card" data-search="CS302 Digital Logic Design Lectures 19-23">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 19-23</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
+                
+                <a href="CS302/24-28.html" class="note-card" data-search="CS302 Digital Logic Design Lectures 24-28">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 24-28</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
 
-        <div class="lectures">
+                <a href="CS302/29-33.html" class="note-card" data-search="CS302 Digital Logic Design Lectures 29-33">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 29-33</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
 
-            <a class="lecture" href="CS502/19-23.html">
-                <strong>Lectures 19–23</strong>
-                <span>Open Notes →</span>
-            </a>
+                <a href="CS302/34-38.html" class="note-card" data-search="CS302 Digital Logic Design Lectures 34-38">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 34-38</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
 
-            <a class="lecture" href="CS502/24-28.html">
-                <strong>Lectures 24–28</strong>
-                <span>Open Notes →</span>
-            </a>
+                <a href="CS302/39-42.html" class="note-card" data-search="CS302 Digital Logic Design Lectures 39-42">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 39-42</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
 
-            <a class="lecture" href="CS502/29-33.html">
-                <strong>Lectures 29–33</strong>
-                <span>Open Notes →</span>
-            </a>
-
-            <a class="lecture" href="CS502/34-38.html">
-                <strong>Lectures 34–38</strong>
-                <span>Open Notes →</span>
-            </a>
-
-            <a class="lecture" href="CS502/39-43.html">
-                <strong>Lectures 39–43</strong>
-                <span>Open Notes →</span>
-            </a>
-
-            <a class="lecture" href="CS502/44-45.html">
-                <strong>Lectures 44–45</strong>
-                <span>Open Notes →</span>
-            </a>
-
-        </div>
-    </section>
-
-
-    <!-- CS506 -->
-    <section class="subject searchable">
-        <div class="subject-header">
-            <div>
-                <h2>CS506</h2>
-                <div class="subject-title">Web Design & Development</div>
+                <a href="CS302/43-45.html" class="note-card" data-search="CS302 Digital Logic Design Lectures 43-45">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 43-45</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
             </div>
-            <div class="badge">6 Lecture Batches</div>
-        </div>
+        </section>
 
-        <div class="lectures">
+        <section class="subject-section" data-subject="CS502 Fundamentals of Algorithms">
+            <div class="subject-header">
+                <h2 class="subject-code">CS502</h2>
+                <span class="subject-title">Fundamentals of Algorithms</span>
+            </div>
+            <div class="notes-grid">
+                <a href="CS502/19-23.html" class="note-card" data-search="CS502 Fundamentals of Algorithms Lectures 19-23">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 19-23</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
+                
+                <a href="CS502/24-28.html" class="note-card" data-search="CS502 Fundamentals of Algorithms Lectures 24-28">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 24-28</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
 
-            <a class="lecture" href="CS506/19-23.html">
-                <strong>Lectures 19–23</strong>
-                <span>Open Notes →</span>
-            </a>
+                <a href="CS502/29-33.html" class="note-card" data-search="CS502 Fundamentals of Algorithms Lectures 29-33">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 29-33</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
 
-            <a class="lecture" href="CS506/24-28.html">
-                <strong>Lectures 24–28</strong>
-                <span>Open Notes →</span>
-            </a>
+                <a href="CS502/34-38.html" class="note-card" data-search="CS502 Fundamentals of Algorithms Lectures 34-38">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 34-38</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
 
-            <a class="lecture" href="CS506/29-33.html">
-                <strong>Lectures 29–33</strong>
-                <span>Open Notes →</span>
-            </a>
+                <a href="CS502/39-43.html" class="note-card" data-search="CS502 Fundamentals of Algorithms Lectures 39-43">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 39-43</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
 
-            <a class="lecture" href="CS506/34-38.html">
-                <strong>Lectures 34–38</strong>
-                <span>Open Notes →</span>
-            </a>
+                <a href="CS502/44-45.html" class="note-card" data-search="CS502 Fundamentals of Algorithms Lectures 44-45">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 44-45</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
+            </div>
+        </section>
 
-            <a class="lecture" href="CS506/39-42.html">
-                <strong>Lectures 39–42</strong>
-                <span>Open Notes →</span>
-            </a>
+        <section class="subject-section" data-subject="CS506 Web Design & Development">
+            <div class="subject-header">
+                <h2 class="subject-code">CS506</h2>
+                <span class="subject-title">Web Design & Development</span>
+            </div>
+            <div class="notes-grid">
+                <a href="CS506/19-23.html" class="note-card" data-search="CS506 Web Design & Development Lectures 19-23">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 19-23</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
+                
+                <a href="CS506/24-28.html" class="note-card" data-search="CS506 Web Design & Development Lectures 24-28">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 24-28</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
 
-            <a class="lecture" href="CS506/43-45.html">
-                <strong>Lectures 43–45</strong>
-                <span>Open Notes →</span>
-            </a>
+                <a href="CS506/29-33.html" class="note-card" data-search="CS506 Web Design & Development Lectures 29-33">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 29-33</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
 
-        </div>
-    </section>
+                <a href="CS506/34-38.html" class="note-card" data-search="CS506 Web Design & Development Lectures 34-38">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 34-38</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
 
-</main>
+                <a href="CS506/39-42.html" class="note-card" data-search="CS506 Web Design & Development Lectures 39-42">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 39-42</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
 
-<footer>
-    CS Notes Hub • Personal Study Portal
-</footer>
+                <a href="CS506/43-45.html" class="note-card" data-search="CS506 Web Design & Development Lectures 43-45">
+                    <div>
+                        <div class="card-header">
+                            <h3 class="batch-title">Lectures 43-45</h3>
+                            <span class="status-badge">Available</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">Final Term Preparation</p>
+                    </div>
+                    <div class="card-action">Read Notes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg></div>
+                </a>
+            </div>
+        </section>
 
+    </main>
 
-<script>
-    const search = document.getElementById("search");
-    const sections = document.querySelectorAll(".searchable");
+    <footer class="site-footer">
+        <p>&copy; <span id="currentYear"></span> CS Notes Hub. Personal Study Portal.</p>
+    </footer>
 
-    search.addEventListener("input", function () {
-        const query = this.value.toLowerCase().trim();
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        sections.forEach(section => {
-            const text = section.innerText.toLowerCase();
+            const searchInput = document.getElementById('searchInput');
+            const sections = document.querySelectorAll('.subject-section');
+            const noResults = document.getElementById('noResults');
 
-            section.style.display =
-                text.includes(query) ? "block" : "none";
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                let hasVisibleResults = false;
+
+                sections.forEach(section => {
+                    const cards = section.querySelectorAll('.note-card');
+                    let sectionHasVisibleCards = false;
+                    const sectionSubject = section.getAttribute('data-subject').toLowerCase();
+
+                    cards.forEach(card => {
+                        const searchData = card.getAttribute('data-search').toLowerCase();
+                        
+                        // Check if the search term is in the card's data OR the section's subject
+                        if (searchData.includes(searchTerm) || sectionSubject.includes(searchTerm)) {
+                            card.style.display = 'flex'; // Use flex to maintain card layout
+                            sectionHasVisibleCards = true;
+                            hasVisibleResults = true;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    // Hide the entire section if no cards within it are visible
+                    if (sectionHasVisibleCards) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+
+                // Show/hide "No results" message
+                if (hasVisibleResults || searchTerm === '') {
+                    noResults.style.display = 'none';
+                } else {
+                    noResults.style.display = 'block';
+                }
+            });
         });
-    });
-</script>
-
+    </script>
 </body>
 </html>
