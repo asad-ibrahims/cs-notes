@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS302 Study Notes - Lectures 43 to 45</title>
+    <style>
+        :root {
+            --primary: #1e3a8a; 
+            --secondary: #3b82f6; 
+            --bg-color: #f8fafc;
+            --text-main: #334155;
+            --roman-urdu-bg: #fef9c3;
+            --roman-urdu-border: #eab308;
+            --def-bg: #e0f2fe;
+            --def-border: #0ea5e9;
+            --rule-bg: #dcfce7;
+            --rule-border: #22c55e;
+            --danger-bg: #fee2e2;
+            --danger-border: #ef4444;
+            --sidebar-width: 250px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; line-height: 1.6; }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #1e293b;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+        .sidebar h2 {
+            text-align: center; padding-bottom: 20px; border-bottom: 1px solid #334155;
+            margin-bottom: 20px; font-size: 1.2rem; color: #38bdf8;
+        }
+        .sidebar ul { list-style-type: none; }
+        .sidebar ul li a {
+            display: block; padding: 12px 20px; color: #cbd5e1;
+            text-decoration: none; transition: 0.3s; border-left: 4px solid transparent;
+        }
+        .sidebar ul li a:hover {
+            background-color: #334155; border-left: 4px solid var(--secondary); color: white;
+        }
+
+        /* Main Content */
+        .content { margin-left: var(--sidebar-width); padding: 40px; width: calc(100% - var(--sidebar-width)); max-width: 1000px; }
+        h1 { color: var(--primary); font-size: 2.5rem; border-bottom: 3px solid var(--primary); padding-bottom: 10px; margin-bottom: 30px; }
+        h2 { color: var(--primary); margin-top: 40px; margin-bottom: 15px; font-size: 1.8rem; }
+        h3 { color: var(--secondary); margin-top: 30px; margin-bottom: 10px; font-size: 1.4rem; }
+        p { margin-bottom: 15px; }
+
+        /* Concept Cards & Boxes */
+        .box { padding: 15px 20px; margin: 20px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .def-box { background-color: var(--def-bg); border-left: 5px solid var(--def-border); }
+        .def-box strong { color: #0369a1; }
+        .roman-urdu { background-color: var(--roman-urdu-bg); border-left: 5px solid var(--roman-urdu-border); font-style: italic; color: #854d0e; }
+        .rule-box { background-color: var(--rule-bg); border: 2px solid var(--rule-border); text-align: center; font-weight: bold; color: #166534; }
+        .danger-box { background-color: var(--danger-bg); border-left: 5px solid var(--danger-border); color: #991b1b; }
+
+        /* Formula Blocks */
+        .formula-block {
+            background-color: #f1f5f9;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Cambria', serif;
+            font-size: 1.1rem;
+            color: #0f172a;
+            border-left: 4px solid #64748b;
+            margin-bottom: 15px;
+        }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; border: 1px solid #cbd5e1; text-align: center; }
+        th { background-color: var(--primary); color: white; }
+        tr:nth-child(even) { background-color: #f1f5f9; }
+
+        /* Quick Revision Section */
+        .quick-revision { background-color: #1e293b; color: white; padding: 25px; border-radius: 10px; margin-top: 50px; margin-bottom: 50px; }
+        .quick-revision h3 { color: #38bdf8; margin-top: 0; border-bottom: 1px solid #475569; padding-bottom: 10px; }
+        .quick-revision ul { margin-left: 20px; margin-bottom: 15px; }
+        .quick-revision li { margin-bottom: 8px; }
+        code { background-color: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #b91c1c; font-weight: bold;}
+
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .content { margin-left: 0; width: 100%; padding: 20px; }
+            body { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS302: Lec 43-45</h2>
+        <ul>
+            <li><a href="#lec43">Lecture 43: Advanced DRAMs</a></li>
+            <li><a href="#lec44">Lecture 44: Flash, FIFO & LIFO</a></li>
+            <li><a href="#lec45">Lecture 45: Memory Expansion</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content">
+
+        <!-- ================= LECTURE 43 ================= -->
+        <section id="lec43">
+            <h1>Lecture 43: Advanced DRAM Architectures</h1>
+            <p>Standard DRAM (covered in Lecture 42) is slow because for every single byte of data, the CPU must send a Row Address (RAS), wait, then send a Column Address (CAS), and wait again. Engineers developed faster versions of DRAM to solve this bottleneck.</p>
+
+            <h2>1. FPM (Fast Page Mode) DRAM</h2>
+            <p><strong>What is it?</strong> In FPM, once a Row Address is selected, the DRAM keeps that row (or "page") open. The CPU can then just send multiple different Column Addresses rapidly to read multiple bytes from the same row without re-sending the Row Address.</p>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Farz karein aap ek kitaab (Memory) parh rahay hain. Normal DRAM mein CPU har lafz parhne ke baad kitaab band karta hai aur phir naya lafz parhne ke liye wahi page dobara kholta hai. FPM DRAM mein CPU ek dafa page (Row) khol leta hai, aur us page par mojood saaray lafz (Columns) jaldi jaldi parh leta hai bina kitaab band kiye.
+            </div>
+
+            <h2>2. EDO (Extended Data Out) DRAM</h2>
+            <p><strong>What is it?</strong> An improvement over FPM. In EDO DRAM, the output data remains valid on the data pins even while the CPU is sending the <em>next</em> column address. This overlapping of operations speeds up reading significantly.</p>
+
+            <h2>3. SDRAM (Synchronous DRAM)</h2>
+            <p><strong>What is it?</strong> Older DRAMs were asynchronous (they didn't care about the CPU's main clock, they operated on their own internal delays). SDRAM is tied directly to the system clock. All read/write operations happen exactly on the rising edge of the clock pulse. This allows the memory to work in perfect harmony with the CPU, transferring data in high-speed "bursts".</p>
+
+            <h2>4. DDR (Double Data Rate) SDRAM</h2>
+            <p><strong>What is it?</strong> Standard SDRAM transfers 1 word of data per clock cycle (on the rising edge). DDR SDRAM transfers data on BOTH the rising edge and the falling edge of the clock. This effectively doubles the speed without increasing the clock frequency.</p>
+            
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Normal SDRAM clock ki 'tick' (upward edge) par data bhejta hai aur 'tock' (downward edge) par farigh rehta hai. DDR SDRAM 'tick' aur 'tock' dono par data bhejta hai, jiski wajah se speed double (2x) ho jati hai!
+            </div>
+
+            <!-- QUICK REVISION 43 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 43</h3>
+                <ul>
+                    <li><strong>FPM DRAM:</strong> Holds the Row (Page) open to read multiple columns faster.</li>
+                    <li><strong>EDO DRAM:</strong> Overlaps data output with the next address setup.</li>
+                    <li><strong>SDRAM:</strong> Synchronized with the CPU clock for burst transfers.</li>
+                    <li><strong>DDR SDRAM:</strong> Transfers data on both the rising (&uarr;) and falling (&darr;) edges of the clock.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 44 ================= -->
+        <section id="lec44">
+            <h1>Lecture 44: Flash Memory & Special Memories</h1>
+
+            <h2>1. Flash Memory Architecture</h2>
+            <p>Flash Memory is a non-volatile storage technology (keeps data when power is off) that can be electrically erased and reprogrammed in large blocks. It is the technology behind USB drives and SSDs.</p>
+            <p><strong>How it works:</strong> It uses a special MOS transistor with a <strong>Floating Gate</strong>. By applying a high voltage, electrons are forced through a thin oxide layer and trapped inside the floating gate. Because it is surrounded by insulation, the electrons stay trapped for years (representing a '0'). To erase it, a reverse voltage pulls the electrons back out (representing a '1').</p>
+
+            <h3>NOR vs. NAND Flash</h3>
+            <div class="def-box box">
+                <strong>NOR Flash:</strong> Allows Random Access (you can read any specific byte instantly). Used for storing BIOS and firmware where the CPU needs to execute code directly from memory.<br>
+                <strong>NAND Flash:</strong> Allows only Serial Access (read in blocks/pages). It is much denser, cheaper, and faster for bulk writing. Used in USB flash drives and SD cards.
+            </div>
+
+            <h2>2. Special Memories (FIFO & LIFO)</h2>
+
+            <h3>A. FIFO (First In, First Out)</h3>
+            <p>Data written first is the first one to be read out. It acts like a pipeline or a queue.</p>
+            <p><strong>Why is it used?</strong> Used as a <strong>Buffer</strong> between two devices running at different speeds. For example, a fast CPU sends a document to a slow Printer. The CPU dumps the data into a FIFO buffer and moves on, while the printer slowly reads from the FIFO.</p>
+
+            <h3>B. LIFO (Last In, First Out)</h3>
+            <p>Data written last is the first one to be read out. Also called a <strong>Stack</strong>.</p>
+            <p><strong>Why is it used?</strong> Used heavily by Microprocessors. When a CPU jumps to run a sub-routine (a mini-program), it PUSHES its current return address onto the LIFO stack. When the sub-routine finishes, it POPs the address off the stack to know exactly where to return.</p>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong><br>
+                <strong>FIFO:</strong> Yeh bank ki line ki tarah hai. Jo banda pehle line mein khara hoga, wo pehle farigh hoga.<br>
+                <strong>LIFO:</strong> Yeh kitabon ke dher (stack) ki tarah hai. Jo kitaab aapne sab se aakhir mein dher ke upar rakhi thi, jab uthani paray gi toh sab se pehle wohi upar wali kitaab uthayenge.
+            </div>
+
+            <!-- QUICK REVISION 44 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 44</h3>
+                <ul>
+                    <li><strong>Floating Gate:</strong> Traps electrons to store data permanently without power.</li>
+                    <li><strong>NOR Flash:</strong> Random access. Used for code execution (BIOS).</li>
+                    <li><strong>NAND Flash:</strong> Block access. High density. Used for USBs/SSDs.</li>
+                    <li><strong>FIFO:</strong> Queue system. Used for buffering between different-speed devices.</li>
+                    <li><strong>LIFO:</strong> Stack system. Used for holding return addresses in CPUs (PUSH/POP).</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 45 ================= -->
+        <section id="lec45">
+            <h1>Lecture 45: Memory Expansion</h1>
+            <p>Often, a single memory IC does not have the capacity (number of locations) or the word-size (data width) required by a computer system. Engineers combine multiple smaller memory chips to create a larger memory system. This is called Memory Expansion.</p>
+
+            <h2>1. Word-Size Expansion (Increasing Data Width)</h2>
+            <p><strong>Scenario:</strong> The CPU has a 16-bit Data Bus, but you only have 8-bit RAM chips. (e.g., You want to build a 1K &times; 16 memory using two 1K &times; 8 chips).</p>
+            
+            <p><strong>How to Connect:</strong> You connect the chips in parallel.</p>
+            <ul>
+                <li><strong>Address Bus:</strong> Connected to BOTH chips simultaneously (A0 goes to A0 of Chip 1 AND Chip 2).</li>
+                <li><strong>Control Pins (CS, WE, OE):</strong> Connected to BOTH chips simultaneously so they turn on and off together.</li>
+                <li><strong>Data Bus:</strong> Kept <strong>SEPARATE</strong>. Chip 1 handles bits D0-D7. Chip 2 handles bits D8-D15. Together, they form a 16-bit word.</li>
+            </ul>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Word-Size barhane ka matlab hai ke memory ki chaurai (width) barhani hai. Hum 2 chips ko bilkul ek sath on karte hain. Aadha data pehli chip mein jata hai aur baqi ka aadha dusri chip mein. Address dono ko same diya jata hai taake dono ek hi location par apna apna hissa save karein.
+            </div>
+
+            <h2>2. Capacity Expansion (Increasing Locations)</h2>
+            <p><strong>Scenario:</strong> The CPU wants 2048 locations (2K), but your chips only hold 1024 locations (1K). The data width is fine (8-bits). (e.g., Expanding two 1K &times; 8 chips into one 2K &times; 8 memory).</p>
+
+            <p><strong>How to Connect:</strong> You connect the chips sequentially using a Decoder.</p>
+            <ul>
+                <li><strong>Data Bus:</strong> Connected together. (D0-D7 of CPU goes to D0-D7 of BOTH chips).</li>
+                <li><strong>Address Bus (Lower bits):</strong> The first 10 bits (A0 to A9) are shared between both chips to access the 1024 locations inside them.</li>
+                <li><strong>Address Bus (Highest bit):</strong> The 11th bit (A10) from the CPU is used as a <strong>Selector</strong>. It is connected to a NOT gate or Decoder. 
+                    <br>&rarr; If A10 = 0, Chip 1 is enabled (Chip Select = 0), and Chip 2 is disabled.
+                    <br>&rarr; If A10 = 1, Chip 1 is disabled, and Chip 2 is enabled.
+                </li>
+            </ul>
+
+            <div class="formula-block">
+                <strong>Mathematical Rule for Capacity Expansion:</strong><br>
+                Number of Chips Required = Total Desired Capacity &divide; Capacity of One Chip.<br>
+                <em>Example: Need 4K locations using 1K chips? You need 4 chips, and a 2-to-4 Decoder to control their CS' pins using the top 2 address bits.</em>
+            </div>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Capacity barhane ka matlab hai lambaai (length) barhana. Isme ek waqt mein sirf EK chip on hoti hai. Data wire dono pe lagi hoti hai par kaam sirf us chip mein hota hai jo "On" (Select) hoti hai. Sab se highest address wire batati hai ke memory ka upar wala hissa (Chip 1) use karna hai ya neechay wala (Chip 2).
+            </div>
+
+            <!-- QUICK REVISION 45 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 45</h3>
+                <ul>
+                    <li><strong>Word-Size Expansion:</strong> Data buses split. Address and Control (CS) are shared. Both chips active simultaneously.</li>
+                    <li><strong>Capacity Expansion:</strong> Data buses shared. Lower addresses shared. Highest address bit(s) used via a Decoder to select which chip turns on. Only one chip active at a time.</li>
+                    <li><strong>Decoder Role:</strong> In capacity expansion, Decoders map the CPU's memory address space to the correct physical chip.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

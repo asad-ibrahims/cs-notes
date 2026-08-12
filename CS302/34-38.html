@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS302 Study Notes - Lectures 34 to 38</title>
+    <style>
+        :root {
+            --primary: #1e3a8a; 
+            --secondary: #3b82f6; 
+            --bg-color: #f8fafc;
+            --text-main: #334155;
+            --roman-urdu-bg: #fef9c3;
+            --roman-urdu-border: #eab308;
+            --def-bg: #e0f2fe;
+            --def-border: #0ea5e9;
+            --rule-bg: #dcfce7;
+            --rule-border: #22c55e;
+            --danger-bg: #fee2e2;
+            --danger-border: #ef4444;
+            --sidebar-width: 250px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; line-height: 1.6; }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #1e293b;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+        .sidebar h2 {
+            text-align: center; padding-bottom: 20px; border-bottom: 1px solid #334155;
+            margin-bottom: 20px; font-size: 1.2rem; color: #38bdf8;
+        }
+        .sidebar ul { list-style-type: none; }
+        .sidebar ul li a {
+            display: block; padding: 12px 20px; color: #cbd5e1;
+            text-decoration: none; transition: 0.3s; border-left: 4px solid transparent;
+        }
+        .sidebar ul li a:hover {
+            background-color: #334155; border-left: 4px solid var(--secondary); color: white;
+        }
+
+        /* Main Content */
+        .content { margin-left: var(--sidebar-width); padding: 40px; width: calc(100% - var(--sidebar-width)); max-width: 1000px; }
+        h1 { color: var(--primary); font-size: 2.5rem; border-bottom: 3px solid var(--primary); padding-bottom: 10px; margin-bottom: 30px; }
+        h2 { color: var(--primary); margin-top: 40px; margin-bottom: 15px; font-size: 1.8rem; }
+        h3 { color: var(--secondary); margin-top: 30px; margin-bottom: 10px; font-size: 1.4rem; }
+        p { margin-bottom: 15px; }
+
+        /* Concept Cards & Boxes */
+        .box { padding: 15px 20px; margin: 20px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .def-box { background-color: var(--def-bg); border-left: 5px solid var(--def-border); }
+        .def-box strong { color: #0369a1; }
+        .roman-urdu { background-color: var(--roman-urdu-bg); border-left: 5px solid var(--roman-urdu-border); font-style: italic; color: #854d0e; }
+        .rule-box { background-color: var(--rule-bg); border: 2px solid var(--rule-border); text-align: center; font-weight: bold; color: #166534; }
+        .danger-box { background-color: var(--danger-bg); border-left: 5px solid var(--danger-border); color: #991b1b; }
+
+        /* Formula Blocks */
+        .formula-block {
+            background-color: #f1f5f9;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Cambria', serif;
+            font-size: 1.1rem;
+            color: #0f172a;
+            border-left: 4px solid #64748b;
+            margin-bottom: 15px;
+        }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; border: 1px solid #cbd5e1; text-align: center; }
+        th { background-color: var(--primary); color: white; }
+        tr:nth-child(even) { background-color: #f1f5f9; }
+
+        /* Quick Revision Section */
+        .quick-revision { background-color: #1e293b; color: white; padding: 25px; border-radius: 10px; margin-top: 50px; margin-bottom: 50px; }
+        .quick-revision h3 { color: #38bdf8; margin-top: 0; border-bottom: 1px solid #475569; padding-bottom: 10px; }
+        .quick-revision ul { margin-left: 20px; margin-bottom: 15px; }
+        .quick-revision li { margin-bottom: 8px; }
+        code { background-color: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #b91c1c; font-weight: bold;}
+
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .content { margin-left: 0; width: 100%; padding: 20px; }
+            body { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS302: Lec 34-38</h2>
+        <ul>
+            <li><a href="#lec34">Lecture 34: ADC Types & Maths</a></li>
+            <li><a href="#lec35">Lecture 35: DSP & ADC Errors</a></li>
+            <li><a href="#lec36">Lecture 36: Intro to ABEL</a></li>
+            <li><a href="#lec37">Lecture 37: ABEL Programming</a></li>
+            <li><a href="#lec38">Lecture 38: ABEL Seq. Logic</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content">
+
+        <!-- ================= LECTURE 34 ================= -->
+        <section id="lec34">
+            <h1>Lecture 34: Analog to Digital Converters (Detailed)</h1>
+            <p>In this lecture, we deeply analyze the mathematical behavior, conversion times, and architecture of the three primary types of ADCs.</p>
+
+            <h2>1. Flash ADC (Simultaneous ADC)</h2>
+            <p><strong>What is it?</strong> It uses a massive array of comparators that check the input voltage against reference voltages simultaneously. It is the fastest ADC available.</p>
+            
+            <div class="formula-block">
+                <strong>Comparators Required:</strong> C = 2<sup>n</sup> - 1 <br>
+                <strong>Conversion Time:</strong> T<sub>conv</sub> = 1 Clock Cycle
+            </div>
+            
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Flash ADC bilkul ek thermometer ki tarah kaam karta hai. Isme bohat saaray sensors (comparators) ek sath lagay hote hain. Jaise hi voltage aati hai, sab ek hi waqt mein check karte hain, isliye yeh sirf 1 clock tick (1 cycle) mein result de deta hai. Lekin iska nuqsan yeh hai ke hardware bohat bara aur mehenga ho jata hai.
+            </div>
+
+            <h2>2. Successive Approximation ADC (SAR)</h2>
+            <p><strong>What is it?</strong> It uses a "guessing" algorithm. It starts by setting the Most Significant Bit (MSB) to 1, converts it back to analog via a DAC, and compares it with the input. If the guess is too high, it turns the bit to 0. If it's too low, it keeps it at 1. It repeats this for every bit down to the LSB.</p>
+            
+            <div class="formula-block">
+                <strong>Conversion Time (SAR):</strong> T<sub>conv</sub> = n &times; T<sub>clock</sub><br>
+                <em>Where 'n' is the number of bits.</em>
+            </div>
+
+            <h2>3. Dual-Slope (Integrating) ADC</h2>
+            <p><strong>What is it?</strong> It uses an Operational Amplifier configured as an integrator (charging a capacitor). It charges the capacitor with the unknown input voltage for a fixed time, and then discharges it using a known reference voltage. The time it takes to discharge is measured by a digital counter.</p>
+            
+            <div class="formula-block">
+                <strong>Input Voltage Equation:</strong> V<sub>in</sub> = -V<sub>ref</sub> &times; (t<sub>discharge</sub> &divide; t<sub>charge</sub>)
+            </div>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Dual Slope mein ek capacitor charge hota hai aur phir discharge hota hai. Jitni der lagti hai discharge hone mein, counter utni der count karta hai. Yeh sab se "slow" ADC hai, par iska faida yeh hai ke yeh noise (interference) ko bilkul khatam kar deta hai. Digital multimeters (DMMs) mein yehi use hota hai.
+            </div>
+
+            <!-- QUICK REVISION 34 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 34</h3>
+                <ul>
+                    <li><strong>Flash ADC:</strong> Fastest. Needs 2<sup>n</sup> - 1 comparators. T<sub>conv</sub> = 1 cycle.</li>
+                    <li><strong>Successive Approximation:</strong> Best balance of speed/cost. T<sub>conv</sub> = n cycles.</li>
+                    <li><strong>Dual-Slope:</strong> Slowest, but highly immune to noise. Used in digital voltmeters.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 35 ================= -->
+        <section id="lec35">
+            <h1>Lecture 35: Tracking ADC, Errors, and DSP</h1>
+
+            <h2>1. Tracking ADC</h2>
+            <p><strong>What is it?</strong> Similar to the Successive Approximation ADC, but instead of starting from scratch (guessing from MSB) for every sample, it uses an <strong>Up/Down Counter</strong>. It simply tracks the voltage. If the input goes up, the counter counts UP. If it goes down, it counts DOWN.</p>
+            <p><strong>Why is it used?</strong> It is extremely fast for signals that change very slowly over time, because the counter only has to change by a few bits instead of resetting.</p>
+
+            <h2>2. ADC Errors</h2>
+            <p>Even the best ADCs are not perfect. They suffer from physical limitations:</p>
+            <ul>
+                <li><strong>Quantization Error:</strong> Because an ADC assigns a continuous voltage to a specific discrete binary step, there is always a slight mathematical rounding error. The maximum quantization error is <strong>&plusmn; <sup>1</sup>&frasl;<sub>2</sub> LSB</strong>.</li>
+                <li><strong>Missing Code:</strong> Due to internal hardware faults, an ADC might skip a binary number entirely while counting up.</li>
+                <li><strong>Offset Error:</strong> When the input voltage is 0V, but the ADC outputs a binary number greater than <code>0000...</code></li>
+            </ul>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Quantization error ka matlab hai "rounding off". Agar apka wazan 65.4 kg hai aur apka scale sirf points mein nahi batata, toh wo 65 kg dikhayega. Yeh jo 0.4 kg ka farq aya, yeh quantization error hai. Real world signals continuous hote hain, jabke digital steps mein, isliye thora data hamesha round off ho jata hai.
+            </div>
+
+            <h2>3. Digital Signal Processing (DSP) Block Diagram</h2>
+            <p>How does a computer actually process real-world audio/video? It follows this exact hardware chain:</p>
+            <div class="def-box box">
+                <strong>1. Transducer (Mic)</strong> &rarr; 
+                <strong>2. Anti-Aliasing Filter</strong> (Removes unwanted high frequencies) &rarr; 
+                <strong>3. ADC</strong> (Converts to binary) &rarr; 
+                <strong>4. DSP / CPU</strong> (Adds effects, processes data) &rarr; 
+                <strong>5. DAC</strong> (Converts back to analog) &rarr; 
+                <strong>6. Speaker</strong>.
+            </div>
+
+            <!-- QUICK REVISION 35 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 35</h3>
+                <ul>
+                    <li><strong>Tracking ADC:</strong> Uses an Up/Down counter to follow slow-moving signals.</li>
+                    <li><strong>Quantization Error:</strong> Inherent rounding error of ADCs (max &plusmn; 0.5 LSB).</li>
+                    <li><strong>Anti-Aliasing Filter:</strong> Placed <em>before</em> the ADC to remove high frequencies that would confuse the sampling process.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 36 ================= -->
+        <section id="lec36">
+            <h1>Lecture 36: Introduction to Hardware Description Languages (HDL)</h1>
+
+            <h2>1. What is an HDL?</h2>
+            <p><strong>Hardware Description Language (HDL)</strong> is a specialized programming language used to describe the structure and behavior of digital logic circuits. Instead of manually drawing logic gates (Schematic Entry), engineers write code to program PLDs, CPLDs, and FPGAs.</p>
+            
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Ab tak hum logic gates (AND, OR) copy par draw kar rahe thay. Lekin jab circuit mein lakhon gates aa jayen, toh unhe draw karna namumkin hai. Isliye hum Programming Language (HDL) use karte hain. Hum computer ko software mein equations likh kar batate hain, aur computer khud un equations ko asli gates mein convert kar ke chip (FPGA/CPLD) ke andar burn (program) kar deta hai.
+            </div>
+
+            <h2>2. Introduction to ABEL</h2>
+            <p><strong>ABEL</strong> (Advanced Boolean Expression Language) is an industry-standard HDL developed specifically for programming Programmable Logic Devices (PLDs like PALs and GALs).</p>
+            
+            <h3>Why use ABEL?</h3>
+            <ul>
+                <li><strong>Efficiency:</strong> Typing equations is faster than drawing schematics.</li>
+                <li><strong>Optimization:</strong> The ABEL compiler automatically simplifies Boolean equations (like doing K-Maps automatically) before burning the chip.</li>
+                <li><strong>Simulation:</strong> You can test the circuit logically inside the software before actually burning the physical IC.</li>
+            </ul>
+
+            <h2>3. Basic ABEL Operators</h2>
+            <p>ABEL uses specific keyboard symbols to represent Boolean logic:</p>
+            <table style="width: 60%;">
+                <tr><th>Logic Gate</th><th>Boolean Symbol</th><th>ABEL Symbol</th></tr>
+                <tr><td>AND</td><td>A &middot; B</td><td><code>A &amp; B</code></td></tr>
+                <tr><td>OR</td><td>A + B</td><td><code>A # B</code></td></tr>
+                <tr><td>NOT</td><td>A' or A&#773;</td><td><code>!A</code></td></tr>
+                <tr><td>XOR</td><td>A &oplus; B</td><td><code>A $ B</code></td></tr>
+                <tr><td>XNOR</td><td>(A &oplus; B)'</td><td><code>!(A $ B)</code></td></tr>
+            </table>
+
+            <!-- QUICK REVISION 36 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 36</h3>
+                <ul>
+                    <li><strong>HDL:</strong> Programming language for hardware (e.g., ABEL, VHDL, Verilog).</li>
+                    <li><strong>Schematic vs HDL:</strong> HDL is scalable for massive circuits; schematics are not.</li>
+                    <li><strong>ABEL:</strong> Advanced Boolean Expression Language, used for PLDs.</li>
+                    <li><strong>Symbols:</strong> <code>&amp;</code> (AND), <code>#</code> (OR), <code>!</code> (NOT), <code>$</code> (XOR).</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 37 ================= -->
+        <section id="lec37">
+            <h1>Lecture 37: ABEL Programming Structure & Syntax</h1>
+
+            <h2>1. The Structure of an ABEL Program</h2>
+            <p>Every ABEL program must follow a strict modular structure. It consists of three main sections enclosed within a <code>MODULE</code> and an <code>END</code> statement.</p>
+
+            <div class="def-box box">
+                <strong>1. Declarations:</strong> Defines the inputs, outputs, and intermediate wires (nodes). It assigns specific physical PIN numbers of the IC to the variables.<br>
+                <strong>2. Logic Equations (or Truth Tables):</strong> The actual Boolean logic that tells the chip what to do.<br>
+                <strong>3. Test Vectors:</strong> Simulation inputs. It tells the compiler to test the code with virtual inputs to see if the expected outputs are correct.
+            </div>
+
+            <h2>2. Writing a Basic Combinational Circuit</h2>
+            <p>Let's write a program for an XOR logic circuit. (F = A &oplus; B)</p>
+
+            <div class="formula-block">
+<pre>
+MODULE my_XOR
+TITLE 'Simple XOR Gate Design'
+
+" --- DECLARATIONS ---
+A, B   PIN 1, 2;  " Input pins
+F      PIN 15 ISTYPE 'com'; " Output pin, Combinational logic
+
+" --- EQUATIONS ---
+EQUATIONS
+F = A $ B;        " F equals A XOR B
+
+" --- TEST VECTORS (Simulation) ---
+TEST_VECTORS ([A, B] -> [F])
+[0, 0] -> [0];
+[0, 1] -> [1];
+[1, 0] -> [1];
+[1, 1] -> [0];
+
+END my_XOR
+</pre>
+            </div>
+
+            <div class="roman-urdu box">
+                <strong>Concept Breakdown (Roman Urdu):</strong><br>
+                1. Sab se pehle humne <code>MODULE</code> ka naam rakha.<br>
+                2. Phir humne bataya ke IC ki PIN 1 aur PIN 2 ko hum 'A' aur 'B' ka naam de rahay hain. PIN 15 output 'F' hai.<br>
+                3. <code>ISTYPE 'com'</code> ka matlab hai ke ye simple logic hai, isme koi flip-flop (memory) nahi hai (Combinational).<br>
+                4. Phir humne <code>EQUATIONS</code> mein ja kar XOR ka formula <code>$</code> symbol ke sath likh diya.<br>
+                5. End par <code>TEST_VECTORS</code> lagaye taa ke software check kar le ke 0,0 par 0 mil raha hai ya nahi.
+            </div>
+
+            <!-- QUICK REVISION 37 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 37</h3>
+                <ul>
+                    <li><strong>MODULE / END:</strong> The wrappers for every ABEL program.</li>
+                    <li><strong>PIN keyword:</strong> Assigns physical chip pins to variable names.</li>
+                    <li><strong>ISTYPE 'com':</strong> Tells the compiler the output is purely combinational.</li>
+                    <li><strong>TEST_VECTORS:</strong> Used to verify logic accuracy inside the software before burning the physical chip.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 38 ================= -->
+        <section id="lec38">
+            <h1>Lecture 38: Sequential Logic & State Diagrams in ABEL</h1>
+
+            <h2>1. Registered Outputs (Flip-Flops in ABEL)</h2>
+            <p>In the previous lecture, we built a <em>Combinational</em> circuit. Now, we want to build a <em>Sequential</em> circuit (like a Counter) which requires Flip-Flops.</p>
+            
+            <p>To tell ABEL that an output pin is connected to a D-Flip-Flop, we change the declaration from <code>'com'</code> to <code>'reg'</code>.</p>
+            
+            <div class="rule-box box">
+                <strong>Combinational Output:</strong> <code>Q PIN 15 ISTYPE 'com';</code><br>
+                <strong>Sequential Output:</strong> <code>Q PIN 15 ISTYPE 'reg';</code>
+            </div>
+
+            <h2>2. The Clocked Assignment Operator ( <code>:=</code> )</h2>
+            <p>When writing equations for Flip-Flops, we cannot use the standard equals sign ( <code>=</code> ), because sequential circuits depend on the clock pulse.</p>
+            <p>Instead, ABEL uses the <strong>Clocked Assignment Operator</strong> <code>:=</code>. This tells the compiler: "Calculate the right side, but do NOT transfer it to the left side until the clock edge arrives."</p>
+
+            <div class="formula-block">
+                <strong>Equation:</strong> <code>Q := !Q;</code><br>
+                <em>Meaning: Q next state becomes NOT Q (Toggle) upon the next clock pulse.</em>
+            </div>
+
+            <h2>3. State Diagrams in ABEL</h2>
+            <p>Instead of manually calculating J-K excitation tables and K-Maps for complex counters, ABEL allows you to write the exact <strong>State Diagram</strong> directly into the code. The compiler calculates the K-Maps and gates automatically!</p>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Pehle counter banane ke liye hamein pehle State Diagram draw karna parta tha, phir Next State Table banana parta tha, phir K-Maps solve karke equations nikalni parti theen. ABEL mein yeh sab nahi karna parta. Aap sirf English ki tarah code mein likh dete hain: "Agar abhi State 0 hai, toh agli bar State 1 par jao". Compiler khud saari mathematics kar ke chip ko program kar deta hai!
+            </div>
+
+            <h3>Example Syntax of a State Diagram in ABEL:</h3>
+            <div class="formula-block">
+<pre>
+STATE_DIAGRAM count_state
+  STATE 0: 
+      GOTO 1;
+  STATE 1: 
+      GOTO 2;
+  STATE 2: 
+      GOTO 3;
+  STATE 3: 
+      GOTO 0;
+</pre>
+            </div>
+            <p>This code directly creates a MOD-4 (0 to 3) synchronous counter without the user ever writing a single boolean logic equation.</p>
+
+            <!-- QUICK REVISION 38 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 38</h3>
+                <ul>
+                    <li><strong>ISTYPE 'reg':</strong> Tells ABEL that the output pin has a Flip-Flop (Registered).</li>
+                    <li><strong>Operator <code>:=</code> :</strong> Clocked assignment. Evaluates expression and applies it on the clock edge.</li>
+                    <li><strong>.CLK extension:</strong> Used to define the clock pin for a flip-flop (e.g., <code>Q.CLK = clock_pin;</code>).</li>
+                    <li><strong>STATE_DIAGRAM:</strong> A powerful ABEL keyword that allows automatic generation of sequential logic circuits without needing manual K-Map simplifications.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

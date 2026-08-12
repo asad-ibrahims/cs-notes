@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS302 Study Notes - Lectures 39 to 42</title>
+    <style>
+        :root {
+            --primary: #1e3a8a; 
+            --secondary: #3b82f6; 
+            --bg-color: #f8fafc;
+            --text-main: #334155;
+            --roman-urdu-bg: #fef9c3;
+            --roman-urdu-border: #eab308;
+            --def-bg: #e0f2fe;
+            --def-border: #0ea5e9;
+            --rule-bg: #dcfce7;
+            --rule-border: #22c55e;
+            --danger-bg: #fee2e2;
+            --danger-border: #ef4444;
+            --sidebar-width: 250px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; line-height: 1.6; }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #1e293b;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+        .sidebar h2 {
+            text-align: center; padding-bottom: 20px; border-bottom: 1px solid #334155;
+            margin-bottom: 20px; font-size: 1.2rem; color: #38bdf8;
+        }
+        .sidebar ul { list-style-type: none; }
+        .sidebar ul li a {
+            display: block; padding: 12px 20px; color: #cbd5e1;
+            text-decoration: none; transition: 0.3s; border-left: 4px solid transparent;
+        }
+        .sidebar ul li a:hover {
+            background-color: #334155; border-left: 4px solid var(--secondary); color: white;
+        }
+
+        /* Main Content */
+        .content { margin-left: var(--sidebar-width); padding: 40px; width: calc(100% - var(--sidebar-width)); max-width: 1000px; }
+        h1 { color: var(--primary); font-size: 2.5rem; border-bottom: 3px solid var(--primary); padding-bottom: 10px; margin-bottom: 30px; }
+        h2 { color: var(--primary); margin-top: 40px; margin-bottom: 15px; font-size: 1.8rem; }
+        h3 { color: var(--secondary); margin-top: 30px; margin-bottom: 10px; font-size: 1.4rem; }
+        p { margin-bottom: 15px; }
+
+        /* Concept Cards & Boxes */
+        .box { padding: 15px 20px; margin: 20px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .def-box { background-color: var(--def-bg); border-left: 5px solid var(--def-border); }
+        .def-box strong { color: #0369a1; }
+        .roman-urdu { background-color: var(--roman-urdu-bg); border-left: 5px solid var(--roman-urdu-border); font-style: italic; color: #854d0e; }
+        .rule-box { background-color: var(--rule-bg); border: 2px solid var(--rule-border); text-align: center; font-weight: bold; color: #166534; }
+        .danger-box { background-color: var(--danger-bg); border-left: 5px solid var(--danger-border); color: #991b1b; }
+
+        /* Formula Blocks */
+        .formula-block {
+            background-color: #f1f5f9;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Cambria', serif;
+            font-size: 1.1rem;
+            color: #0f172a;
+            border-left: 4px solid #64748b;
+            margin-bottom: 15px;
+        }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; border: 1px solid #cbd5e1; text-align: center; }
+        th { background-color: var(--primary); color: white; }
+        tr:nth-child(even) { background-color: #f1f5f9; }
+
+        /* Quick Revision Section */
+        .quick-revision { background-color: #1e293b; color: white; padding: 25px; border-radius: 10px; margin-top: 50px; margin-bottom: 50px; }
+        .quick-revision h3 { color: #38bdf8; margin-top: 0; border-bottom: 1px solid #475569; padding-bottom: 10px; }
+        .quick-revision ul { margin-left: 20px; margin-bottom: 15px; }
+        .quick-revision li { margin-bottom: 8px; }
+        code { background-color: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #b91c1c; font-weight: bold;}
+
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .content { margin-left: 0; width: 100%; padding: 20px; }
+            body { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS302: Lec 39-42</h2>
+        <ul>
+            <li><a href="#lec39">Lecture 39: Moore & Mealy</a></li>
+            <li><a href="#lec40">Lecture 40: State Machine App</a></li>
+            <li><a href="#lec41">Lecture 41: SRAM & Timings</a></li>
+            <li><a href="#lec42">Lecture 42: DRAM & Multiplexing</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content">
+
+        <!-- ================= LECTURE 39 ================= -->
+        <section id="lec39">
+            <h1>Lecture 39: State Machines (Moore vs. Mealy)</h1>
+            <p>Every sequential circuit that follows a specific pattern of states is called a <strong>Finite State Machine (FSM)</strong>. There are two primary types of FSMs used in digital design: Moore and Mealy.</p>
+
+            <h2>1. The Moore Machine</h2>
+            <div class="def-box box">
+                <strong>Definition:</strong> In a Moore machine, the outputs depend <strong>ONLY</strong> on the current state of the flip-flops (memory). The external inputs only determine what the <em>next state</em> will be, but they do not affect the current output directly.
+            </div>
+            
+            <p><strong>Characteristics:</strong></p>
+            <ul>
+                <li>Safer and highly stable (outputs only change on a clock edge when the state changes).</li>
+                <li>Usually requires more states to complete a task.</li>
+                <li>In a state diagram, the output is written <em>inside</em> the state circle.</li>
+            </ul>
+
+            <h2>2. The Mealy Machine</h2>
+            <div class="def-box box">
+                <strong>Definition:</strong> In a Mealy machine, the outputs depend on the current state <strong>AND</strong> the current external inputs. 
+            </div>
+
+            <p><strong>Characteristics:</strong></p>
+            <ul>
+                <li>Faster, because the output reacts to input changes immediately without waiting for the next clock edge.</li>
+                <li>Requires fewer states than a Moore machine.</li>
+                <li>In a state diagram, the output is written on the <em>transition arrow</em> (Input/Output).</li>
+            </ul>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong><br>
+                Farz karein aap ek ATM machine (State Machine) bana rahay hain. <br>
+                <strong>Moore:</strong> Jab machine "Cash Dispense" wali state mein aati hai, tabhi paise bahar aate hain. Button (input) dabane se sirf state change hoti hai.<br>
+                <strong>Mealy:</strong> Output state aur button dono par depend karta hai. Jaise hi aap button dabate hain, state change hone ka wait kiye bina output foran mil jata hai. Yeh fast hota hai, lekin isme "glitches" (jhatkay) aane ka khatra hota hai agar input fluctuate kare.
+            </div>
+
+            <h2>3. Implementing FSMs in ABEL</h2>
+            <p>In ABEL, we can implement both. We use <code>WITH</code> statements inside the <code>STATE_DIAGRAM</code> block to define the outputs for specific states (Moore) or specific transitions (Mealy).</p>
+
+            <!-- QUICK REVISION 39 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 39</h3>
+                <ul>
+                    <li><strong>FSM:</strong> Finite State Machine (A sequential circuit with fixed states).</li>
+                    <li><strong>Moore Machine:</strong> Output = <em>f</em> (Current State). Output is immune to immediate input glitches.</li>
+                    <li><strong>Mealy Machine:</strong> Output = <em>f</em> (Current State + Current Input). Faster, requires fewer states.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 40 ================= -->
+        <section id="lec40">
+            <h1>Lecture 40: State Machine Applications</h1>
+            <p>To fully understand state machines, engineers design real-world controllers. Typical examples include Traffic Light Controllers, Elevator Controllers, and Vending Machines.</p>
+
+            <h2>1. Design Example: Traffic Light Controller</h2>
+            <p>A simple intersection has a Main Street and a Side Street. The controller must cycle through Green, Yellow, and Red lights based on a Timer and Vehicle Sensors.</p>
+
+            <h3>The States:</h3>
+            <ul>
+                <li><strong>State 0:</strong> Main = GREEN, Side = RED.</li>
+                <li><strong>State 1:</strong> Main = YELLOW, Side = RED.</li>
+                <li><strong>State 2:</strong> Main = RED, Side = GREEN.</li>
+                <li><strong>State 3:</strong> Main = RED, Side = YELLOW.</li>
+            </ul>
+
+            <h3>The Inputs & Logic:</h3>
+            <p>The state machine stays in <strong>State 0</strong> as long as a car is detected on Main Street and the long-timer hasn't expired. Once the timer expires (or no cars are detected), the state transitions to <strong>State 1</strong>. Since this is a <strong>Moore Machine</strong>, the lights (outputs) are strictly tied to the current state.</p>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Jab hum real-world problem solve karte hain toh usko hisson mein baant lete hain. Traffic light mein hum 4 states banate hain. Har state mein lights ki condition fix hoti hai (yeh Moore machine hai). Inputs (jaise timer ya car sensor) sirf yeh faisla karte hain ke abhi is state mein rukna hai ya agli state mein jana hai. ABEL programming ke zariye is poore system ko ek single PLD (jaise GAL) chip par program kiya ja sakta hai.
+            </div>
+
+            <h2>2. Importance of the "Reset" State</h2>
+            <p>When any digital state machine powers on, its flip-flops might power up in a random state (e.g., <code>11</code> instead of <code>00</code>). Therefore, every state diagram MUST have a <strong>Master Reset</strong> condition that forces the system into an initial safe state (like making all traffic lights Red) when a Reset button is pressed.</p>
+
+            <!-- QUICK REVISION 40 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 40</h3>
+                <ul>
+                    <li><strong>Application:</strong> FSMs are used to control sequences (Traffic lights, elevators).</li>
+                    <li><strong>State Assignment:</strong> Assigning binary numbers (00, 01, 10) to physical states (Green, Yellow, Red).</li>
+                    <li><strong>Master Reset:</strong> Crucial to prevent the system from starting in a random or dangerous state upon power-up.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 41 ================= -->
+        <section id="lec41">
+            <h1>Lecture 41: Memory Architecture and Timing (SRAM)</h1>
+            <p>We transition from logic design to the physical operation of Memory ICs. We focus on <strong>SRAM (Static RAM)</strong> which uses latches to store data and is incredibly fast.</p>
+
+            <h2>1. Memory Control Signals</h2>
+            <p>Every memory chip has three primary control lines:</p>
+            <ul>
+                <li><strong>CS' (Chip Select) or CE' (Chip Enable):</strong> Turns the IC on or off. Active-Low.</li>
+                <li><strong>WE' (Write Enable):</strong> When 0, the CPU writes data <em>into</em> the memory.</li>
+                <li><strong>OE' (Output Enable):</strong> When 0, the memory sends data <em>out</em> to the CPU (Read).</li>
+            </ul>
+
+            <h2>2. The Read Cycle (Timing Diagram)</h2>
+            <p>Data cannot be read instantly. The CPU must follow a strict timing protocol.</p>
+            
+            <div class="def-box box">
+                <strong>Read Cycle Steps:</strong><br>
+                1. CPU places the Address on the Address Bus.<br>
+                2. CPU activates CS' (sets to 0).<br>
+                3. CPU activates OE' (sets to 0). WE' remains 1.<br>
+                4. The memory needs time to process this. After a delay, data appears on the Data Bus.
+            </div>
+
+            <div class="formula-block">
+                <strong>Access Time (t<sub>ACC</sub>):</strong> The time delay between when the Address becomes valid and when the valid Data finally appears on the output pins.
+            </div>
+
+            <h2>3. The Write Cycle (Timing Diagram)</h2>
+            <div class="def-box box">
+                <strong>Write Cycle Steps:</strong><br>
+                1. CPU places the Address on the Address Bus.<br>
+                2. CPU places the Data to be stored on the Data Bus.<br>
+                3. CPU activates CS' and pulses the WE' (Write Enable) pin LOW.<br>
+                4. The data is written on the <em>trailing edge</em> (0 to 1 transition) of the WE' pulse.
+            </div>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Memory se data parhna (Read) ya usme data likhna (Write) bilkul ek post office jaisa hai. CPU pehle address batata hai ke kahan se data lana hai. Phir thori der baad memory data bahar nikalti hai. Ye jo thori der lagti hai usko <strong>"Access Time"</strong> kehte hain. Tabi CPU aur RAM ko sync mein rakhne ke liye Timing Diagrams parhi jati hain taake CPU jaldbazi mein ghalat data na parh le.
+            </div>
+
+            <!-- QUICK REVISION 41 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 41</h3>
+                <ul>
+                    <li><strong>Control Pins:</strong> CS' (Chip Select), WE' (Write Enable), OE' (Output Enable).</li>
+                    <li><strong>Read Cycle:</strong> Provide Address &rarr; Enable CS' & OE' &rarr; Wait for Access Time (t<sub>ACC</sub>) &rarr; Read Data.</li>
+                    <li><strong>Write Cycle:</strong> Provide Address & Data &rarr; Pulse WE' low. Data is saved when WE' goes back high.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 42 ================= -->
+        <section id="lec42">
+            <h1>Lecture 42: Dynamic RAM (DRAM) & Address Multiplexing</h1>
+
+            <h2>1. Static RAM vs. Dynamic RAM</h2>
+            <p><strong>SRAM</strong> uses flip-flops (transistors) to hold 1s and 0s. It is fast but physically large.<br>
+            <strong>DRAM</strong> uses a tiny <em>capacitor</em> and a single transistor to hold a bit. Because capacitors leak charge over time, DRAM forgets its data unless it is constantly <strong>Refreshed</strong> (read and rewritten) every few milliseconds.</p>
+            <p><em>Advantage of DRAM:</em> It is extremely dense and cheap. Your PC's main 8GB/16GB memory is DRAM. Your CPU's small, ultra-fast Cache is SRAM.</p>
+
+            <h2>2. Address Multiplexing in DRAM</h2>
+            <p>DRAM chips have millions of locations. A 1 Megabyte chip requires 20 address lines (2<sup>20</sup>). To save physical pins on the IC package, DRAM uses <strong>Address Multiplexing</strong>.</p>
+            <p>Instead of 20 address pins, the chip only has 10 address pins. The 20-bit address is split in half and sent in two steps:</p>
+
+            <div class="def-box box">
+                <strong>1. Row Address:</strong> The first 10 bits are sent. The CPU activates the <strong>RAS' (Row Address Strobe)</strong> pin to tell the DRAM to latch this half of the address.<br>
+                <strong>2. Column Address:</strong> The second 10 bits are sent on the EXACT SAME pins. The CPU activates the <strong>CAS' (Column Address Strobe)</strong> pin to latch the second half.
+            </div>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> DRAM mein address ek Matrix (Grid) ki tarah hota hai. Jaise MS-Excel mein rows aur columns hote hain. Kyunke pins kam hoti hain, toh CPU pehle Row ka number bhejta hai aur "RAS" ka signal deta hai taake DRAM samajh jaye ke ye Row hai. Phir usi taar (wire) par Column ka number bhejta hai aur "CAS" ka signal deta hai. Phir un dono ko mila kar DRAM ko exact location mil jati hai. 
+            </div>
+
+            <h2>3. DRAM Refresh Cycles</h2>
+            <p>Because the capacitors leak, every single row in the DRAM must be refreshed (read and written back) periodically (e.g., every 64 milliseconds). During a refresh cycle, the DRAM cannot be accessed by the CPU for normal read/write operations.</p>
+            <p><strong>Burst Refresh vs. Distributed Refresh:</strong></p>
+            <ul>
+                <li><em>Burst:</em> The CPU stops all work and refreshes every row at once.</li>
+                <li><em>Distributed:</em> The CPU refreshes one row, does some normal work, refreshes the next row, etc. (More commonly used).</li>
+            </ul>
+
+            <!-- QUICK REVISION 42 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 42</h3>
+                <ul>
+                    <li><strong>DRAM:</strong> Uses capacitors to store data. Needs constant refreshing. Highly dense.</li>
+                    <li><strong>Address Multiplexing:</strong> Splitting the address into Row and Column halves to save pins on the IC.</li>
+                    <li><strong>RAS' / CAS':</strong> Row Address Strobe and Column Address Strobe. Used to latch the multiplexed addresses.</li>
+                    <li><strong>Refreshing:</strong> The mandatory process of recharging DRAM capacitors to prevent data loss.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

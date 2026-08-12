@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS302 Study Notes - Lectures 19 to 23</title>
+    <style>
+        :root {
+            --primary: #1e3a8a; 
+            --secondary: #3b82f6; 
+            --bg-color: #f8fafc;
+            --text-main: #334155;
+            --roman-urdu-bg: #fef9c3;
+            --roman-urdu-border: #eab308;
+            --def-bg: #e0f2fe;
+            --def-border: #0ea5e9;
+            --rule-bg: #dcfce7;
+            --rule-border: #22c55e;
+            --danger-bg: #fee2e2;
+            --danger-border: #ef4444;
+            --sidebar-width: 250px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; line-height: 1.6; }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #1e293b;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+        .sidebar h2 {
+            text-align: center; padding-bottom: 20px; border-bottom: 1px solid #334155;
+            margin-bottom: 20px; font-size: 1.2rem; color: #38bdf8;
+        }
+        .sidebar ul { list-style-type: none; }
+        .sidebar ul li a {
+            display: block; padding: 12px 20px; color: #cbd5e1;
+            text-decoration: none; transition: 0.3s; border-left: 4px solid transparent;
+        }
+        .sidebar ul li a:hover {
+            background-color: #334155; border-left: 4px solid var(--secondary); color: white;
+        }
+
+        /* Main Content */
+        .content { margin-left: var(--sidebar-width); padding: 40px; width: calc(100% - var(--sidebar-width)); max-width: 1000px; }
+        h1 { color: var(--primary); font-size: 2.5rem; border-bottom: 3px solid var(--primary); padding-bottom: 10px; margin-bottom: 30px; }
+        h2 { color: var(--primary); margin-top: 40px; margin-bottom: 15px; font-size: 1.8rem; }
+        h3 { color: var(--secondary); margin-top: 30px; margin-bottom: 10px; font-size: 1.4rem; }
+        p { margin-bottom: 15px; }
+
+        /* Concept Cards & Boxes */
+        .box { padding: 15px 20px; margin: 20px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .def-box { background-color: var(--def-bg); border-left: 5px solid var(--def-border); }
+        .def-box strong { color: #0369a1; }
+        .roman-urdu { background-color: var(--roman-urdu-bg); border-left: 5px solid var(--roman-urdu-border); font-style: italic; color: #854d0e; }
+        .rule-box { background-color: var(--rule-bg); border: 2px solid var(--rule-border); text-align: center; font-weight: bold; color: #166534; }
+        .danger-box { background-color: var(--danger-bg); border-left: 5px solid var(--danger-border); color: #991b1b; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; border: 1px solid #cbd5e1; text-align: center; }
+        th { background-color: var(--primary); color: white; }
+        tr:nth-child(even) { background-color: #f1f5f9; }
+
+        /* Quick Revision Section */
+        .quick-revision { background-color: #1e293b; color: white; padding: 25px; border-radius: 10px; margin-top: 50px; margin-bottom: 50px; }
+        .quick-revision h3 { color: #38bdf8; margin-top: 0; border-bottom: 1px solid #475569; padding-bottom: 10px; }
+        .quick-revision ul { margin-left: 20px; margin-bottom: 15px; }
+        .quick-revision li { margin-bottom: 8px; }
+        .confusion-point { background-color: #ef4444; color: white; padding: 10px; border-radius: 5px; margin-top: 15px; }
+        code { background-color: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #b91c1c; }
+
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .content { margin-left: 0; width: 100%; padding: 20px; }
+            body { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS302: Lec 19-23</h2>
+        <ul>
+            <li><a href="#lec19">Lecture 19: Latches</a></li>
+            <li><a href="#lec20">Lecture 20: Edge-Triggered FFs</a></li>
+            <li><a href="#lec21">Lecture 21: FF Characteristics</a></li>
+            <li><a href="#lec22">Lecture 22: Async Counters</a></li>
+            <li><a href="#lec23">Lecture 23: Sync Counters</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content">
+
+        <!-- ================= LECTURE 19 ================= -->
+        <section id="lec19">
+            <h1>Lecture 19: Combinational vs Sequential Logic & Latches</h1>
+
+            <h2>1. Combinational vs. Sequential Circuits</h2>
+            <div class="def-box box">
+                <strong>Combinational Circuit:</strong> Output depends ONLY on the current inputs. (e.g., Adders, MUX). No memory.<br>
+                <strong>Sequential Circuit:</strong> Output depends on current inputs AND the past history (previous state). It contains Memory Elements.
+            </div>
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Combinational circuits mein "yaad dasht" (memory) nahi hoti. Jo input dogay, usi waqt output milega. Sequential circuits ko apna purana state yaad rehta hai. Jaise ek counter, jise yaad rakhna parta hai ke pichla number kya tha taa ke wo agla number bata sake.
+            </div>
+
+            <h2>2. The Latch (Basic Memory Element)</h2>
+            <p>A latch is a temporary storage device that has two stable states (Bistable). It is used to store exactly 1 bit of information (0 or 1).</p>
+
+            <h3>A. Active-High S-R (Set-Reset) Latch (NOR Based)</h3>
+            <p>Made by cross-coupling two NOR gates. "Active-High" means the inputs activate when they are 1.</p>
+            <table>
+                <tr><th>S (Set)</th><th>R (Reset)</th><th>Q<sub>next</sub></th><th>State</th></tr>
+                <tr><td>0</td><td>0</td><td>Q<sub>prev</sub></td><td>Hold (No Change)</td></tr>
+                <tr><td>0</td><td>1</td><td>0</td><td>Reset (Clear to 0)</td></tr>
+                <tr><td>1</td><td>0</td><td>1</td><td>Set (Store 1)</td></tr>
+                <tr><td>1</td><td>1</td><td>Invalid</td><td>Unpredictable (Avoid)</td></tr>
+            </table>
+
+            <h3>B. Active-Low S'-R' Latch (NAND Based)</h3>
+            <p>Made by cross-coupling two NAND gates. It operates on "Active-Low" logic (reacts when input is 0).</p>
+            <table>
+                <tr><th>S'</th><th>R'</th><th>Q<sub>next</sub></th><th>State</th></tr>
+                <tr><td>1</td><td>1</td><td>Q<sub>prev</sub></td><td>Hold (No Change)</td></tr>
+                <tr><td>1</td><td>0</td><td>0</td><td>Reset</td></tr>
+                <tr><td>0</td><td>1</td><td>1</td><td>Set</td></tr>
+                <tr><td>0</td><td>0</td><td>Invalid</td><td>Unpredictable</td></tr>
+            </table>
+            
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> NAND aur NOR latch bilkul opposite kaam karte hain. NOR wale mein 1 dene se kaam hota hai, aur NAND wale mein 0 dene se. Dono mein S aur R dono ko ek sath active karna "Invalid" hai kyunki is se Q aur Q' dono same ho jate hain, jo logic rules ke khilaf hai (Q aur Q' hamesha opposite hone chahiye).
+            </div>
+
+            <h2>3. Gated S-R Latch & Gated D Latch</h2>
+            <p><strong>Gated S-R Latch:</strong> Adds an Enable (EN) input. If EN=0, the latch holds its state regardless of S and R. If EN=1, it works like a normal latch.</p>
+            <p><strong>Gated D (Data) Latch:</strong> Solves the invalid state problem of the S-R latch. It uses an inverter so that S and R are never the same. It only has one input 'D'. If EN=1, Q simply copies D. If EN=0, it holds.</p>
+
+            <!-- QUICK REVISION 19 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 19</h3>
+                <ul>
+                    <li><strong>Sequential Logic</strong> = Combinational Logic + Memory.</li>
+                    <li><strong>NOR S-R Latch:</strong> S=1 sets to 1, R=1 resets to 0. S=1,R=1 is Invalid.</li>
+                    <li><strong>NAND S'-R' Latch:</strong> S'=0 sets to 1, R'=0 resets to 0. S'=0,R'=0 is Invalid.</li>
+                    <li><strong>D-Latch:</strong> Eliminates the invalid state. Copies Data (D) when Enabled.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 20 ================= -->
+        <section id="lec20">
+            <h1>Lecture 20: Edge-Triggered Flip-Flops</h1>
+
+            <h2>1. Latches vs. Flip-Flops</h2>
+            <div class="def-box box">
+                <strong>Latches are Level-Triggered:</strong> They respond to changes as long as the Enable signal is HIGH (or LOW).<br>
+                <strong>Flip-Flops are Edge-Triggered:</strong> They only respond to changes during the exact instant the clock signal changes from 0 to 1 (Positive Edge) or 1 to 0 (Negative Edge).
+            </div>
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Latch ek khule darwaze ki tarah hai. Jab tak darwaza (Enable) khula hai, input continuously output ko change karta rahega. Flip-Flop ek camera shutter ki tarah hai, jo sirf us ek microsecond mein data ko capture (store) karta hai jab clock pulse ki edge aati hai.
+            </div>
+
+            <h2>2. Types of Edge-Triggered Flip-Flops</h2>
+            <p>We use a Pulse Transition Detector circuit inside flip-flops to ensure they only trigger on the edges.</p>
+            
+            <h3>A. Edge-Triggered D Flip-Flop</h3>
+            <p>Copies the D input to Q at the active clock edge. Very popular for registers.</p>
+
+            <h3>B. Edge-Triggered J-K Flip-Flop</h3>
+            <p>Solves the S-R flip-flop invalid state by using feedback from the outputs. When J=1 and K=1, it <strong>Toggles</strong>.</p>
+            <table>
+                <tr><th>Clock Edge</th><th>J</th><th>K</th><th>Q<sub>next</sub></th><th>Action</th></tr>
+                <tr><td>&uarr;</td><td>0</td><td>0</td><td>Q<sub>prev</sub></td><td>Hold</td></tr>
+                <tr><td>&uarr;</td><td>0</td><td>1</td><td>0</td><td>Reset</td></tr>
+                <tr><td>&uarr;</td><td>1</td><td>0</td><td>1</td><td>Set</td></tr>
+                <tr><td>&uarr;</td><td>1</td><td>1</td><td>Q'<sub>prev</sub></td><td><strong>Toggle</strong></td></tr>
+            </table>
+
+            <h2>3. Asynchronous Inputs (PRESET and CLEAR)</h2>
+            <p>These are special pins on a flip-flop that override the clock completely.</p>
+            <ul>
+                <li><strong>PRE (Preset):</strong> Immediately sets Q to 1.</li>
+                <li><strong>CLR (Clear):</strong> Immediately resets Q to 0.</li>
+            </ul>
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Preset aur Clear ko "Asynchronous" isliye kehte hain kyunki inhein Clock ki zaroorat nahi hoti. Yeh direct override buttons hain. Jab circuit ko power milti hai, toh pehle system ko reset karne ke liye Clear button use hota hai.
+            </div>
+
+            <h2>4. Master-Slave J-K Flip-Flop</h2>
+            <p>Before edge-triggered FFs, engineers used a Master-Slave configuration to prevent "Race Conditions" (where the output oscillates uncontrollably). It uses two latches: a Master (triggers on positive pulse) and a Slave (triggers on negative pulse). Information transfers in two steps.</p>
+
+            <!-- QUICK REVISION 20 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 20</h3>
+                <ul>
+                    <li><strong>Edge-Triggering:</strong> Reacting only at the 0&rarr;1 or 1&rarr;0 transition of the clock.</li>
+                    <li><strong>J-K Flip Flop:</strong> When J=1, K=1, the state flips (Toggles) on the clock edge.</li>
+                    <li><strong>Asynchronous Inputs:</strong> PRESET and CLEAR do not wait for the clock edge.</li>
+                    <li><strong>Master-Slave:</strong> An older design to prevent race conditions, using two stages of latches.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 21 ================= -->
+        <section id="lec21">
+            <h1>Lecture 21: Flip-Flop Characteristics & Applications</h1>
+
+            <h2>1. Flip-Flop Operating Characteristics</h2>
+            <p>To design reliable circuits, we must respect the physical timing limits of real-world flip-flops.</p>
+
+            <div class="box">
+                <ul>
+                    <li><strong>Setup Time (t<sub>s</sub>):</strong> The minimum time the input data (e.g., D or J/K) must be held stable <em>before</em> the active clock edge arrives.</li>
+                    <li><strong>Hold Time (t<sub>h</sub>):</strong> The minimum time the input data must remain stable <em>after</em> the clock edge has occurred.</li>
+                    <li><strong>Propagation Delay (t<sub>PLH</sub> / t<sub>PHL</sub>):</strong> The time it takes for the output to actually change after the clock edge triggers. (PLH = Low to High, PHL = High to Low).</li>
+                    <li><strong>Maximum Clock Frequency (f<sub>max</sub>):</strong> The highest speed the clock can run before the flip-flop stops functioning reliably.</li>
+                </ul>
+            </div>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Setup time ka matlab hai ke clock aane se thora pehle input ready hona chahiye. Hold time ka matlab hai ke clock guzarne ke kuch dair baad tak input change na ho, warna flip-flop confuse ho jayega aur ghalat data store kar lega.
+            </div>
+
+            <h2>2. Applications of Flip-Flops</h2>
+            
+            <h3>A. Parallel Data Storage (Registers)</h3>
+            <p>A group of D Flip-Flops sharing a single clock can store multiple bits of data simultaneously. An 8-bit register uses 8 D-flip-flops.</p>
+
+            <h3>B. Frequency Division</h3>
+            <p>If you connect a J-K Flip-Flop in Toggle mode (J=1, K=1), its output Q will change state once for every full clock cycle. This cuts the output frequency exactly in half.</p>
+            <div class="rule-box box">
+                Formula: f<sub>out</sub> = f<sub>in</sub> / 2
+            </div>
+            <p>If you cascade (chain) 3 flip-flops together, the final output frequency will be <code>f<sub>in</sub> / 2<sup>3</sup> = f<sub>in</sub> / 8</code>.</p>
+
+            <h2>3. Introduction to Counters</h2>
+            <p>Counters are specialized registers designed to count clock pulses. They count in binary (00, 01, 10, 11...).</p>
+            <ul>
+                <li><strong>Asynchronous (Ripple) Counters:</strong> Clock is only connected to the first FF. Each FF triggers the next one.</li>
+                <li><strong>Synchronous Counters:</strong> Clock is connected to ALL FFs simultaneously.</li>
+            </ul>
+
+            <!-- QUICK REVISION 21 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 21</h3>
+                <ul>
+                    <li><strong>t<sub>s</sub> (Setup Time):</strong> Stable time needed BEFORE clock.</li>
+                    <li><strong>t<sub>h</sub> (Hold Time):</strong> Stable time needed AFTER clock.</li>
+                    <li><strong>Registers:</strong> Multiple FFs used to store a binary word.</li>
+                    <li><strong>Frequency Divider:</strong> Toggling FF divides clock speed by 2.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 22 ================= -->
+        <section id="lec22">
+            <h1>Lecture 22: Asynchronous (Ripple) Counters</h1>
+
+            <h2>1. The Ripple Effect</h2>
+            <p>In an asynchronous counter, only the first flip-flop (LSB) receives the external clock. The output (Q) of the first FF acts as the clock for the second FF, and so on. We use Negative-Edge triggered J-K Flip-Flops set to Toggle mode (J=1, K=1).</p>
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Asynchronous counter ko "Ripple" isliye kehte hain kyunki clock ka asar paani ki lehar (ripple) ki tarah ek FF se dosre mein flow karta hai. Is wajah se isme "Propagation Delay" (deri) paida hoti hai, kyunki har FF apne pichle FF ke trigger hone ka wait karta hai.
+            </div>
+
+            <h2>2. The MOD Number</h2>
+            <div class="def-box box">
+                <strong>MOD (Modulus):</strong> The maximum number of distinct states a counter goes through before resetting. 
+                <br>Formula: MOD = 2<sup>n</sup> (where n is the number of Flip-Flops).
+            </div>
+            <ul>
+                <li>2 Flip-Flops = 2<sup>2</sup> = MOD-4 (Counts 0, 1, 2, 3)</li>
+                <li>3 Flip-Flops = 2<sup>3</sup> = MOD-8 (Counts 0 to 7)</li>
+                <li>4 Flip-Flops = 2<sup>4</sup> = MOD-16 (Counts 0 to 15)</li>
+            </ul>
+
+            <h2>3. Asynchronous Decade Counter (MOD-10)</h2>
+            <p><strong>Goal:</strong> A digital clock digit only goes from 0 to 9. A 4-bit counter naturally goes to 15. We must force it to reset at 10.</p>
+            <p><strong>How it works:</strong> The binary number for 10 is <code>1010</code> (Q<sub>3</sub>=1, Q<sub>2</sub>=0, Q<sub>1</sub>=1, Q<sub>0</sub>=0). We connect the outputs Q<sub>3</sub> and Q<sub>1</sub> to a NAND gate. The output of this NAND gate is connected to the <strong>CLEAR (CLR)</strong> pins of all flip-flops (which are active-low). As soon as count reaches 10, the NAND gate outputs 0, instantly resetting all FFs to 0000.</p>
+
+            <div class="danger-box box">
+                <strong>Glitches:</strong> Because of the propagation delay in ripple counters, you might see a brief, incorrect state (a glitch) for a fraction of a nanosecond before the NAND gate clears everything. This is a major disadvantage of Ripple Counters.
+            </div>
+
+            <!-- QUICK REVISION 22 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 22</h3>
+                <ul>
+                    <li><strong>Asynchronous = Ripple:</strong> Only first FF gets the main clock.</li>
+                    <li><strong>MOD Number:</strong> Total number of states = 2<sup>n</sup>.</li>
+                    <li><strong>Decade Counter:</strong> Resets at count 10 (1010) using a NAND gate on Q3 and Q1 connected to CLR.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 23 ================= -->
+        <section id="lec23">
+            <h1>Lecture 23: Asynchronous Down Counters & Synchronous Counters</h1>
+
+            <h2>1. Asynchronous Down Counter</h2>
+            <p>To make an asynchronous counter count downwards (e.g., 7, 6, 5...), instead of connecting the normal output Q to the clock of the next flip-flop, we connect the <strong>inverted output Q'</strong> to the clock of the next flip-flop.</p>
+
+            <h2>2. Cascading Asynchronous Counters</h2>
+            <p>If we want to count higher than a single IC allows, we cascade them. For example, to make a MOD-60 counter (useful for seconds/minutes in a clock):</p>
+            <p>Cascade a MOD-10 (Decade) counter and a MOD-6 counter. Connect the MSB output of the MOD-10 to the clock input of the MOD-6.</p>
+
+            <h2>3. Introduction to Synchronous Counters</h2>
+            <p><strong>Why use them?</strong> To eliminate the propagation delay glitches of Ripple Counters. In a synchronous counter, the Master Clock is connected directly to the clock pins of <strong>EVERY</strong> flip-flop simultaneously.</p>
+            
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Synchronous counter mein saare Flip-Flops ko ek hi waqt mein Clock milti hai, isliye delay nahi hota. Lekin ab masla yeh hai ke sab ek sath toggle kar jayenge! Isko roknay ke liye hum AND gates lagate hain jo batate hain ke kis Flip-Flop ko kis waqt toggle (change) karna hai aur kisko hold rehna hai.
+            </div>
+
+            <h2>4. Synchronous Counter Design Logic</h2>
+            <p>We use J-K Flip-Flops. The rule for binary counting is: <em>A bit flips only when ALL previous lower-order bits are 1.</em></p>
+            <ul>
+                <li><strong>FF0 (LSB):</strong> Always toggles. <code>J0 = 1, K0 = 1</code></li>
+                <li><strong>FF1:</strong> Toggles only if Q0=1. <code>J1 = Q0, K1 = Q0</code></li>
+                <li><strong>FF2:</strong> Toggles only if Q0=1 AND Q1=1. <code>J2 = Q0&middot;Q1, K2 = Q0&middot;Q1</code></li>
+                <li><strong>FF3 (MSB):</strong> Toggles only if Q0=1 AND Q1=1 AND Q2=1. <code>J3 = Q0&middot;Q1&middot;Q2, K3 = Q0&middot;Q1&middot;Q2</code></li>
+            </ul>
+            <p>To achieve this, we place AND gates between the flip-flops to combine the Q outputs and feed them into the next J-K inputs.</p>
+
+            <!-- QUICK REVISION 23 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 23</h3>
+                <ul>
+                    <li><strong>Down Counter:</strong> Uses Q' for the clocking signal instead of Q.</li>
+                    <li><strong>Cascading:</strong> Connecting counters in series to multiply their MOD numbers (e.g. Mod 10 &times; Mod 6 = Mod 60).</li>
+                    <li><strong>Synchronous Counters:</strong> Clock shared across all FFs. No ripple delay. Faster and more reliable.</li>
+                    <li><strong>Sync Control:</strong> Uses AND logic (J<sub>n</sub> = K<sub>n</sub> = Q<sub>0</sub>&middot;Q<sub>1</sub>...&middot;Q<sub>n-1</sub>).</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

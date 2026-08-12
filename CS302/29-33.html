@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS302 Study Notes - Lectures 29 to 33</title>
+    <style>
+        :root {
+            --primary: #1e3a8a; 
+            --secondary: #3b82f6; 
+            --bg-color: #f8fafc;
+            --text-main: #334155;
+            --roman-urdu-bg: #fef9c3;
+            --roman-urdu-border: #eab308;
+            --def-bg: #e0f2fe;
+            --def-border: #0ea5e9;
+            --rule-bg: #dcfce7;
+            --rule-border: #22c55e;
+            --danger-bg: #fee2e2;
+            --danger-border: #ef4444;
+            --sidebar-width: 250px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; line-height: 1.6; }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #1e293b;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+        .sidebar h2 {
+            text-align: center; padding-bottom: 20px; border-bottom: 1px solid #334155;
+            margin-bottom: 20px; font-size: 1.2rem; color: #38bdf8;
+        }
+        .sidebar ul { list-style-type: none; }
+        .sidebar ul li a {
+            display: block; padding: 12px 20px; color: #cbd5e1;
+            text-decoration: none; transition: 0.3s; border-left: 4px solid transparent;
+        }
+        .sidebar ul li a:hover {
+            background-color: #334155; border-left: 4px solid var(--secondary); color: white;
+        }
+
+        /* Main Content */
+        .content { margin-left: var(--sidebar-width); padding: 40px; width: calc(100% - var(--sidebar-width)); max-width: 1000px; }
+        h1 { color: var(--primary); font-size: 2.5rem; border-bottom: 3px solid var(--primary); padding-bottom: 10px; margin-bottom: 30px; }
+        h2 { color: var(--primary); margin-top: 40px; margin-bottom: 15px; font-size: 1.8rem; }
+        h3 { color: var(--secondary); margin-top: 30px; margin-bottom: 10px; font-size: 1.4rem; }
+        p { margin-bottom: 15px; }
+
+        /* Concept Cards & Boxes */
+        .box { padding: 15px 20px; margin: 20px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .def-box { background-color: var(--def-bg); border-left: 5px solid var(--def-border); }
+        .def-box strong { color: #0369a1; }
+        .roman-urdu { background-color: var(--roman-urdu-bg); border-left: 5px solid var(--roman-urdu-border); font-style: italic; color: #854d0e; }
+        .rule-box { background-color: var(--rule-bg); border: 2px solid var(--rule-border); text-align: center; font-weight: bold; color: #166534; }
+        .danger-box { background-color: var(--danger-bg); border-left: 5px solid var(--danger-border); color: #991b1b; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; border: 1px solid #cbd5e1; text-align: center; }
+        th { background-color: var(--primary); color: white; }
+        tr:nth-child(even) { background-color: #f1f5f9; }
+
+        /* Quick Revision Section */
+        .quick-revision { background-color: #1e293b; color: white; padding: 25px; border-radius: 10px; margin-top: 50px; margin-bottom: 50px; }
+        .quick-revision h3 { color: #38bdf8; margin-top: 0; border-bottom: 1px solid #475569; padding-bottom: 10px; }
+        .quick-revision ul { margin-left: 20px; margin-bottom: 15px; }
+        .quick-revision li { margin-bottom: 8px; }
+        .confusion-point { background-color: #ef4444; color: white; padding: 10px; border-radius: 5px; margin-top: 15px; }
+        code { background-color: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #b91c1c; }
+
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .content { margin-left: 0; width: 100%; padding: 20px; }
+            body { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS302: Lec 29-33</h2>
+        <ul>
+            <li><a href="#lec29">Lecture 29: Memory Expansion</a></li>
+            <li><a href="#lec30">Lecture 30: PLDs & PAL</a></li>
+            <li><a href="#lec31">Lecture 31: PLA, CPLD, FPGA</a></li>
+            <li><a href="#lec32">Lecture 32: Intro to DAC</a></li>
+            <li><a href="#lec33">Lecture 33: DAC Specs & ADC</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content">
+
+        <!-- ================= LECTURE 29 ================= -->
+        <section id="lec29">
+            <h1>Lecture 29: Flash Memory & Memory Expansion</h1>
+
+            <h2>1. Flash Memory Operations</h2>
+            <p>Flash Memory is an advanced form of EEPROM (Electrically Erasable Programmable Read-Only Memory). It is high-density, non-volatile, and can be read/written electrically. It uses special MOS transistors with a "floating gate" to trap electrons (storing data).</p>
+
+            <h2>2. Memory Expansion</h2>
+            <p><strong>What is it?</strong> Often, a single memory chip doesn't have enough capacity (locations) or word size (data bits) for a CPU. We connect multiple identical memory chips to "expand" the memory system.</p>
+            <p><strong>Why is it used?</strong> To meet the data-width (e.g., 8-bit to 16-bit) and address-space requirements of a computer without needing to invent a custom chip.</p>
+
+            <h3>A. Word-Size Expansion (Increasing Data Bus Width)</h3>
+            <p>If you have a CPU that processes 16-bit words, but your memory chips are only 8-bits wide, you use TWO 8-bit chips in parallel.</p>
+            <div class="def-box box">
+                <strong>How to wire it:</strong><br>
+                - <strong>Address Lines:</strong> Connected together (CPU Address 0 goes to A0 of both chips).<br>
+                - <strong>Chip Select (CS):</strong> Connected together (Both turn on at the same time).<br>
+                - <strong>Data Lines:</strong> Kept separate! Chip 1 provides bits D0-D7. Chip 2 provides bits D8-D15.
+            </div>
+
+            <h3>B. Capacity Expansion (Increasing Number of Locations)</h3>
+            <p>If you have two 1K (1024 locations) memory chips and you want a 2K (2048 locations) memory.</p>
+            <div class="def-box box">
+                <strong>How to wire it:</strong><br>
+                - <strong>Data Lines:</strong> Connected together (Both share D0-D7).<br>
+                - <strong>Address Lines:</strong> Lower address lines are shared. The <strong>Most Significant Bit (MSB)</strong> of the CPU's address bus is used to select WHICH chip turns on (using a Decoder or directly to CS).
+            </div>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Asaan alfaz mein, agar data ki "chaudai" (width) barhani hai (jaise 8-bit se 16-bit), toh dono chips ko ek sath on karte hain. Agar memory ki "lambaai" (capacity) barhani hai, toh ek waqt mein sirf ek chip on hoti hai; jab pehli chip full ho jati hai toh address ka MSB (sabse bada bit) dusri chip ko on kar deta hai.
+            </div>
+
+            <!-- QUICK REVISION 29 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 29</h3>
+                <ul>
+                    <li><strong>Flash Memory:</strong> High density, non-volatile, block-erasable using floating gate tech.</li>
+                    <li><strong>Word-Size Expansion:</strong> Connect Data buses separately, share Address and CS lines.</li>
+                    <li><strong>Capacity Expansion:</strong> Connect Data buses together, use highest Address bit to control Chip Select (CS).</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 30 ================= -->
+        <section id="lec30">
+            <h1>Lecture 30: Special Memories & Programmable Logic Devices (PLDs)</h1>
+
+            <h2>1. Special Types of Memory</h2>
+            <ul>
+                <li><strong>FIFO (First In First Out):</strong> Used as buffers between two devices operating at different speeds (e.g., CPU and Keyboard). The first bit written is the first one read.</li>
+                <li><strong>LIFO (Last In First Out):</strong> Known as a "Stack". Used heavily in microprocessors for storing return addresses during subroutines. The last item pushed in is the first one popped out.</li>
+            </ul>
+
+            <h2>2. Introduction to PLDs (Programmable Logic Devices)</h2>
+            <p><strong>What is it?</strong> Instead of using fixed logic gates (like 7400 series AND/OR ICs), a PLD is a blank chip containing a massive array of gates. The user "programs" the connections between these gates to create custom digital circuits.</p>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Pehle har logic circuit banane ke liye alag alag ICs (AND, OR, NOT) khareed kar unhe wires se jodna parta tha (Hardware implementation). PLD ek "kora kaghaz" (blank slate) hai. Aap software mein Boolean equation likhte hain, aur woh PLD ke andar ke connections ko fuse/anti-fuse ke zariye set kar deta hai. Is se jagah aur time dono bachte hain.
+            </div>
+
+            <h2>3. Architecture of PLDs (AND-OR Arrays)</h2>
+            <p>Most PLDs are based on the standard <strong>Sum-Of-Products (SOP)</strong> Boolean form. They have a massive array of AND gates followed by an array of OR gates.</p>
+
+            <h3>A. PROM (Programmable ROM) as a PLD</h3>
+            <p>A PROM has a <strong>Fixed AND array</strong> (Decoder) and a <strong>Programmable OR array</strong>. Since the AND array is fully decoded, it generates every possible minterm. It is good for table lookups but inefficient for simple logic equations.</p>
+
+            <h3>B. PAL (Programmable Array Logic)</h3>
+            <div class="def-box box">
+                <strong>PAL Architecture:</strong> Has a <strong>Programmable AND array</strong> and a <strong>Fixed OR array</strong>.
+            </div>
+            <p>This is the most popular basic PLD. You can program exactly which inputs go into the AND gates (making product terms), but those AND gates are permanently wired to specific OR gates. It is faster and cheaper than PROM.</p>
+
+            <!-- QUICK REVISION 30 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 30</h3>
+                <ul>
+                    <li><strong>FIFO:</strong> First In First Out (Data Buffers).</li>
+                    <li><strong>LIFO:</strong> Last In First Out (CPU Stacks).</li>
+                    <li><strong>PROM:</strong> Fixed AND, Programmable OR. (Generates all minterms).</li>
+                    <li><strong>PAL:</strong> Programmable AND, Fixed OR. (Faster, cheaper, very common).</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 31 ================= -->
+        <section id="lec31">
+            <h1>Lecture 31: PLA, GAL, CPLD & FPGA</h1>
+
+            <h2>1. PLA (Programmable Logic Array)</h2>
+            <div class="def-box box">
+                <strong>PLA Architecture:</strong> Has both a <strong>Programmable AND array</strong> AND a <strong>Programmable OR array</strong>.
+            </div>
+            <p>It provides the maximum flexibility. You can create any product term and connect it to any OR gate. However, because both arrays are programmable, it has higher propagation delay (it is slower) and is more complex to manufacture than a PAL.</p>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu Yaad Rakhne Ka Tarika:</strong><br>
+                - <strong>PROM:</strong> AND fix, OR set karo.<br>
+                - <strong>PAL:</strong> AND set karo, OR fix hai.<br>
+                - <strong>PLA:</strong> Dono apni marzi se set karo (Full control, but slow).
+            </div>
+
+            <h2>2. GAL (Generic Array Logic)</h2>
+            <p>A GAL is essentially a PAL that is <strong>reprogrammable</strong>. It uses EEPROM technology instead of permanent fuses. It also includes an <strong>OLMC (Output Logic Macrocell)</strong> which allows the user to program the output pins to be active-high, active-low, or connected to flip-flops for sequential logic.</p>
+
+            <h2>3. Complex PLDs (CPLD)</h2>
+            <p><strong>What is it?</strong> When a single PAL/GAL isn't enough, we use a CPLD. A CPLD contains multiple SPLDs (Simple PLDs like PAL blocks) on a single chip, all connected together by a Global Programmable Interconnect matrix.</p>
+
+            <h2>4. FPGA (Field Programmable Gate Array)</h2>
+            <p><strong>What is it?</strong> The most advanced programmable logic. Unlike PLDs that use AND-OR arrays, FPGAs use <strong>Logic Blocks</strong> (usually based on Look-Up Tables or LUTs), highly flexible programmable interconnects, and I/O blocks. They are used to implement entire computer processors on a single chip.</p>
+
+            <!-- QUICK REVISION 31 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 31</h3>
+                <ul>
+                    <li><strong>PLA:</strong> Programmable AND, Programmable OR. (Most flexible, but slower).</li>
+                    <li><strong>GAL:</strong> Reprogrammable PAL with OLMCs.</li>
+                    <li><strong>CPLD:</strong> Multiple PAL-like blocks combined on one chip.</li>
+                    <li><strong>FPGA:</strong> Very high density, based on Logic Blocks/LUTs instead of AND-OR arrays.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 32 ================= -->
+        <section id="lec32">
+            <h1>Lecture 32: Interfacing - Introduction to DACs</h1>
+
+            <h2>1. Digital to Analog Conversion (DAC)</h2>
+            <p><strong>Why is it used?</strong> The real world is Analog (temperature, voice, speed). Computers are Digital (0s and 1s). To control a real-world device (like driving a speaker or a motor), the computer's digital binary output must be converted into a continuous analog voltage or current. This is done by a DAC.</p>
+
+            <h2>2. The Binary-Weighted Input DAC</h2>
+            <p>This circuit uses a resistor network and an Operational Amplifier (Op-Amp) acting as a summing amplifier.</p>
+            <ul>
+                <li>The Most Significant Bit (MSB) is connected to a resistor of value <strong>R</strong>.</li>
+                <li>The next bit is connected to <strong>2R</strong>.</li>
+                <li>The next to <strong>4R</strong>, then <strong>8R</strong>, and so on.</li>
+            </ul>
+            <p>When a bit is '1', current flows through its resistor. The Op-Amp sums these currents to produce an analog output voltage.</p>
+
+            <div class="danger-box box">
+                <strong>Disadvantage of Binary-Weighted DAC:</strong> For a high-resolution DAC (like 12-bit), the resistor for the LSB (Least Significant Bit) would need to be 2<sup>11</sup> = 2048 times larger than the MSB resistor. Manufacturing such a wide range of highly precise resistors on a single chip is practically impossible.
+            </div>
+
+            <h2>3. The R-2R Ladder DAC</h2>
+            <p><strong>What is it?</strong> To solve the resistor problem, the R-2R ladder uses <strong>only two values of resistors: R and 2R</strong>, arranged in a ladder network.</p>
+            <p>By using network theorems (like Thevenin's theorem), the circuit inherently halves the current at each node down the ladder, perfectly creating binary weighting without needing extreme resistor values.</p>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Binary Weighted DAC ka masla yeh tha ke agar bits barhte the, toh resistors ki value aasmaan pe chali jati thi (bohot baday aur precise resistors chahiye thay). R-2R Ladder ne yeh masla hal kar diya kyunke usme chahe 4-bit ho ya 16-bit, sirf 2 hi qisam ke resistors use hote hain (Maslan 10k aur 20k ohm). Yeh banana sasta aur highly accurate hota hai.
+            </div>
+
+            <!-- QUICK REVISION 32 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 32</h3>
+                <ul>
+                    <li><strong>DAC:</strong> Converts binary 0s and 1s into continuous analog voltages.</li>
+                    <li><strong>Binary-Weighted DAC:</strong> Uses scaling resistors (R, 2R, 4R, 8R). Hard to manufacture for many bits.</li>
+                    <li><strong>R-2R Ladder DAC:</strong> Uses only two resistor values (R and 2R). Standard and highly accurate.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- ================= LECTURE 33 ================= -->
+        <section id="lec33">
+            <h1>Lecture 33: DAC Specifications & ADC Intro</h1>
+
+            <h2>1. Operational Characteristics of DACs</h2>
+            <p>Based on the official handout specifications, these are the key parameters used to evaluate a DAC:</p>
+
+            <div class="rule-box box">
+                <strong>1. Resolution:</strong> The smallest change in analog output voltage that can occur due to a change in the digital input (step size).<br>
+                Formula: Step Size = V<sub>ref</sub> / (2<sup>n</sup> - 1)
+            </div>
+
+            <div class="def-box box">
+                <strong>2. Accuracy:</strong> A comparison of the actual output of a D/A converter with the expected/ideal theoretical output. It is usually expressed as a percentage of the full-scale output.<br><br>
+                
+                <strong>3. Linearity:</strong> The output of the D/A converter should be a straight line when the binary input is varied between its min and max values.<br><br>
+                
+                <strong>4. Monotonicity:</strong> The output voltage must always <em>increase</em> (or stay same) as the binary input increases. If an increase in binary input causes a drop in voltage, it exhibits non-monotonic behavior (which is bad).<br><br>
+                
+                <strong>5. Settling Time:</strong> Ideally, the analogue output should appear instantly. Practically, it takes time. Settling time is defined as the time the DAC takes to settle within <strong>&plusmn;1/2 Least Significant Bit (LSB)</strong> of its final value when a change occurs in the input.
+            </div>
+
+            <h2>2. Analog to Digital Conversion (ADC)</h2>
+            <p><strong>What is it?</strong> Converts real-world analog signals (like a microphone signal) into digital binary data (0s and 1s) so a computer can process it. It requires two main steps:</p>
+            <ol>
+                <li><strong>Sampling:</strong> Taking "snapshots" of the continuous analog wave at discrete time intervals.</li>
+                <li><strong>Quantization:</strong> Assigning a specific binary code to the voltage level captured in the snapshot.</li>
+            </ol>
+
+            <div class="roman-urdu box">
+                <strong>Roman Urdu:</strong> Real duniya ka signal continuous hota hai. ADC pehle us signal ki choti choti pictures kheenchat hai (Sampling), aur phir har picture ki voltage height ke mutabiq ek binary number (0101) chipka deta hai (Quantization).
+            </div>
+
+            <h2>3. Types of ADCs</h2>
+            
+            <h3>A. Flash ADC (Simultaneous ADC)</h3>
+            <p>The fastest type of ADC. It uses multiple comparators connected in parallel. For an <em>n-bit</em> ADC, it requires <strong>2<sup>n</sup> - 1 comparators</strong>. (E.g., an 8-bit flash ADC needs 255 comparators!). It is extremely fast but very complex and expensive.</p>
+
+            <h3>B. Successive Approximation ADC</h3>
+            <p>The most widely used ADC. It uses a single Comparator, a DAC, and a Successive Approximation Register (SAR). It essentially "guesses" the digital value bit-by-bit from MSB to LSB. If it's an 8-bit ADC, it takes exactly 8 clock cycles to find the correct binary value.</p>
+
+            <!-- QUICK REVISION 33 -->
+            <div class="quick-revision">
+                <h3>Quick Revision: Lecture 33</h3>
+                <ul>
+                    <li><strong>Resolution:</strong> The smallest voltage change (Step Size).</li>
+                    <li><strong>Settling Time:</strong> Time taken to stabilize within &plusmn;1/2 LSB of final value.</li>
+                    <li><strong>Monotonicity:</strong> Output voltage must strictly increase with increasing binary input.</li>
+                    <li><strong>Flash ADC:</strong> Extremely fast, uses 2<sup>n</sup> - 1 comparators.</li>
+                    <li><strong>Successive Approximation ADC:</strong> Uses SAR logic, takes 'n' clock cycles for 'n' bits. Excellent balance of speed and complexity.</li>
+                </ul>
+                <div class="confusion-point">
+                    <strong>Common Confusion: DAC vs ADC</strong><br>
+                    - Computer outputting sound to speakers = DAC (Digital to Analog).<br>
+                    - Microphone recording sound into computer = ADC (Analog to Digital).
+                </div>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>
