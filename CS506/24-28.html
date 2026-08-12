@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS506 Study Notes - Lectures 24 to 28</title>
+    <style>
+        :root {
+            --primary: #1e3a8a; /* Deep Blue */
+            --secondary: #3b82f6; /* Lighter Blue */
+            --accent: #f59e0b; /* Amber/Yellow for important stuff */
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text: #1f2937;
+            --roman-urdu-bg: #ecfdf5;
+            --roman-urdu-border: #10b981;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+            --border: #e5e7eb;
+            --html-color: #e34c26; /* HTML Orange */
+            --java-color: #b07219; /* Java Brown */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            line-height: 1.6;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            padding: 20px 0;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 15px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--secondary);
+            color: white;
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Main Content */
+        .content {
+            margin-left: 280px;
+            padding: 40px;
+            width: calc(100% - 280px);
+        }
+
+        .header-banner {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        /* Concept Cards */
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .card h3 {
+            color: var(--secondary);
+            margin-top: 0;
+        }
+
+        /* Roman Urdu Explanation Box */
+        .roman-urdu {
+            background-color: var(--roman-urdu-bg);
+            border-left: 5px solid var(--roman-urdu-border);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+            font-style: italic;
+            color: #065f46;
+        }
+        
+        .roman-urdu strong {
+            color: var(--roman-urdu-border);
+            font-style: normal;
+        }
+
+        /* Syntax & Code Blocks */
+        .syntax-box {
+            background-color: #e0f2fe;
+            border: 1px solid #7dd3fc;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #0369a1;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+
+        .lang-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .html-badge { background-color: var(--html-color); }
+        .java-badge { background-color: var(--java-color); }
+
+        /* Inline Code */
+        p code, li code {
+            background-color: #f1f5f9;
+            color: #dc2626; 
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Comparison Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        tr:nth-child(even) { background-color: #f9fafb; }
+
+        /* Rules & Mistakes Info Boxes */
+        .info-box {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .rules {
+            background-color: #fffbeb;
+            border-left: 5px solid #f59e0b;
+        }
+
+        .mistakes {
+            background-color: #fef2f2;
+            border-left: 5px solid #ef4444;
+        }
+
+        /* Connection Box */
+        .connection-box {
+            background-color: #f5f3ff;
+            border: 1px solid #c4b5fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .connection-box strong { color: #6d28d9; }
+
+        /* Quick Revision Box */
+        .revision-box {
+            background: linear-gradient(to right, #eff6ff, #ffffff);
+            border: 2px dashed var(--secondary);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .revision-box h3 {
+            color: var(--primary);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media(max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 10px 0; display: flex; flex-wrap: wrap; justify-content: center; }
+            .sidebar h2 { width: 100%; }
+            .sidebar a { padding: 10px 15px; font-size: 1rem; border-left: none; border-bottom: 2px solid transparent; }
+            .sidebar a:hover { border-bottom: 2px solid var(--accent); }
+            .content { margin-left: 0; width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS506 Notes</h2>
+        <a href="#lec24">Lecture 24: Web Apps & HTML Forms</a>
+        <a href="#lec25">Lecture 25: Intro to Servlets</a>
+        <a href="#lec26">Lecture 26: Processing Forms (Java)</a>
+        <a href="#lec27">Lecture 27: Request Dispatching</a>
+        <a href="#lec28">Lecture 28: Session Tracking</a>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content">
+
+        <div class="header-banner">
+            <h1>CS506 - Web Design & Development</h1>
+            <p>Comprehensive Study Notes for Lectures 24 to 28</p>
+        </div>
+        
+        <div class="info-box rules">
+            <strong>Subject Context (CS506):</strong> This section bridges the gap between Frontend (HTML) and Backend (Java). We learn how HTML forms collect user data and how Java Servlets process that data on the server.
+        </div>
+
+        <!-- LECTURE 24 -->
+        <section id="lec24">
+            <h2>Lecture 24: Web Applications & HTML Forms Basics</h2>
+
+            <div class="card">
+                <h3>1. Web Architecture (Two-Tier vs Three-Tier)</h3>
+                <p><strong>Technical Definition:</strong> Web applications are built on Client-Server architecture. The Client (browser) sends an HTTP Request, and the Server sends an HTTP Response.</p>
+                <ul>
+                    <li><strong>Two-Tier:</strong> Client directly communicates with the database server.</li>
+                    <li><strong>Three-Tier:</strong> Client communicates with a Web/Application Server, which then communicates with the Database. (Standard for modern web).</li>
+                </ul>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Jab aap browser mein `www.google.com` likhte hain, tou aapka browser (Client) ek <strong>Request</strong> bhejta hai Google ke Server ko. Server usay process karta hai aur wapas HTML bhejta hai jise <strong>Response</strong> kehte hain. 3-Tier architecture mein beech mein Web Server (jaise Tomcat) hota hai jo security aur logic handle karta hai taake database seedha expose na ho.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. HTTP Protocol: GET vs POST</h3>
+                <p>HTTP is the protocol used for transferring web pages. It provides two main methods to send data to the server:</p>
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>GET Method</th>
+                        <th>POST Method</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Location</strong></td>
+                        <td>Appended to the URL (Visible).</td>
+                        <td>Sent inside the HTTP message body (Hidden).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Limit</strong></td>
+                        <td>Limited data (depends on max URL length).</td>
+                        <td>Unlimited data (ideal for large forms/files).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Security</strong></td>
+                        <td>Insecure (Passwords are visible in URL).</td>
+                        <td>More secure (Data not visible in URL).</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>3. HTML Forms (Structure for User Input)</h3>
+                <p><strong>What is it?</strong> The HTML <code>&lt;form&gt;</code> element is used to collect user input (like login details, searches) and send it to a backend server.</p>
+                
+                <span class="lang-badge html-badge">HTML</span>
+<pre><code>&lt;form action="LoginServlet" method="POST"&gt;
+    &lt;!-- Input element for Text --&gt;
+    &lt;label&gt;Username:&lt;/label&gt;
+    &lt;input type="text" name="uname"&gt; &lt;br&gt;
+    
+    &lt;!-- Input element for Password --&gt;
+    &lt;label&gt;Password:&lt;/label&gt;
+    &lt;input type="password" name="pwd"&gt; &lt;br&gt;
+    
+    &lt;!-- Submit Button --&gt;
+    &lt;input type="submit" value="Login"&gt;
+&lt;/form&gt;
+</code></pre>
+                <h4>Explanation of HTML Form:</h4>
+                <ul>
+                    <li><code>&lt;form&gt;</code>: The container for input elements.</li>
+                    <li><code>action="LoginServlet"</code>: <strong>Crucial attribute.</strong> This tells the browser *WHERE* to send the data when the submit button is clicked. In this case, it goes to a Java Servlet named "LoginServlet".</li>
+                    <li><code>method="POST"</code>: Tells the browser *HOW* to send the data. Since it's a login form, POST hides the password from the URL.</li>
+                    <li><code>name="uname"</code>: <strong>Crucial attribute.</strong> The Java server uses this exact name to extract the value the user typed.</li>
+                    <li><code>&lt;input type="submit"&gt;</code>: A special button that automatically packages all form data and sends the HTTP Request to the <code>action</code> URL.</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 24</h3>
+                <ul>
+                    <li><strong>Client-Server:</strong> Web apps work on HTTP Request & Response.</li>
+                    <li><strong>GET:</strong> Data visible in URL. Used for fetching/searching.</li>
+                    <li><strong>POST:</strong> Data hidden in body. Used for sensitive data/submitting.</li>
+                    <li><strong>HTML <code>action</code>:</strong> Destination URL for form data.</li>
+                    <li><strong>HTML <code>name</code>:</strong> Identifier for input fields used by the backend.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 25 -->
+        <section id="lec25">
+            <h2>Lecture 25: Introduction to Servlets & Life Cycle</h2>
+
+            <div class="card">
+                <h3>1. What is a Servlet?</h3>
+                <p><strong>Technical Definition:</strong> A Servlet is a Java technology used to create Web Applications. It is a Java class that resides and executes on a Web Server to process HTTP requests and generate dynamic web pages (usually HTML) as HTTP responses.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    HTML sirf static (fixed) pages banata hai. Agar humein aisi website chahiye jahan user login kare, database se data aaye (Dynamic Web Page), tou humein server par logic likhni parti hai. <strong>Servlet</strong> darasal ek Java ka program hai jo Web Server (jaise Apache Tomcat) ke andar chalta hai. Ye HTML form se data leta hai, process karta hai, aur naya HTML page bana kar wapas bhej deta hai.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. Web Container (Tomcat)</h3>
+                <p>A Web Container (Servlet Container) is a part of a Web Server that interacts with the Servlets. The most famous one is <strong>Apache Tomcat</strong>. It manages the Servlet's life cycle, URL mapping, and handles the raw HTTP socket connections.</p>
+            </div>
+
+            <div class="card">
+                <h3>3. Servlet Life Cycle (Exam Favorite)</h3>
+                <p>Just like Applets, Servlets do not have a <code>main()</code> method. The Web Container (Tomcat) manages them through three major methods:</p>
+                
+                <div class="syntax-box">
+                    1. init() <br>
+                    2. service() <br>
+                    3. destroy()
+                </div>
+
+                <table>
+                    <tr>
+                        <th>Method</th>
+                        <th>When is it called?</th>
+                        <th>Roman Urdu</th>
+                    </tr>
+                    <tr>
+                        <td><code>init()</code></td>
+                        <td>Called exactly <strong>ONCE</strong> when the Servlet is first loaded into memory.</td>
+                        <td>Sirf zindagi mein ek dafa call hota hai, database connection waghera setup karne ke liye.</td>
+                    </tr>
+                    <tr>
+                        <td><code>service()</code></td>
+                        <td>Called <strong>EVERY TIME</strong> a new request comes from a client.</td>
+                        <td>Har dafa jab koi user button click karta hai ya URL hit karta hai, yeh call hota hai form data process karne ke liye.</td>
+                    </tr>
+                    <tr>
+                        <td><code>destroy()</code></td>
+                        <td>Called exactly <strong>ONCE</strong> when the server is shutting down or unloading the servlet.</td>
+                        <td>Server band hone se pehle resources (memory/connections) ko free karne ke liye call hota hai.</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="info-box mistakes">
+                <strong>Important Rule:</strong>
+                <p>Unlike old CGI (Common Gateway Interface) scripts that created a new heavy process for every request, Servlets create a new <strong>Thread</strong> for every request. This makes Servlets very fast and highly scalable.</p>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 25</h3>
+                <ul>
+                    <li><strong>Servlet:</strong> Java program running on a server to generate dynamic content.</li>
+                    <li><strong>Tomcat:</strong> The Web Container that runs and manages Servlets.</li>
+                    <li><strong>No Main Method:</strong> Servlets are managed by the container.</li>
+                    <li><strong>Life Cycle:</strong> <code>init()</code> -> <code>service()</code> -> <code>destroy()</code>.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 26 -->
+        <section id="lec26">
+            <h2>Lecture 26: Processing HTML Forms with Servlets</h2>
+
+            <div class="connection-box">
+                <strong>Relationship Check:</strong> <br>
+                <strong>HTML</strong> creates the Form (Structure & UI). <br>
+                <strong>Servlet (Java)</strong> reads the Form data, applies logic, and sends back a response.
+            </div>
+
+            <div class="card">
+                <h3>1. HttpServlet and Methods</h3>
+                <p>To create a Servlet, your Java class must extend <code>HttpServlet</code>. Instead of directly overriding <code>service()</code>, we usually override HTTP-specific methods:</p>
+                <ul>
+                    <li><code>doGet(HttpServletRequest req, HttpServletResponse res)</code>: Called if HTML form method was GET.</li>
+                    <li><code>doPost(HttpServletRequest req, HttpServletResponse res)</code>: Called if HTML form method was POST.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>2. Reading HTML Form Data in Java</h3>
+                <p>When a client submits an HTML form, Tomcat bundles all the data into the <code>HttpServletRequest</code> object. We use <code>request.getParameter("html_name_attribute")</code> to extract it.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    HTML form mein jis input field ka jo <code>name=""</code> rakha tha, Servlet usi naam ko istemal kar ke <code>request.getParameter()</code> ke zariye uski value nikalta hai. Har value String format mein aati hai.
+                </div>
+                
+                <span class="lang-badge java-badge">Java</span>
+<pre><code>import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+// 1. Extend HttpServlet
+public class LoginServlet extends HttpServlet {
+    
+    // 2. Override doPost because HTML form used method="POST"
+    public void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        // 3. Read data sent by the HTML form
+        // "uname" and "pwd" must match the name="" in HTML exactly
+        String username = request.getParameter("uname");
+        String password = request.getParameter("pwd");
+        
+        // 4. Set the content type of our response to HTML
+        response.setContentType("text/html");
+        
+        // 5. Get PrintWriter to write HTML directly to the browser
+        PrintWriter out = response.getWriter();
+        
+        // 6. Generate Dynamic HTML Response
+        out.println("&lt;html&gt;&lt;body&gt;");
+        if(username.equals("admin") && password.equals("123")) {
+            out.println("&lt;h1&gt;Welcome, " + username + "!&lt;/h1&gt;");
+        } else {
+            out.println("&lt;h1 style='color:red;'&gt;Login Failed!&lt;/h1&gt;");
+        }
+        out.println("&lt;/body&gt;&lt;/html&gt;");
+    }
+}
+</code></pre>
+                <h4>Explanation of the Code:</h4>
+                <ul>
+                    <li><code>HttpServletRequest</code>: Contains everything the browser sent (parameters, IP, browser info).</li>
+                    <li><code>HttpServletResponse</code>: Used to send data BACK to the browser.</li>
+                    <li><code>getParameter("uname")</code>: Fetches the value entered by the user in the text box named "uname".</li>
+                    <li><code>setContentType("text/html")</code>: Tells the browser "Hey, I am sending you HTML code, so render it as a webpage, don't just show plain text."</li>
+                    <li><code>PrintWriter out = response.getWriter()</code>: Creates an output stream. Whatever we <code>out.println()</code> will be sent directly to the user's browser.</li>
+                </ul>
+            </div>
+
+            <div class="info-box mistakes">
+                <strong>Common Mistakes:</strong>
+                <ul>
+                    <li>Spelling mistake inside <code>getParameter()</code>. If the HTML has <code>name="user"</code> and you type <code>getParameter("usr")</code>, it will return <strong>null</strong> and crash your program (NullPointerException).</li>
+                    <li>Forgetting to set <code>response.setContentType("text/html")</code>. The browser might download the response as a file instead of displaying it.</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 26</h3>
+                <ul>
+                    <li><strong>HttpServlet:</strong> Base class for web Servlets.</li>
+                    <li><strong>doGet / doPost:</strong> Methods to handle GET and POST requests.</li>
+                    <li><strong>request.getParameter("name"):</strong> Fetches form data. ALWAYS returns a String.</li>
+                    <li><strong>response.setContentType():</strong> Defines MIME type (e.g., "text/html").</li>
+                    <li><strong>PrintWriter:</strong> Used to write HTML response to the client.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 27 -->
+        <section id="lec27">
+            <h2>Lecture 27: Request Dispatching & Redirecting</h2>
+
+            <div class="card">
+                <h3>1. What is Request Dispatching?</h3>
+                <p><strong>Technical Definition:</strong> Sometimes, a single Servlet cannot finish a request. It needs help from another Servlet or wants to send the user to an HTML/JSP page. Request Dispatching transfers the control from the current Servlet to another resource (HTML, JSP, or another Servlet) on the <strong>same server</strong>.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Agar Servlet ne login check kiya aur password theek nikla, tou Servlet khud naya bada HTML page generate (print) karne ke bajaye, request ko ek pehle se bane hue HTML page ki taraf "Forward" kar deta hai. Isse code clean rehta hai (Business Logic Java mein, Design HTML mein).
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. RequestDispatcher: forward() vs include()</h3>
+                <p>The <code>RequestDispatcher</code> interface provides two main methods:</p>
+                <ul>
+                    <li><strong>forward(request, response):</strong> Stops execution of the current servlet and permanently passes the request to another page. The user sees the output of the *second* page.</li>
+                    <li><strong>include(request, response):</strong> Temporarily borrows the output of another page, includes it in its own output, and then continues execution. Useful for adding a common header/footer HTML to all pages.</li>
+                </ul>
+                
+                <span class="lang-badge java-badge">Java Syntax</span>
+<pre><code>// 1. Get the dispatcher for a specific HTML page
+RequestDispatcher rd = request.getRequestDispatcher("welcome.html");
+
+// 2. Forward the request
+rd.forward(request, response);
+</code></pre>
+            </div>
+
+            <div class="card">
+                <h3>3. sendRedirect (Different from Forward)</h3>
+                <p><code>response.sendRedirect("URL")</code> tells the client's browser to make a brand NEW request to a different URL. It can redirect to a completely different website (e.g., google.com), unlike RequestDispatcher which only works on the same server.</p>
+                
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>RequestDispatcher (forward)</th>
+                        <th>sendRedirect</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Who handles it?</strong></td>
+                        <td>Server handles it internally.</td>
+                        <td>Browser is told to make a new request.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>URL in Browser</strong></td>
+                        <td>URL does NOT change.</td>
+                        <td>URL CHANGES to the new location.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Speed</strong></td>
+                        <td>Faster (internal).</td>
+                        <td>Slower (requires extra network round-trip).</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 27</h3>
+                <ul>
+                    <li><strong>RequestDispatcher:</strong> Moves processing to another resource on the same server.</li>
+                    <li><strong>forward():</strong> Complete handover. Current servlet stops.</li>
+                    <li><strong>include():</strong> Merges output from another resource.</li>
+                    <li><strong>sendRedirect():</strong> Client-side redirect. Changes browser URL. Can go to external sites.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 28 -->
+        <section id="lec28">
+            <h2>Lecture 28: Session Tracking</h2>
+
+            <div class="card">
+                <h3>1. The Problem: HTTP is Stateless</h3>
+                <p><strong>Technical Definition:</strong> HTTP is a stateless protocol. This means every request is independent. The server does not remember anything from the previous request. If you log in on page 1 and go to page 2, the server forgets who you are.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    HTTP ka masla yeh hai ke iski yadasht (memory) zero

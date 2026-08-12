@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS506 Study Notes - Lectures 34 to 38</title>
+    <style>
+        :root {
+            --primary: #0f766e; /* Teal */
+            --secondary: #14b8a6; /* Lighter Teal */
+            --accent: #f59e0b; /* Amber */
+            --bg: #f0fdfa;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --roman-urdu-bg: #f8fafc;
+            --roman-urdu-border: #3b82f6; /* Blue border for Urdu */
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+            --border: #ccfbf1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            line-height: 1.6;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            padding: 20px 0;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 15px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #ccfbf1;
+            text-decoration: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--secondary);
+            color: white;
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Main Content */
+        .content {
+            margin-left: 280px;
+            padding: 40px;
+            width: calc(100% - 280px);
+        }
+
+        .header-banner {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        /* Concept Cards */
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .card h3 {
+            color: var(--secondary);
+            margin-top: 0;
+        }
+
+        /* Roman Urdu Explanation Box */
+        .roman-urdu {
+            background-color: var(--roman-urdu-bg);
+            border-left: 5px solid var(--roman-urdu-border);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+            font-style: italic;
+            color: #1e40af;
+        }
+        
+        .roman-urdu strong {
+            color: var(--roman-urdu-border);
+            font-style: normal;
+        }
+
+        /* Syntax & Code Blocks */
+        .syntax-box {
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #0369a1;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+
+        /* Inline Code */
+        p code, li code {
+            background-color: #f1f5f9;
+            color: #b91c1c; 
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Comparison Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid var(--secondary);
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        tr:nth-child(even) { background-color: #f8fafc; }
+
+        /* Rules & Mistakes Info Boxes */
+        .info-box {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .rules {
+            background-color: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            color: #92400e;
+        }
+
+        .mistakes {
+            background-color: #fee2e2;
+            border-left: 5px solid #ef4444;
+            color: #991b1b;
+        }
+
+        /* Quick Revision Box */
+        .revision-box {
+            background: linear-gradient(to right, #f0fdfa, #ffffff);
+            border: 2px dashed var(--secondary);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .revision-box h3 {
+            color: var(--primary);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media(max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 10px 0; display: flex; flex-wrap: wrap; justify-content: center; }
+            .sidebar h2 { width: 100%; }
+            .sidebar a { padding: 10px 15px; font-size: 1rem; border-left: none; border-bottom: 2px solid transparent; }
+            .sidebar a:hover { border-bottom: 2px solid var(--accent); }
+            .content { margin-left: 0; width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS506 Notes</h2>
+        <a href="#lec34">Lecture 34: Model 1 Architecture</a>
+        <a href="#lec35">Lecture 35: Model 2 (MVC) Architecture</a>
+        <a href="#lec36">Lecture 36: Intro to XML</a>
+        <a href="#lec37">Lecture 37: XML DOM Parser</a>
+        <a href="#lec38">Lecture 38: XML SAX Parser</a>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content">
+
+        <div class="header-banner">
+            <h1>CS506 - Web Design & Development</h1>
+            <p>Study Notes for Lectures 34 to 38 (MVC Architectures & XML Parsers)</p>
+        </div>
+
+        <!-- LECTURE 34 -->
+        <section id="lec34">
+            <h2>Lecture 34: Web Application Architectures (Model 1)</h2>
+
+            <div class="card">
+                <h3>1. What is Web Application Architecture?</h3>
+                <p><strong>Technical Definition:</strong> Web Architecture refers to the layout and interaction of different components (like Servlets, JSPs, and JavaBeans) in a web application. Java introduced two primary architectures for building web applications: <strong>Model 1</strong> and <strong>Model 2</strong>.</p>
+            </div>
+
+            <div class="card">
+                <h3>2. Model 1 Architecture</h3>
+                <p>In Model 1, the <strong>JSP page</strong> is responsible for everything. It handles the user's incoming request, performs business logic (usually by calling JavaBeans), and generates the HTML response.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Model 1 mein JSP hi sab kuch karta hai. User ka form data JSP mein aata hai, JSP database se connect hota hai (JavaBeans ke zariye), aur phir wahi JSP output screen pe dikhata hai. Shuru mein yeh aasaan lagta hai, lekin jab project bada ho jaye, tou HTML aur Java code itna mix ho jata hai ke usay samajhna aur theek karna (maintain) azaab ban jata hai. Is mix code ko "Spaghetti code" kehte hain.
+                </div>
+
+                <h4>Drawbacks of Model 1:</h4>
+                <ul>
+                    <li><strong>No Separation of Roles:</strong> Web designers (HTML/CSS) and Programmers (Java) have to work on the same JSP file, causing conflicts.</li>
+                    <li><strong>Hard to Maintain:</strong> Code becomes complex and unreadable ("Spaghetti Code").</li>
+                    <li><strong>Reusability is Low:</strong> Business logic stuck in one JSP cannot be easily used by another.</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 34</h3>
+                <ul>
+                    <li><strong>Model 1:</strong> JSP handles both Processing (Logic) and Presentation (UI).</li>
+                    <li><strong>Key Components:</strong> Browser ➔ JSP ➔ JavaBeans ➔ Database.</li>
+                    <li><strong>Biggest Problem:</strong> Spaghetti code, mixing design with programming logic.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 35 -->
+        <section id="lec35">
+            <h2>Lecture 35: Model 2 Architecture (MVC Pattern)</h2>
+
+            <div class="card">
+                <h3>1. What is Model 2 (MVC)?</h3>
+                <p><strong>Technical Definition:</strong> Model 2 architecture solves the problems of Model 1 by adopting the <strong>MVC (Model-View-Controller)</strong> design pattern. It strictly separates business logic, presentation, and request handling into three distinct components.</p>
+                
+                <ul>
+                    <li><strong>Model (JavaBean):</strong> Holds the data and the business rules (e.g., Database connection, calculations).</li>
+                    <li><strong>View (JSP):</strong> Only responsible for displaying data to the user. (No Java logic).</li>
+                    <li><strong>Controller (Servlet):</strong> Acts as the manager. It receives the request, asks the Model to process it, and forwards the result to the View.</li>
+                </ul>
+
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    MVC mein kaam divide ho jata hai. Jab aap button click karte hain, tou request seedha JSP par nahi, balke <strong>Servlet (Controller)</strong> par jati hai. Servlet check karta hai aapne kya bheja hai, phir wo <strong>JavaBean (Model)</strong> se kehta hai ke data process karo (jaise login verify karna). Jab Bean result de deta hai, tou Servlet us result ko pakar kar <strong>JSP (View)</strong> ki taraf bhej deta hai taake user ko dikhaya ja sakay. Design aur Logic bilkul alag ho gaye!
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. How MVC works in Code (The Controller)</h3>
+                <p>The core of Model 2 is how the Servlet (Controller) passes data to the JSP (View). We use the <code>RequestDispatcher</code> for this.</p>
+                
+<pre><code>// 1. Inside a Servlet (Controller)
+protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    
+    // a. Capture input
+    String user = request.getParameter("username");
+    
+    // b. Talk to Model (JavaBean)
+    UserBean myBean = new UserBean();
+    myBean.setName(user);
+    
+    // c. Store the Bean inside the 'request' so JSP can find it
+    request.setAttribute("userData", myBean);
+    
+    // d. Forward the request to the View (JSP)
+    RequestDispatcher rd = request.getRequestDispatcher("welcome.jsp");
+    rd.forward(request, response);
+}
+</code></pre>
+                <h4>Explanation:</h4>
+                <ul>
+                    <li><code>request.setAttribute("userData", myBean)</code>: This is crucial. The Servlet attaches the populated Bean to the request object under the name "userData".</li>
+                    <li><code>RequestDispatcher</code>: An interface used to send the request from the Servlet to another resource (like a JSP file) on the server.</li>
+                    <li><code>rd.forward()</code>: Transfers the control. The user's URL doesn't change, but the server internally loads the JSP.</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3>3. How MVC works in Code (The View)</h3>
+<pre><code>&lt;!-- Inside welcome.jsp (View) --&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;!-- 1. Use the bean stored by the Servlet in the 'request' scope --&gt;
+    &lt;jsp:useBean id="userData" class="com.example.UserBean" scope="request" /&gt;
+    
+    &lt;!-- 2. Display the data (No Java scriptlet needed!) --&gt;
+    &lt;h1&gt;Welcome, &lt;jsp:getProperty name="userData" property="name" /&gt;&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+            </div>
+
+            <div class="info-box rules">
+                <strong>Important Rule (Scope):</strong>
+                When passing beans from Servlet to JSP, the scope in <code>request.setAttribute()</code> MUST match the scope in <code>&lt;jsp:useBean scope="..."&gt;</code>. In MVC, this is almost always <strong>scope="request"</strong>.
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 35</h3>
+                <ul>
+                    <li><strong>Model 2 (MVC):</strong> Clear separation of concerns.</li>
+                    <li><strong>Controller:</strong> Servlet (Intercepts, manages flow).</li>
+                    <li><strong>Model:</strong> JavaBean (Data, Logic, DB).</li>
+                    <li><strong>View:</strong> JSP (HTML Presentation).</li>
+                    <li><strong>RequestDispatcher:</strong> The mechanism used by Servlets to forward requests to JSPs.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 36 -->
+        <section id="lec36">
+            <h2>Lecture 36: Introduction to XML</h2>
+
+            <div class="card">
+                <h3>1. What is XML?</h3>
+                <p><strong>Technical Definition:</strong> XML stands for eXtensible Markup Language. Unlike HTML (which is designed to <i>display</i> data), XML is designed to <i>store</i> and <i>transport</i> data. In XML, there are no predefined tags; you invent your own tags to describe the data.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    HTML mein pehle se tay shuda tags hote hain (jaise <code>&lt;p&gt;</code> paragraph ke liye). Lekin agar aapko ek student ka data bhejna ho, tou HTML ka koi <code>&lt;student&gt;</code> tag nahi hai. XML aapko azadi deta hai ke aap apne data ke hisaab se khud tags banayein. Iska maqsad data ko khoobsurat dikhana nahi hai, balke data ko safe tareeqay se ek system se doosre system tak pohnchana hai.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. Basic XML Syntax and Rules</h3>
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- 1. Root Element (Mandatory) --&gt;
+&lt;bookstore&gt; 
+    &lt;!-- 2. Child Element --&gt;
+    &lt;book category="programming"&gt; 
+        &lt;title&gt;Java Basics&lt;/title&gt;
+        &lt;author&gt;John Doe&lt;/author&gt;
+        &lt;price&gt;500&lt;/price&gt;
+    &lt;/book&gt;
+&lt;/bookstore&gt;
+</code></pre>
+                
+                <h4>Strict XML Rules:</h4>
+                <ol>
+                    <li><strong>Single Root:</strong> Every XML document MUST have exactly one root element that encloses all other elements (e.g., <code>&lt;bookstore&gt;</code>).</li>
+                    <li><strong>Case Sensitivity:</strong> <code>&lt;Author&gt;</code> and <code>&lt;author&gt;</code> are completely different.</li>
+                    <li><strong>Closing Tags:</strong> Every tag must be closed. (<code>&lt;title&gt;...&lt;/title&gt;</code>).</li>
+                    <li><strong>Proper Nesting:</strong> Tags cannot overlap. (<code>&lt;b&gt;&lt;i&gt;Text&lt;/b&gt;&lt;/i&gt;</code> is illegal in XML).</li>
+                    <li><strong>Quotes for Attributes:</strong> Attribute values MUST be in quotes. (<code>category="programming"</code>).</li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h3>3. Well-Formed vs Valid XML (Important Exam Topic)</h3>
+                <ul>
+                    <li><strong>Well-Formed XML:</strong> An XML document that follows all the strict syntax rules mentioned above.</li>
+                    <li><strong>Valid XML:</strong> An XML document that is "Well-Formed" AND also conforms to a predefined structure called a <strong>DTD (Document Type Definition)</strong> or an <strong>XML Schema</strong>.</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 36</h3>
+                <ul>
+                    <li><strong>HTML vs XML:</strong> HTML displays data, XML stores/transports data.</li>
+                    <li><strong>Tags:</strong> XML tags are custom and not predefined.</li>
+                    <li><strong>Root Element:</strong> Absolute requirement for XML.</li>
+                    <li><strong>Well-Formed:</strong> Follows syntax rules.</li>
+                    <li><strong>Valid:</strong> Follows syntax rules + DTD structural rules.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 37 -->
+        <section id="lec37">
+            <h2>Lecture 37: XML Parsing using DOM</h2>
+
+            <div class="card">
+                <h3>1. What is an XML Parser?</h3>
+                <p>To read or modify XML files using Java, we need a software component called an XML Parser. Java provides two main types of parsers: <strong>DOM</strong> and <strong>SAX</strong>.</p>
+            </div>
+
+            <div class="card">
+                <h3>2. The DOM Parser (Document Object Model)</h3>
+                <p><strong>Technical Definition:</strong> DOM is a tree-based parser. It reads the entire XML file and creates a tree of <code>Node</code> objects in memory (RAM). Once the tree is built, developers can navigate up, down, or modify the nodes.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    DOM parser poori XML file ko ek hi dafa RAM mein utha lata hai aur usko ek "Darakht" (Tree) ki shakal de deta hai. Iska faida yeh hai ke aap file mein kisi bhi waqt aage peeche ja sakte hain aur data change kar sakte hain. Lekin nuqsan yeh hai ke agar XML file bohot badi (jaise 2GB) ho, tou aapki RAM full ho jayegi aur program crash (Out of Memory) ho jayega.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>3. DOM Code Example & Syntax</h3>
+                <p>Important packages to import: <code>javax.xml.parsers.*</code> and <code>org.w3c.dom.*</code>.</p>
+                
+<pre><code>import javax.xml.parsers.*;
+import org.w3c.dom.*;
+import java.io.File;
+
+public class DOMExample {
+    public static void main(String[] args) {
+        try {
+            // 1. Setup the Parser Factory & Builder
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            
+            // 2. Parse the XML file into a Document (Tree) in memory
+            Document doc = builder.parse(new File("students.xml"));
+            
+            // 3. Normalize the XML structure (fixes spacing issues)
+            doc.getDocumentElement().normalize();
+            
+            // 4. Get a list of all &lt;student&gt; tags
+            NodeList nList = doc.getElementsByTagName("student");
+            
+            // 5. Loop through the list
+            for (int i = 0; i < nList.getLength(); i++) {
+                Node node = nList.item(i);
+                
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node; // Cast Node to Element
+                    
+                    // 6. Extract data
+                    String id = element.getAttribute("id");
+                    String name = element.getElementsByTagName("name").item(0).getTextContent();
+                    
+                    System.out.println("ID: " + id + ", Name: " + name);
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+}
+</code></pre>
+                <h4>Explanation:</h4>
+                <ul>
+                    <li><code>DocumentBuilderFactory / DocumentBuilder</code>: Built-in Java classes that prepare the parsing engine.</li>
+                    <li><code>builder.parse()</code>: The critical step that actually reads the file and returns a <code>Document</code> object (The DOM Tree).</li>
+                    <li><code>getElementsByTagName("student")</code>: Returns a <code>NodeList</code> (array) of all elements matching the tag.</li>
+                    <li><code>getTextContent()</code>: Extracts the text between the opening and closing tags.</li>
+                </ul>
+            </div>
+
+            <div class="info-box mistakes">
+                <strong>Common Mistakes / Rules:</strong>
+                <ul>
+                    <li><strong>Rule:</strong> In DOM, everything is a Node. Elements are Nodes, Attributes are Nodes, even the raw text between tags is a "Text Node". You must check <code>getNodeType() == Node.ELEMENT_NODE</code> before treating it like a standard tag.</li>
+                    <li><strong>Mistake:</strong> Using DOM for massive XML logs. Always use SAX for large files to avoid memory crashes.</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 37</h3>
+                <ul>
+                    <li><strong>DOM:</strong> Tree-based, Memory-heavy, Read & Write capable.</li>
+                    <li><strong>Best For:</strong> Small files where you need to modify the XML structure.</li>
+                    <li><strong>Core Classes:</strong> <code>DocumentBuilder</code>, <code>Document</code>, <code>NodeList</code>, <code>Element</code>.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 38 -->
+        <section id="lec38">
+            <h2>Lecture 38: XML Parsing using SAX</h2>
+
+            <div class="card">
+                <h3>1. What is the SAX Parser?</h3>
+                <p><strong>Technical Definition:</strong> SAX (Simple API for XML) is an <strong>event-based</strong>, sequential access parser. Instead of loading the whole document into memory, it reads the XML line-by-line from top to bottom. When it encounters a tag, it triggers an "Event" (like pressing a button) that calls a specific method.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    SAX parser ek waqt mein sirf ek line parhta hai, us line ka data aapko deta hai, aur phir usko memory se nikal kar agli line par chala jata hai. Is waja se yeh bohot fast hai aur memory (RAM) bilkul gher-ta nahi. Lekin isme masla yeh hai ke aap file mein wapas peeche nahi ja sakte, aur na hi XML file ko edit kar sakte hain. Yeh sirf read-only hai.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. How SAX Works (The Events)</h3>
+                <p>To use SAX, you must create a class that extends <code>DefaultHandler</code> and override these specific event methods:</p>
+                <ul>
+                    <li><code>startDocument()</code>: Triggered when parsing starts.</li>
+                    <li><code>startElement()</code>: Triggered when an opening tag is found (e.g., <code>&lt;name&gt;</code>).</li>
+                    <li><code>characters()</code>: Triggered when the text inside the tag is read.</li>
+                    <li><code>endElement()</code>: Triggered when a closing tag is found (e.g., <code>&lt;/name&gt;</code>).</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>3. SAX Code Example</h3>
+                <p>Important package: <code>org.xml.sax.*</code> and <code>javax.xml.parsers.SAXParser</code>.</p>
+                
+<pre><code>import javax.xml.parsers.*;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
+import java.io.File;
+
+// 1. Custom Handler extending DefaultHandler
+class MyHandler extends DefaultHandler {
+    boolean bName = false; // Flag to track when we are inside <name>
+
+    // 2. Triggered on <tag>
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
+        if (qName.equalsIgnoreCase("name")) {
+            bName = true; 
+        }
+    }
+
+    // 3. Triggered on Text content
+    public void characters(char ch[], int start, int length) {
+        if (bName) {
+            System.out.println("Name: " + new String(ch, start, length));
+            bName = false; // Reset flag
+        }
+    }
+
+    // 4. Triggered on </tag>
+    public void endElement(String uri, String localName, String qName) {
+        // (Clean up or closing logic here if needed)
+    }
+}
+
+public class SAXExample {
+    public static void main(String[] args) {
+        try {
+            // 5. Setup SAX Parser
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+            
+            // 6. Start parsing! Pass the file and our custom Handler
+            saxParser.parse(new File("students.xml"), new MyHandler());
+            
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+}
+</code></pre>
+                <h4>Explanation:</h4>
+                <ul>
+                    <li><code>extends DefaultHandler</code>: We inherit this class so we only have to override the events we care about.</li>
+                    <li><code>qName</code>: The actual name of the XML tag being processed (e.g., "name").</li>
+                    <li><code>bName = true</code>: Because SAX is event-driven, when we see <code>&lt;name&gt;</code>, we set a boolean flag to true. When the <code>characters()</code> method fires right after, we check the flag to know *which* tag's text we are currently reading.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>4. DOM vs SAX (Exam Comparison)</h3>
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>DOM (Document Object Model)</th>
+                        <th>SAX (Simple API for XML)</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Style</strong></td>
+                        <td>Tree-based.</td>
+                        <td>Event-based.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Memory Usage</strong></td>
+                        <td>High (Loads entire document).</td>
+                        <td>Low (Reads node by node).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Speed</strong></td>
+                        <td>Slower (Must build tree first).</td>
+                        <td>Faster.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Navigation</strong></td>
+                        <td>Can move forward and backward.</td>
+                        <td>Sequential (Top to bottom only).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Modification</strong></td>
+                        <td>Can Edit/Add/Delete tags.</td>
+                        <td><strong>Read-Only.</strong> Cannot modify.</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 38</h3>
+                <ul>
+                    <li><strong>SAX:</strong> Event-driven, low memory footprint, extremely fast.</li>
+                    <li><strong>Best For:</strong> Reading massive XML files where you only need to extract data, not edit it.</li>
+                    <li><strong>Mechanism:</strong> Triggers <code>startElement</code>, <code>characters</code>, and <code>endElement</code> sequentially. You must use boolean flags to track your position.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

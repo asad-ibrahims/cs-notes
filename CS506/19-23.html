@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS506 Study Notes - Lectures 19 to 23</title>
+    <style>
+        :root {
+            --primary: #1e3a8a; /* Deep Blue */
+            --secondary: #3b82f6; /* Lighter Blue */
+            --accent: #f59e0b; /* Amber/Yellow for important stuff */
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text: #1f2937;
+            --roman-urdu-bg: #ecfdf5;
+            --roman-urdu-border: #10b981;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+            --border: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            line-height: 1.6;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            padding: 20px 0;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 15px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--secondary);
+            color: white;
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Main Content */
+        .content {
+            margin-left: 280px;
+            padding: 40px;
+            width: calc(100% - 280px);
+        }
+
+        .header-banner {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        /* Concept Cards */
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .card h3 {
+            color: var(--secondary);
+            margin-top: 0;
+        }
+
+        /* Roman Urdu Explanation Box */
+        .roman-urdu {
+            background-color: var(--roman-urdu-bg);
+            border-left: 5px solid var(--roman-urdu-border);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+            font-style: italic;
+            color: #065f46;
+        }
+        
+        .roman-urdu strong {
+            color: var(--roman-urdu-border);
+            font-style: normal;
+        }
+
+        /* Syntax & Code Blocks */
+        .syntax-box {
+            background-color: #e0f2fe;
+            border: 1px solid #7dd3fc;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #0369a1;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+
+        /* Inline Code */
+        p code, li code {
+            background-color: #f1f5f9;
+            color: #dc2626; /* Red shade for inline code */
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Comparison Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        tr:nth-child(even) { background-color: #f9fafb; }
+
+        /* Rules & Mistakes Info Boxes */
+        .info-box {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .rules {
+            background-color: #fffbeb;
+            border-left: 5px solid #f59e0b;
+        }
+
+        .mistakes {
+            background-color: #fef2f2;
+            border-left: 5px solid #ef4444;
+        }
+
+        /* Quick Revision Box */
+        .revision-box {
+            background: linear-gradient(to right, #eff6ff, #ffffff);
+            border: 2px dashed var(--secondary);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .revision-box h3 {
+            color: var(--primary);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media(max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 10px 0; display: flex; flex-wrap: wrap; justify-content: center; }
+            .sidebar h2 { width: 100%; }
+            .sidebar a { padding: 10px 15px; font-size: 1rem; border-left: none; border-bottom: 2px solid transparent; }
+            .sidebar a:hover { border-bottom: 2px solid var(--accent); }
+            .content { margin-left: 0; width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS506 Notes</h2>
+        <a href="#lec19">Lecture 19: Animation & Threads</a>
+        <a href="#lec20">Lecture 20: Applets</a>
+        <a href="#lec21">Lecture 21: Socket Programming</a>
+        <a href="#lec22">Lecture 22: Object Serialization</a>
+        <a href="#lec23">Lecture 23: Multithreaded Server</a>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content">
+
+        <div class="header-banner">
+            <h1>CS506 - Web Design & Development</h1>
+            <p>Comprehensive Study Notes for Lectures 19 to 23</p>
+        </div>
+        
+        <div class="info-box rules">
+            <strong>Subject Context (CS506):</strong> Lectures 19-23 focus on Java (Multithreading, Sockets, Serialization). The only HTML-specific topic covered in this range is the <code>&lt;applet&gt;</code> tag in Lecture 20, which is explained in detail below.
+        </div>
+
+        <!-- LECTURE 19 -->
+        <section id="lec19">
+            <h2>Lecture 19: How to Animate? (Threads & Multithreading)</h2>
+
+            <div class="card">
+                <h3>1. What is Multithreading & Animation?</h3>
+                <p><strong>Technical Definition:</strong> A thread is a lightweight sub-process or the smallest unit of processing. Multithreading is the concurrent execution of two or more threads to maximize CPU utilization. In Java GUIs, animation is achieved by continuously updating graphics in an infinite loop running on a separate thread to prevent UI freezing.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Java ka program default tareeqay se ek waqt mein ek hi kaam karta hai (Single-threaded). Agar humein GUI mein koi cheez move karni ho (Animation), tou uske liye humein ek infinite `while` loop lagana parta hai. Agar hum yeh loop 'Main Thread' par lagayenge, tou poori screen hang ho jayegi (buttons click nahi honge). Is maslay ko hal karne ke liye hum ek naya "Thread" (background worker) banate hain jo sirf animation ka kaam karta hai.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. How does it work? (Runnable Interface)</h3>
+                <p>To create a thread, we generally implement the <code>Runnable</code> interface and override its <code>run()</code> method. To create animation, we use <code>Thread.sleep()</code> to add a delay between drawing frames.</p>
+                
+                <div class="syntax-box">
+                    class MyClass implements Runnable { <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;public void run() { <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Code that will run in background <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;} <br>
+                    }
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>3. Code Example & Explanation</h3>
+<pre><code>public class AnimationTask implements Runnable {
+    
+    // 1. run() method is mandatory when implementing Runnable
+    public void run() {
+        while(true) { // 2. Infinite loop for continuous animation
+            
+            updatePosition(); // 3. Change coordinates
+            repaint();        // 4. Redraw the screen
+            
+            try {
+                // 5. Pause the thread for 50 milliseconds
+                Thread.sleep(50); 
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+</code></pre>
+                <h4>Explanation:</h4>
+                <ul>
+                    <li><code>implements Runnable</code>: Indicates this class can be executed by a Thread.</li>
+                    <li><code>public void run()</code>: The starting point for the new thread. The logic goes here.</li>
+                    <li><code>repaint()</code>: A standard Java method that asks the JVM to redraw the GUI components.</li>
+                    <li><code>Thread.sleep(50)</code>: Halts execution for 50ms. This prevents the animation from moving so fast that the human eye can't see it.</li>
+                    <li><code>try-catch block</code>: <code>sleep()</code> can throw an <code>InterruptedException</code>, so we must handle it using try-catch.</li>
+                </ul>
+            </div>
+
+            <div class="info-box mistakes">
+                <strong>Common Mistakes / Rules:</strong>
+                <ul>
+                    <li><strong>Rule:</strong> You CANNOT call the <code>run()</code> method directly. You must create a Thread object and call <code>start()</code> (e.g., <code>Thread t = new Thread(new AnimationTask()); t.start();</code>). Calling <code>run()</code> directly executes it in the current thread, defeating the purpose!</li>
+                    <li><strong>Mistake:</strong> Forgetting the <code>try/catch</code> block around <code>Thread.sleep()</code>. The compiler will give an error.</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 19</h3>
+                <ul>
+                    <li><strong>Thread:</strong> Lightweight independent path of execution.</li>
+                    <li><strong>Runnable:</strong> Interface used to define thread behavior.</li>
+                    <li><strong>run():</strong> Method where thread logic is placed.</li>
+                    <li><strong>start():</strong> Method used to begin thread execution.</li>
+                    <li><strong>sleep():</strong> Pauses thread. Crucial for controlling animation speed.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 20 -->
+        <section id="lec20">
+            <h2>Lecture 20: Introduction to Applets</h2>
+
+            <div class="card">
+                <h3>1. What is an Applet?</h3>
+                <p><strong>Technical Definition:</strong> An Applet is a special type of Java program that is embedded in an HTML page to generate dynamic content. It runs inside the web browser and works on the client-side.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Normal Java applications (Desktop apps) ko run karne ke liye <code>main()</code> method zaroori hota hai. Lekin Applet ek aisi Java application hai jo seedha aapke HTML Web Page (browser) ke andar chalti hai. Isme <code>main()</code> method nahi hota kyunke browser khud iski zindagi (life cycle) ko control karta hai.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. The HTML <code>&lt;applet&gt;</code> Tag (HTML Integration)</h3>
+                <p>Because Applets run inside browsers, we use a specific HTML tag to embed them in a webpage. <i>(Note: This tag is deprecated in modern HTML5 but is heavily featured in the CS506 syllabus).</i></p>
+                
+                <div class="syntax-box">
+                    &lt;applet code="ClassName.class" width="pixelValue" height="pixelValue"&gt; <br>
+                    &lt;/applet&gt;
+                </div>
+                
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My First Applet Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Welcome to Java Applets&lt;/h1&gt;
+    
+    &lt;!-- Applet Integration --&gt;
+    &lt;applet code="HelloWorldApplet.class" width="400" height="300"&gt;
+        Alt Text: Browser does not support Applets.
+    &lt;/applet&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+                <h4>HTML Tag Explanation:</h4>
+                <ul>
+                    <li><code>&lt;applet&gt;</code>: The HTML element used to embed the Java program.</li>
+                    <li><code>code</code> Attribute: Specifies the name of the compiled Java file (e.g., <code>.class</code> file) that contains the applet logic.</li>
+                    <li><code>width</code> & <code>height</code>: Defines the dimensions (in pixels) of the applet window displayed on the webpage.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>3. Applet Life Cycle (Crucial for Exams)</h3>
+                <p>Applets do not have a <code>main()</code> method. The browser calls specific methods at specific times.</p>
+                
+                <table>
+                    <tr>
+                        <th>Method</th>
+                        <th>When is it called?</th>
+                        <th>Roman Urdu</th>
+                    </tr>
+                    <tr>
+                        <td><code>init()</code></td>
+                        <td>Once, when the applet is first loaded.</td>
+                        <td>Jab browser pehli dafa applet load karta hai, initialization (variables setup) ke liye.</td>
+                    </tr>
+                    <tr>
+                        <td><code>start()</code></td>
+                        <td>Whenever the applet becomes visible (e.g., maximizing window or revisiting page).</td>
+                        <td>Jab user us page par aata hai aur applet screen par nazar aata hai.</td>
+                    </tr>
+                    <tr>
+                        <td><code>paint(Graphics g)</code></td>
+                        <td>Whenever the applet needs to be redrawn.</td>
+                        <td>Shapes, lines, ya text draw karne ke liye. Yeh baar baar call ho sakta hai.</td>
+                    </tr>
+                    <tr>
+                        <td><code>stop()</code></td>
+                        <td>When the applet becomes hidden (e.g., changing tabs).</td>
+                        <td>Jab user kisi aur tab ya page par chala jata hai tou execution rokne ke liye.</td>
+                    </tr>
+                    <tr>
+                        <td><code>destroy()</code></td>
+                        <td>Once, when the browser is closed.</td>
+                        <td>Jab browser close kiya jata hai, memory azaad (free) karne ke liye.</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="info-box rules">
+                <strong>Important Rules:</strong>
+                <ul>
+                    <li>Applet class must inherit from <code>java.applet.Applet</code>.</li>
+                    <li>The class must be declared <code>public</code> so the browser can access it.</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 20</h3>
+                <ul>
+                    <li><strong>No Main Method:</strong> Applets rely on the browser for execution.</li>
+                    <li><strong>Applet Tag:</strong> <code>&lt;applet code="X.class" width="200" height="200"&gt;&lt;/applet&gt;</code></li>
+                    <li><strong>Life Cycle Order:</strong> init() -> start() -> paint() -> stop() -> destroy()</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 21 -->
+        <section id="lec21">
+            <h2>Lecture 21: Introduction to Sockets (Networking)</h2>
+
+            <div class="card">
+                <h3>1. What is Socket Programming?</h3>
+                <p><strong>Technical Definition:</strong> A socket is an endpoint for a two-way communication link between two programs running on the network. Socket programming is a way of connecting two nodes (Client and Server) on a network to communicate with each other.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Jab do computers ne aapas mein baat karni ho (jaise chatting app ya game), tou wo "Sockets" ka istemaal karte hain. Server computer ek specific darwaze (Port) par khara ho kar intezar karta hai. Client computer Server ke IP Address aur Port Number ko use kar ke connection request bhejta hai. Jab connection ban jata hai, dono ek doosre ko data bhej sakte hain.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. Core Networking Concepts</h3>
+                <ul>
+                    <li><strong>IP Address:</strong> The unique address of a computer on a network (e.g., <code>192.168.1.5</code> or <code>localhost</code> / <code>127.0.0.1</code> for same machine).</li>
+                    <li><strong>Port:</strong> A logical channel on a computer. (e.g., Port 80 for Web/HTTP, Port 21 for FTP). Range is 0-65535.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>3. Code Example: Echo Server & Client</h3>
+                
+                <h4>Server Side (EchoServer)</h4>
+<pre><code>import java.net.*;
+import java.io.*;
+
+public class Server {
+    public static void main(String[] args) throws Exception {
+        // 1. Create a ServerSocket listening on port 9999
+        ServerSocket ss = new ServerSocket(9999);
+        System.out.println("Server is waiting for client...");
+        
+        // 2. Wait and ACCEPT the incoming connection
+        Socket s = ss.accept(); 
+        System.out.println("Client Connected!");
+        
+        // 3. Setup Streams to receive and send data
+        InputStream is = s.getInputStream();
+        OutputStream os = s.getOutputStream();
+        
+        // (Logic to read/write data goes here)
+        
+        s.close(); // 4. Close connection
+    }
+}
+</code></pre>
+                
+                <h4>Client Side (EchoClient)</h4>
+<pre><code>import java.net.*;
+import java.io.*;
+
+public class Client {
+    public static void main(String[] args) throws Exception {
+        // 1. Create a socket connecting to server's IP and Port
+        Socket s = new Socket("localhost", 9999);
+        
+        // 2. Setup streams
+        InputStream is = s.getInputStream();
+        OutputStream os = s.getOutputStream();
+        
+        // (Logic to send/receive data goes here)
+        
+        s.close();
+    }
+}
+</code></pre>
+                <h4>Explanation:</h4>
+                <ul>
+                    <li><code>ServerSocket(port)</code>: Used by the server to open a port and wait.</li>
+                    <li><code>accept()</code>: This is a <strong>blocking method</strong>. The server stops on this line and waits until a client connects. It returns a <code>Socket</code> object.</li>
+                    <li><code>Socket(ip, port)</code>: Used by the client to request a connection to the server.</li>
+                    <li><code>getInputStream() / getOutputStream()</code>: Once connected, these streams act as the pipeline for data to travel back and forth.</li>
+                </ul>
+            </div>
+
+            <div class="info-box mistakes">
+                <strong>Common Mistakes / Rules:</strong>
+                <ul>
+                    <li><strong>Rule:</strong> The Server must be started BEFORE the Client. If the client tries to connect to an offline server, it throws <code>ConnectException</code>.</li>
+                    <li><strong>Mistake:</strong> Trying to use a Port number below 1024. These are reserved for system services. Use high numbers like 8000, 9999, etc.</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 21</h3>
+                <ul>
+                    <li><strong>Socket:</strong> Endpoint of communication.</li>
+                    <li><strong>ServerSocket:</strong> Waits for client requests on the server side.</li>
+                    <li><strong>accept():</strong> Blocks execution until a client connects.</li>
+                    <li><strong>localhost:</strong> Refers to the current machine (127.0.0.1).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 22 -->
+        <section id="lec22">
+            <h2>Lecture 22: Object Serialization</h2>
+
+            <div class="card">
+                <h3>1. What is Serialization?</h3>
+                <p><strong>Technical Definition:</strong> Serialization is the process of converting an object's state (its variables and data) into a byte stream so that it can be reverted back into a copy of the object later. The reverse process is called Deserialization.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Jab aapka Java program band hota hai, tou uske andar banay gaye tamam Objects memory (RAM) se delete ho jate hain. Agar aap chahte hain ke Object ka data kisi file mein save ho jaye (taake baad mein load kar sakein) ya network ke zariye doosre computer par bheja jaye, tou aapko us Object ko bytes (0s aur 1s) mein convert karna parta hai. Is conversion ke amal ko Serialization kehte hain.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. How does it work? (Serializable Interface)</h3>
+                <p>For a class to be serialized, it MUST implement the <code>java.io.Serializable</code> interface. This is a <strong>Marker Interface</strong> (it contains no methods). It just gives a hint to the JVM that this class is allowed to be serialized.</p>
+                
+                <div class="syntax-box">
+                    import java.io.Serializable;<br><br>
+                    class Person implements Serializable { <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;String name; <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;int age; <br>
+                    }
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>3. Code Example: Saving an Object to a File</h3>
+<pre><code>import java.io.*;
+
+// 1. Must implement Serializable
+class Student implements Serializable { 
+    String name = "Ali";
+    int id = 101;
+}
+
+public class SerializeTest {
+    public static void main(String[] args) {
+        try {
+            Student s1 = new Student();
+            
+            // 2. Setup output streams pointing to a file
+            FileOutputStream fos = new FileOutputStream("studentData.ser");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            
+            // 3. Write the whole object at once!
+            oos.writeObject(s1); 
+            
+            oos.close();
+            System.out.println("Object Saved!");
+            
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                <h4>Explanation:</h4>
+                <ul>
+                    <li><code>implements Serializable</code>: Without this, Java will throw <code>NotSerializableException</code>.</li>
+                    <li><code>FileOutputStream</code>: Prepares a file to write plain bytes.</li>
+                    <li><code>ObjectOutputStream</code>: Wraps around FileOutputStream to provide the magic <code>writeObject()</code> method which converts the object to bytes.</li>
+                    <li><code>writeObject()</code>: Actually performs the serialization.</li>
+                </ul>
+            </div>
+
+            <div class="info-box rules">
+                <strong>Important Rules:</strong>
+                <ul>
+                    <li><strong>Rule (Exam Point):</strong> What is a Marker Interface? An interface with ZERO methods. Example: <code>Serializable</code>.</li>
+                    <li><strong>transient Keyword:</strong> If you have a variable (like a password) that you DO NOT want to save/serialize, put the keyword <code>transient</code> before it (e.g., <code>transient String password;</code>).</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 22</h3>
+                <ul>
+                    <li><strong>Serialization:</strong> Object state to Byte Stream.</li>
+                    <li><strong>Deserialization:</strong> Byte Stream back to Object.</li>
+                    <li><strong>Serializable:</strong> Marker interface required to allow serialization.</li>
+                    <li><strong>ObjectOutputStream:</strong> Used to write objects (writeObject).</li>
+                    <li><strong>ObjectInputStream:</strong> Used to read objects (readObject).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 23 -->
+        <section id="lec23">
+            <h2>Lecture 23: Multithreaded Server</h2>
+
+            <div class="card">
+                <h3>1. The Problem with Single-Threaded Servers</h3>
+                <p>The Server we created in Lecture 21 could only handle ONE client at a time. If Client A connects, the server processes Client A. If Client B tries to connect during this time, Client B must wait. This is a severe bottleneck.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Lecture 21 wale server ki misaal aisi hai jaise bank mein sirf ek hi cashier ho. Jab tak wo ek customer ko deal kar raha hai, baqi sab line mein wait karenge. Multithreaded server ka matlab hai ke bank manager (Main Server Thread) jaise hi naye customer ko dekhta hai, wo ek naya cashier (New Thread) assign kar deta hai us customer ke liye. Aur khud wapas gate par aa jata hai naye logo ka wait karne ke liye.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. The Solution: Multithreading</h3>
+                <p>We combine <strong>Sockets</strong> (Lecture 21) with <strong>Threads</strong> (Lecture 19). For every client that connects, the server spawns a new <code>Thread</code> to handle that specific client, allowing the main server thread to go back to <code>accept()</code> immediately.</p>
+            </div>
+
+            <div class="card">
+                <h3>3. Code Example & Logic</h3>
+<pre><code>import java.net.*;
+import java.io.*;
+
+// 1. ClientHandler class runs as a Thread for each client
+class ClientHandler implements Runnable {
+    Socket clientSocket;
+    
+    // Constructor receives the specific socket
+    public ClientHandler(Socket s) {
+        this.clientSocket = s;
+    }
+    
+    public void run() {
+        try {
+            // Logic to talk to this specific client
+            System.out.println("Processing client request...");
+            clientSocket.close();
+        } catch (Exception e) {}
+    }
+}
+
+public class MultiServer {
+    public static void main(String[] args) throws Exception {
+        ServerSocket ss = new ServerSocket(9999);
+        System.out.println("Server Started...");
+        
+        // 2. Infinite Loop to accept multiple clients
+        while(true) {
+            Socket s = ss.accept(); // Blocks until a client connects
+            
+            // 3. Once connected, pass socket to a new Thread and start it
+            ClientHandler handler = new ClientHandler(s);
+            Thread t = new Thread(handler);
+            t.start(); 
+            
+            // Loop goes back to accept() immediately!
+        }
+    }
+}
+</code></pre>
+                <h4>Explanation:</h4>
+                <ul>
+                    <li><code>while(true)</code>: Keeps the server running forever.</li>
+                    <li><code>accept()</code>: Waits for a client. When a client connects, it returns a <code>Socket</code>.</li>
+                    <li><code>new ClientHandler(s)</code>: We pass the newly created Socket to our custom <code>Runnable</code> class.</li>
+                    <li><code>t.start()</code>: A new background thread begins talking to the client. The main <code>while</code> loop instantly loops back and waits for the next client at <code>accept()</code> without being blocked by data processing.</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 23</h3>
+                <ul>
+                    <li><strong>Problem:</strong> <code>accept()</code> and I/O streams are blocking. Single threads halt the entire server.</li>
+                    <li><strong>Solution:</strong> A <code>while(true)</code> loop containing <code>accept()</code>, followed immediately by starting a new <code>Thread</code>.</li>
+                    <li><strong>Architecture:</strong> 1 Main Thread (Listener) + N Worker Threads (1 for each connected Client).</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS506 Study Notes - Lectures 43 to 45</title>
+    <style>
+        :root {
+            --primary: #9f1239; /* Deep Crimson/Rose */
+            --secondary: #e11d48; /* Lighter Rose */
+            --accent: #fbbf24; /* Amber */
+            --bg: #fff1f2; /* Very Light Rose Background */
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --roman-urdu-bg: #fff7ed;
+            --roman-urdu-border: #f97316; /* Orange border for Urdu */
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+            --border: #fecdd3;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            line-height: 1.6;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            padding: 20px 0;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 15px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #ffe4e6;
+            text-decoration: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--secondary);
+            color: white;
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Main Content */
+        .content {
+            margin-left: 280px;
+            padding: 40px;
+            width: calc(100% - 280px);
+        }
+
+        .header-banner {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        /* Concept Cards */
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .card h3 {
+            color: var(--secondary);
+            margin-top: 0;
+        }
+
+        /* Roman Urdu Explanation Box */
+        .roman-urdu {
+            background-color: var(--roman-urdu-bg);
+            border-left: 5px solid var(--roman-urdu-border);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+            font-style: italic;
+            color: #9a3412;
+        }
+        
+        .roman-urdu strong {
+            color: var(--roman-urdu-border);
+            font-style: normal;
+        }
+
+        /* Syntax & Code Blocks */
+        .syntax-box {
+            background-color: #fff1f2;
+            border: 1px solid #fda4af;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #be123c;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+
+        /* Inline Code */
+        p code, li code {
+            background-color: #f1f5f9;
+            color: #0f172a; 
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Comparison Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid #fecdd3;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        tr:nth-child(even) { background-color: #fff1f2; }
+
+        /* Rules & Mistakes Info Boxes */
+        .info-box {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .rules {
+            background-color: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            color: #92400e;
+        }
+
+        .mistakes {
+            background-color: #fee2e2;
+            border-left: 5px solid #ef4444;
+            color: #991b1b;
+        }
+
+        /* Quick Revision Box */
+        .revision-box {
+            background: linear-gradient(to right, #fff1f2, #ffffff);
+            border: 2px dashed var(--secondary);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .revision-box h3 {
+            color: var(--primary);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media(max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 10px 0; display: flex; flex-wrap: wrap; justify-content: center; }
+            .sidebar h2 { width: 100%; }
+            .sidebar a { padding: 10px 15px; font-size: 1rem; border-left: none; border-bottom: 2px solid transparent; }
+            .sidebar a:hover { border-bottom: 2px solid var(--accent); }
+            .content { margin-left: 0; width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS506 Notes</h2>
+        <a href="#lec43">Lecture 43: Entity & MDBs</a>
+        <a href="#lec44">Lecture 44: Intro to Web Services</a>
+        <a href="#lec45">Lecture 45: Web Services Architecture</a>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content">
+
+        <div class="header-banner">
+            <h1>CS506 - Web Design & Development</h1>
+            <p>Study Notes for Lectures 43 to 45 (Entity Beans, MDBs & Web Services)</p>
+        </div>
+
+        <!-- LECTURE 43 -->
+        <section id="lec43">
+            <h2>Lecture 43: Entity Beans & Message-Driven Beans (MDB)</h2>
+
+            <div class="card">
+                <h3>1. What are Entity Beans?</h3>
+                <p><strong>Technical Definition:</strong> While Session Beans contain business logic, <strong>Entity Beans</strong> represent persistent data stored in a relational database. An Entity Bean object typically corresponds to a single row in a database table (e.g., a `StudentBean` represents one student row in the `Students` table).</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Session beans calculations ya tasks karte hain. Lekin agar humein database mein data save ya read karna ho, tou hum Entity Beans use karte hain. Ek Entity Bean ka object bilkul database ki ek row jaisa hota hai. EJB container is data ko zinda (persistent) rakhta hai. Agar server crash bhi ho jaye, tou DB mein data mehfooz rehta hai.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. Two Types of Entity Beans (CMP vs BMP)</h3>
+                <p>This is a major exam topic in CS506. How does the Bean actually talk to the database?</p>
+                <table>
+                    <tr>
+                        <th>CMP (Container-Managed Persistence)</th>
+                        <th>BMP (Bean-Managed Persistence)</th>
+                    </tr>
+                    <tr>
+                        <td>The EJB <strong>Container</strong> writes and executes all SQL queries automatically.</td>
+                        <td>The <strong>Developer</strong> must write all JDBC (SQL) code manually inside the bean.</td>
+                    </tr>
+                    <tr>
+                        <td>Developer only writes abstract getter/setter methods.</td>
+                        <td>Developer writes `INSERT`, `UPDATE`, `DELETE` statements.</td>
+                    </tr>
+                    <tr>
+                        <td>Fast to develop, easy to switch databases.</td>
+                        <td>Slower to develop, harder to switch databases.</td>
+                    </tr>
+                    <tr>
+                        <td>Less control over complex queries.</td>
+                        <td>Full control over complex database operations.</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>3. Message-Driven Beans (MDB)</h3>
+                <p><strong>Technical Definition:</strong> A Message-Driven Bean is an enterprise bean that allows Java applications to process messages <strong>asynchronously</strong>. It uses JMS (Java Message Service).</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Normal EJB mein, client request bhejta hai aur jawab ka wait karta hai (Synchronous). Lekin kuch kaam aisay hote hain jinme wait nahi karwana chahiye, jaise email send karna. <strong>MDB</strong> ek aisi EJB hai jisko client direct call nahi karta. Client sirf ek "Message" queue mein daal kar apna kaam karta rehta hai. MDB background mein us message ko uthata hai aur process karta hai (Asynchronous). Iska koi return type nahi hota.
+                </div>
+                
+                <div class="syntax-box">
+<pre><code>import javax.ejb.MessageDrivenBean;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+
+public class MyEmailMDB implements MessageDrivenBean, MessageListener {
+    
+    // This is the ONLY method used to process incoming messages!
+    public void onMessage(Message msg) {
+        // Read message and send email in the background
+        System.out.println("Processing async message...");
+    }
+    
+    // (Lifecycle methods omitted for brevity)
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="info-box mistakes">
+                <strong>Important Rule for MDBs:</strong>
+                MDBs do NOT have a Home Interface or Remote Interface. Clients never connect to them directly. They only have the bean class and the `onMessage()` method.
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 43</h3>
+                <ul>
+                    <li><strong>Entity Bean:</strong> Represents persistent DB data (a row in a table).</li>
+                    <li><strong>BMP:</strong> Developer writes the SQL.</li>
+                    <li><strong>CMP:</strong> Server/Container writes the SQL.</li>
+                    <li><strong>MDB:</strong> Used for asynchronous background processing (JMS). No client interfaces.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 44 -->
+        <section id="lec44">
+            <h2>Lecture 44: Introduction to Web Services</h2>
+
+            <div class="card">
+                <h3>1. The Problem with RMI & EJB (Why Web Services?)</h3>
+                <p>We learned that RMI and EJB are great for distributed computing. However, they have a massive flaw: <strong>Interoperability</strong>. RMI and EJB require <em>both</em> the client and the server to be written in Java.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Agar mera server Java mein bana hai aur kisi doosri company ka client .NET ya PHP mein bana hai, tou RMI wahan fail ho jata hai kyunke RMI sirf Java ki zubaan samajhta hai. Is maslay ko hal karne ke liye <strong>Web Services</strong> banayi gayin. Web services internet (HTTP) aur XML ka istemaal karti hain, jisse koi bhi language kisi doosri language se baat kar sakti hai.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. What is a Web Service?</h3>
+                <p><strong>Technical Definition:</strong> A Web Service is any piece of software that makes itself available over the internet and uses a standardized XML messaging system (SOAP). It allows communication between different applications running on different platforms and frameworks.</p>
+                <ul>
+                    <li><strong>Platform Independent:</strong> A Windows client can consume a Linux web service.</li>
+                    <li><strong>Language Independent:</strong> A Python app can consume a Java web service.</li>
+                    <li><strong>Loosely Coupled:</strong> The client doesn't need to know how the server is coded.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>3. Core Technologies of Web Services</h3>
+                <p>Web services rely on three fundamental standards (often asked in exams):</p>
+                <ol>
+                    <li><strong>SOAP (Simple Object Access Protocol):</strong> The format of the message sent across the network. (XML based).</li>
+                    <li><strong>WSDL (Web Services Description Language):</strong> A document that describes what the service does and how to connect to it.</li>
+                    <li><strong>UDDI (Universal Description, Discovery, and Integration):</strong> A registry (directory) where web services can be listed and found.</li>
+                </ol>
+            </div>
+            
+            <div class="card">
+                <h3>4. SOAP Structure</h3>
+                <p>A SOAP message is simply an XML document wrapped in an "Envelope". It acts like a digital postal letter.</p>
+                <div class="syntax-box">
+<pre><code>&lt;?xml version="1.0"?&gt;
+&lt;!-- 1. The Envelope wraps the whole message --&gt;
+&lt;soap:Envelope&gt;
+
+    &lt;!-- 2. Header: Contains metadata, authentication, routing --&gt;
+    &lt;soap:Header&gt;
+        &lt;authKey&gt;12345&lt;/authKey&gt;
+    &lt;/soap:Header&gt;
+    
+    &lt;!-- 3. Body: Contains the actual data/method call --&gt;
+    &lt;soap:Body&gt;
+        &lt;GetWeather&gt;
+            &lt;CityName&gt;Lahore&lt;/CityName&gt;
+        &lt;/GetWeather&gt;
+    &lt;/soap:Body&gt;
+    
+    &lt;!-- 4. Fault: Only appears if there is an error (Optional) --&gt;
+    &lt;!-- &lt;soap:Fault&gt;...&lt;/soap:Fault&gt; --&gt;
+
+&lt;/soap:Envelope&gt;</code></pre>
+                </div>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 44</h3>
+                <ul>
+                    <li><strong>RMI Flaw:</strong> Tightly coupled, strictly Java-to-Java.</li>
+                    <li><strong>Web Service:</strong> Platform and language independent communication via HTTP and XML.</li>
+                    <li><strong>SOAP:</strong> XML protocol for sending the actual messages. Contains Envelope, Header, Body, and Fault.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 45 -->
+        <section id="lec45">
+            <h2>Lecture 45: Web Services Architecture (Publish, Find, Bind)</h2>
+
+            <div class="card">
+                <h3>1. The Service Oriented Architecture (SOA)</h3>
+                <p>As per the CS506 Handouts, the architecture of Web Services relies on three distinct roles and three specific operations. This forms a triangle of communication.</p>
+                
+                <h4>The Three Roles:</h4>
+                <ul>
+                    <li><strong>Service Provider (Server):</strong> The company or server that writes and hosts the web service (e.g., a Weather API).</li>
+                    <li><strong>Service Registry (UDDI):</strong> A central directory or "Yellow Pages" on the internet where services are listed.</li>
+                    <li><strong>Service Requestor (Client):</strong> The application that wants to use the web service.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>2. The Three Operations (Publish, Find, Bind)</h3>
+                <p>How do these three roles interact? Through these three steps:</p>
+                
+                <ol>
+                    <li><strong>PUBLISH (Provider -> Registry):</strong> The Service Provider generates a WSDL file and uploads (publishes) it to the UDDI Registry so the world knows it exists.</li>
+                    <li><strong>FIND (Client -> Registry):</strong> The Service Requestor queries the UDDI Registry looking for a specific service (e.g., "Find me a weather service"). The Registry returns the WSDL file.</li>
+                    <li><strong>BIND (Client -> Provider):</strong> Using the details inside the WSDL file, the Requestor connects directly to the Provider using SOAP over HTTP to execute the service.</li>
+                </ol>
+
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Isko ek aam misaal se samjhein. Ek Plumber (Service Provider) apna number aur kaam ki details Yellow Pages directory (Registry/UDDI) mein <strong>Publish</strong> karta hai. Aap (Client) us directory mein jakar plumber ko <strong>Find</strong> karte hain. Jab aapko number (WSDL) mil jata hai, tou aap direct plumber ko call kar ke apna kaam karwate hain (is direct communication ko <strong>Bind</strong> kehte hain, jo SOAP ke zariye hota hai).
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>3. Deep Dive: WSDL & UDDI</h3>
+                
+                <h4>WSDL (Web Services Description Language)</h4>
+                <p>WSDL is an XML file that describes the technical contract of the web service. It tells the client:</p>
+                <ul>
+                    <li>What operations/functions are available.</li>
+                    <li>What parameters (data types) to send.</li>
+                    <li>What data type the response will be.</li>
+                    <li>The exact URL endpoint to send the SOAP message to.</li>
+                </ul>
+
+                <h4>UDDI (Universal Description, Discovery & Integration)</h4>
+                <p>UDDI is a repository of web services on the internet. Machines or humans can search it to discover different web services. It provides standard APIs to publish and query services.</p>
+            </div>
+
+            <div class="info-box rules">
+                <strong>Important Exam Point:</strong>
+                Remember the mapping! 
+                <br>Publish = Provider -> Registry
+                <br>Find = Requestor -> Registry
+                <br>Bind = Requestor -> Provider
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 45</h3>
+                <ul>
+                    <li><strong>Service Provider:</strong> Creates the service.</li>
+                    <li><strong>Service Requestor:</strong> Uses the service.</li>
+                    <li><strong>Service Registry (UDDI):</strong> Catalogs the service.</li>
+                    <li><strong>Publish, Find, Bind:</strong> The core lifecycle of Web Service architecture.</li>
+                    <li><strong>WSDL:</strong> The XML "instruction manual" for how to connect to the service.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

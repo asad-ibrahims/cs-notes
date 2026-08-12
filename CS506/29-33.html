@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS506 Study Notes - Lectures 29 to 33</title>
+    <style>
+        :root {
+            --primary: #4338ca; /* Indigo */
+            --secondary: #6366f1; /* Lighter Indigo */
+            --accent: #f59e0b; /* Amber */
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --roman-urdu-bg: #ecfdf5;
+            --roman-urdu-border: #10b981;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            line-height: 1.6;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            padding: 20px 0;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 15px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #e0e7ff;
+            text-decoration: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--secondary);
+            color: white;
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Main Content */
+        .content {
+            margin-left: 280px;
+            padding: 40px;
+            width: calc(100% - 280px);
+        }
+
+        .header-banner {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        /* Concept Cards */
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .card h3 {
+            color: var(--secondary);
+            margin-top: 0;
+        }
+
+        /* Roman Urdu Explanation Box */
+        .roman-urdu {
+            background-color: var(--roman-urdu-bg);
+            border-left: 5px solid var(--roman-urdu-border);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+            font-style: italic;
+            color: #064e3b;
+        }
+        
+        .roman-urdu strong {
+            color: var(--roman-urdu-border);
+            font-style: normal;
+        }
+
+        /* Syntax & Code Blocks */
+        .syntax-box {
+            background-color: #e0e7ff;
+            border: 1px solid #a5b4fc;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #3730a3;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+
+        /* Inline Code */
+        p code, li code {
+            background-color: #f1f5f9;
+            color: #b91c1c; 
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Comparison Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        tr:nth-child(even) { background-color: #f8fafc; }
+
+        /* Rules & Mistakes Info Boxes */
+        .info-box {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .rules {
+            background-color: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            color: #92400e;
+        }
+
+        .mistakes {
+            background-color: #fee2e2;
+            border-left: 5px solid #ef4444;
+            color: #991b1b;
+        }
+
+        /* Quick Revision Box */
+        .revision-box {
+            background: linear-gradient(to right, #e0e7ff, #ffffff);
+            border: 2px dashed var(--secondary);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .revision-box h3 {
+            color: var(--primary);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media(max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 10px 0; display: flex; flex-wrap: wrap; justify-content: center; }
+            .sidebar h2 { width: 100%; }
+            .sidebar a { padding: 10px 15px; font-size: 1rem; border-left: none; border-bottom: 2px solid transparent; }
+            .sidebar a:hover { border-bottom: 2px solid var(--accent); }
+            .content { margin-left: 0; width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS506 Notes</h2>
+        <a href="#lec29">Lecture 29: Intro to JSP</a>
+        <a href="#lec30">Lecture 30: JSP Scripting Elements</a>
+        <a href="#lec31">Lecture 31: JSP Implicit Objects</a>
+        <a href="#lec32">Lecture 32: JSP Standard Actions</a>
+        <a href="#lec33">Lecture 33: JavaBeans & JSP</a>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content">
+
+        <div class="header-banner">
+            <h1>CS506 - Web Design & Development</h1>
+            <p>Comprehensive Study Notes for Lectures 29 to 33 (JSP & JavaBeans)</p>
+        </div>
+
+        <!-- LECTURE 29 -->
+        <section id="lec29">
+            <h2>Lecture 29: Introduction to JSP (Java Server Pages)</h2>
+
+            <div class="card">
+                <h3>1. What is JSP and Why is it used?</h3>
+                <p><strong>Technical Definition:</strong> Java Server Pages (JSP) is a server-side technology used to create dynamic web pages. It allows developers to embed Java code directly into HTML pages. JSP is built on top of the Servlet API.</p>
+                <p><strong>Why is it used?</strong> In pure Servlets, developers had to write HTML code inside Java strings (e.g., <code>out.println("&lt;html&gt;")</code>). This made designing and maintaining UI extremely difficult. JSP solves this by reversing the process: you write standard HTML and insert Java only where dynamic data is needed.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Servlets mein masla yeh tha ke humein Java code ke andar HTML likhna parta tha. Agar web designer ko UI change karna ho tou usay Java code mein modification karni parti thi. JSP ne isko asaan kar diya: ab hum normal HTML page banate hain aur jahan calculation ya database ka data dikhana ho, wahan hum thora sa Java code daal dete hain.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. The JSP Lifecycle (How it works)</h3>
+                <p>Behind the scenes, the Web Container (like Tomcat) automatically converts your JSP file into a Servlet.</p>
+                <ol>
+                    <li><strong>Translation Phase:</strong> The container translates the <code>.jsp</code> file into a <code>.java</code> Servlet file.</li>
+                    <li><strong>Compilation Phase:</strong> The <code>.java</code> file is compiled into a <code>.class</code> file.</li>
+                    <li><strong>Initialization:</strong> <code>jspInit()</code> method is called.</li>
+                    <li><strong>Execution:</strong> <code>_jspService()</code> method handles the actual HTTP Request/Response.</li>
+                    <li><strong>Destruction:</strong> <code>jspDestroy()</code> is called when the JSP is removed from memory.</li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h3>3. Basic Structure / Comparison</h3>
+                <table>
+                    <tr>
+                        <th>Servlet Approach (Hard)</th>
+                        <th>JSP Approach (Easy)</th>
+                    </tr>
+                    <tr>
+                        <td>
+<pre><code>out.println("&lt;html&gt;");
+out.println("&lt;body&gt;");
+out.println("&lt;h1&gt;" + name + "&lt;/h1&gt;");
+out.println("&lt;/body&gt;");
+out.println("&lt;/html&gt;");</code></pre>
+                        </td>
+                        <td>
+<pre><code>&lt;html&gt;
+&lt;body&gt;
+  &lt;h1&gt;&lt;%= name %&gt;&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="info-box rules">
+                <strong>Important Rules:</strong>
+                JSP files must be saved with the <code>.jsp</code> extension and must be placed in a web directory that the server can access (like the <code>webapps</code> folder in Tomcat).
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 29</h3>
+                <ul>
+                    <li><strong>JSP:</strong> Java Server Pages. HTML with embedded Java.</li>
+                    <li><strong>Purpose:</strong> Separates presentation (HTML) from business logic (Java).</li>
+                    <li><strong>Internal Working:</strong> Every JSP is ultimately converted into a Servlet by the server.</li>
+                    <li><strong>Lifecycle Methods:</strong> <code>jspInit()</code>, <code>_jspService()</code>, <code>jspDestroy()</code>.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 30 -->
+        <section id="lec30">
+            <h2>Lecture 30: JSP Scripting Elements</h2>
+
+            <div class="card">
+                <h3>1. What are Scripting Elements?</h3>
+                <p><strong>Technical Definition:</strong> Scripting elements are specific tags in JSP that allow you to insert Java code into the HTML page. The JSP engine reads these tags and executes the Java code during the page translation phase.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    HTML page ko yeh kaise pata chalega ke kahan HTML khatam ho raha hai aur kahan Java shuru ho rahi hai? Is maqsad ke liye JSP mein kuch special tags banaye gaye hain jinhein Scripting Elements kehte hain. In tags ke andar likha hua code Java code samjha jata hai.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. Types of Scripting Elements</h3>
+                
+                <h4>A. Directives <code>&lt;%@ ... %&gt;</code></h4>
+                <p>Used to give special instructions to the JSP container (like importing Java packages).</p>
+                <div class="syntax-box">Syntax: &lt;%@ directive_name attribute="value" %&gt;</div>
+                <p>Example: <code>&lt;%@ page import="java.util.Date" %&gt;</code></p>
+
+                <h4>B. Declarations <code>&lt;%! ... %&gt;</code></h4>
+                <p>Used to declare class-level variables or methods. These go outside the <code>_jspService()</code> method in the translated Servlet.</p>
+                <div class="syntax-box">Syntax: &lt;%! Java Code (Variable/Method) %&gt;</div>
+                <p>Example: <code>&lt;%! int clickCount = 0; %&gt;</code></p>
+
+                <h4>C. Scriptlets <code>&lt;% ... %&gt;</code></h4>
+                <p>Used to write regular Java logic (if/else, loops). The code goes directly inside the <code>_jspService()</code> method.</p>
+                <div class="syntax-box">Syntax: &lt;% standard java code statements %&gt;</div>
+                <p>Example: <code>&lt;% int a = 5; out.print(a); %&gt;</code></p>
+
+                <h4>D. Expressions <code>&lt;%= ... %&gt;</code></h4>
+                <p>Used to print a Java variable or calculation directly to the HTML page. It automatically converts the result to a string.</p>
+                <div class="syntax-box">Syntax: &lt;%= Java Expression %&gt;</div>
+                <p>Example: <code>&lt;h1&gt;Hello &lt;%= username %&gt;&lt;/h1&gt;</code></p>
+            </div>
+
+            <div class="card">
+                <h3>3. Complete Example</h3>
+<pre><code>&lt;!-- 1. Directive: Importing ArrayList --&gt;
+&lt;%@ page import="java.util.ArrayList" %&gt;
+
+&lt;html&gt;
+&lt;body&gt;
+    &lt;!-- 2. Declaration: Declaring a method --&gt;
+    &lt;%! 
+        public int add(int a, int b) { 
+            return a + b; 
+        } 
+    %&gt;
+
+    &lt;h2&gt;JSP Scripting Elements Demo&lt;/h2&gt;
+    
+    &lt;!-- 3. Scriptlet: Java logic --&gt;
+    &lt;% 
+        int x = 10;
+        int y = 20;
+        int sum = add(x, y); 
+    %&gt;
+
+    &lt;!-- 4. Expression: Printing Output --&gt;
+    &lt;p&gt;The sum of x and y is: &lt;%= sum %&gt;&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+                <h4>Explanation:</h4>
+                <ul>
+                    <li><code>&lt;%@ page ... %&gt;</code> tells the server we need the <code>ArrayList</code> class.</li>
+                    <li><code>&lt;%! ... %&gt;</code> creates an <code>add()</code> function that can be used anywhere in the file.</li>
+                    <li><code>&lt;% ... %&gt;</code> declares variables and calls the <code>add()</code> function.</li>
+                    <li><code>&lt;%= sum %&gt;</code> prints the final result into the HTML paragraph.</li>
+                </ul>
+            </div>
+
+            <div class="info-box mistakes">
+                <strong>Common Mistakes / Rules:</strong>
+                <ul>
+                    <li><strong>Mistake:</strong> Putting a semicolon (<code>;</code>) inside an Expression tag. <br>
+                    ❌ <code>&lt;%= name; %&gt;</code> (Error!) <br>
+                    ✅ <code>&lt;%= name %&gt;</code> (Correct!)</li>
+                    <li><strong>Rule:</strong> Variables declared in <code>&lt;%! %&gt;</code> (Declarations) are shared among all users (instance variables). Variables declared in <code>&lt;% %&gt;</code> (Scriptlets) are specific to one request (local variables).</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 30</h3>
+                <ul>
+                    <li><strong>&lt;%@ ... %&gt;:</strong> Directives (Imports, page config).</li>
+                    <li><strong>&lt;%! ... %&gt;:</strong> Declarations (Class-level methods/variables).</li>
+                    <li><strong>&lt;% ... %&gt;:</strong> Scriptlets (Local variables, loops, logic).</li>
+                    <li><strong>&lt;%= ... %&gt;:</strong> Expressions (Outputting values to HTML directly).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 31 -->
+        <section id="lec31">
+            <h2>Lecture 31: JSP Implicit Objects</h2>
+
+            <div class="card">
+                <h3>1. What are Implicit Objects?</h3>
+                <p><strong>Technical Definition:</strong> Implicit objects are pre-created Java objects provided by the JSP container automatically. Developers can use them inside scriptlets and expressions without having to write <code>new ObjectName()</code>.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Normal Java mein kisi bhi class ka function use karne se pehle uska object banana parta hai (jaise <code>Scanner sc = new Scanner()</code>). JSP mein kuch cheezein itni common hain (jaise request receive karna, response bhejna, screen pe print karna) ke server unke objects khud pehle se bana kar humein de deta hai. In ready-made objects ko Implicit Objects kehte hain.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. The 9 Implicit Objects (Crucial for Exams)</h3>
+                <table>
+                    <tr>
+                        <th>Object Name</th>
+                        <th>Java Class/Interface</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td><code>request</code></td>
+                        <td>HttpServletRequest</td>
+                        <td>Gets input from the user (HTML forms, URL params).</td>
+                    </tr>
+                    <tr>
+                        <td><code>response</code></td>
+                        <td>HttpServletResponse</td>
+                        <td>Sends output/redirects back to the user's browser.</td>
+                    </tr>
+                    <tr>
+                        <td><code>out</code></td>
+                        <td>JspWriter</td>
+                        <td>Used to write text directly to the HTML page.</td>
+                    </tr>
+                    <tr>
+                        <td><code>session</code></td>
+                        <td>HttpSession</td>
+                        <td>Stores data specific to a single user across multiple pages (e.g., Login state).</td>
+                    </tr>
+                    <tr>
+                        <td><code>application</code></td>
+                        <td>ServletContext</td>
+                        <td>Stores data shared globally across all users in the application.</td>
+                    </tr>
+                    <tr>
+                        <td><code>config</code></td>
+                        <td>ServletConfig</td>
+                        <td>Contains initialization parameters for the specific JSP page.</td>
+                    </tr>
+                    <tr>
+                        <td><code>pageContext</code></td>
+                        <td>PageContext</td>
+                        <td>Provides access to all other implicit objects and manages page attributes.</td>
+                    </tr>
+                    <tr>
+                        <td><code>page</code></td>
+                        <td>Object (this)</td>
+                        <td>Refers to the current JSP instance (rarely used).</td>
+                    </tr>
+                    <tr>
+                        <td><code>exception</code></td>
+                        <td>Throwable</td>
+                        <td>Used for Error Handling. (Only available in pages marked as Error Pages).</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>3. Code Example using Implicit Objects</h3>
+<pre><code>&lt;html&gt;
+&lt;body&gt;
+    &lt;h2&gt;Implicit Objects Example&lt;/h2&gt;
+
+    &lt;%
+        // 1. Using 'request' to get a value from a form submission
+        String username = request.getParameter("uname");
+        
+        // 2. Using 'session' to save the username for later
+        if (username != null) {
+            session.setAttribute("savedUser", username);
+        }
+        
+        // 3. Using 'out' to print a custom message inside the scriptlet
+        out.println("&lt;p&gt;Checking login status...&lt;/p&gt;");
+    %&gt;
+
+    &lt;!-- Accessing session data later using expression --&gt;
+    &lt;p&gt;Welcome back, &lt;%= session.getAttribute("savedUser") %&gt;!&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+                <h4>Explanation:</h4>
+                <ul>
+                    <li><code>request.getParameter()</code> reads the data sent by the browser. We didn't create <code>request</code>, it was provided automatically.</li>
+                    <li><code>session.setAttribute()</code> stores the user's name so it won't be forgotten if they click a link to another page.</li>
+                    <li><code>out.println()</code> writes HTML directly from the Java logic block.</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 31</h3>
+                <ul>
+                    <li><strong>Implicit Objects:</strong> Ready-to-use variables provided by Tomcat/Container.</li>
+                    <li><strong>Most Used:</strong> <code>request</code>, <code>response</code>, <code>session</code>, <code>out</code>.</li>
+                    <li><strong>exception:</strong> The only implicit object that is NOT available on every page by default. It requires <code>isErrorPage="true"</code>.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 32 -->
+        <section id="lec32">
+            <h2>Lecture 32: JSP Standard Actions</h2>
+
+            <div class="card">
+                <h3>1. What are Standard Actions?</h3>
+                <p><strong>Technical Definition:</strong> JSP Standard Actions are XML-like tags built into JSP that control the behavior of the JSP engine. They are used for common tasks like including other files, forwarding requests, and interacting with JavaBeans without writing raw Java code.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    JSP ka main maqsad HTML se Java code ko kam karna hai. Agar aapko ek page se doosre page par jana ho, ya ek common header file har page mein add karni ho, tou Java code (Scriptlet) likhne ke bajaye aap Action Tags use kar sakte hain. Inki shakal bilkul HTML tags jaisi hoti hai (jaise <code>&lt;jsp:include&gt;</code>) jo designers ke liye asaan hota hai.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. Important Action Tags</h3>
+                
+                <h4>A. <code>&lt;jsp:include&gt;</code></h4>
+                <p>Includes a static or dynamic file at <strong>request time</strong>. If the included file changes, the changes appear immediately without restarting.</p>
+                <div class="syntax-box">&lt;jsp:include page="header.jsp" /&gt;</div>
+
+                <h4>B. <code>&lt;jsp:forward&gt;</code></h4>
+                <p>Forwards the user's request from the current JSP page to another JSP, Servlet, or HTML page. The URL in the browser does NOT change.</p>
+                <div class="syntax-box">&lt;jsp:forward page="login.jsp" /&gt;</div>
+
+                <h4>C. <code>&lt;jsp:param&gt;</code></h4>
+                <p>Used inside <code>&lt;jsp:include&gt;</code> or <code>&lt;jsp:forward&gt;</code> to pass extra data to the target page.</p>
+                <div class="syntax-box">
+                    &lt;jsp:forward page="profile.jsp"&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;jsp:param name="status" value="success" /&gt;<br>
+                    &lt;/jsp:forward&gt;
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>3. Action Tags vs Directives (Exam Question)</h3>
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th><code>&lt;jsp:include&gt;</code> (Action Tag)</th>
+                        <th><code>&lt;%@ include %&gt;</code> (Directive)</th>
+                    </tr>
+                    <tr>
+                        <td><strong>When does it happen?</strong></td>
+                        <td>At <strong>Request time</strong> (when user visits the page).</td>
+                        <td>At <strong>Translation time</strong> (when JSP converts to Servlet).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dynamic Updates?</strong></td>
+                        <td>Yes, changes in the included file show immediately.</td>
+                        <td>No, changing the included file requires recompiling the main JSP.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Best For:</strong></td>
+                        <td>Dynamic content (like menus, sidebars).</td>
+                        <td>Static content (like copyright footers, CSS links).</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="info-box rules">
+                <strong>Syntax Rule:</strong> Standard Actions follow XML rules. This means every tag MUST be closed properly either like <code>&lt;jsp:forward&gt; ... &lt;/jsp:forward&gt;</code> or self-closed like <code>&lt;jsp:include /&gt;</code>.
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 32</h3>
+                <ul>
+                    <li><strong>Standard Actions:</strong> XML-styled tags to reduce Java code in JSP.</li>
+                    <li><strong>jsp:include:</strong> Request-time inclusion of files.</li>
+                    <li><strong>jsp:forward:</strong> Transfers processing to another page.</li>
+                    <li><strong>jsp:param:</strong> Sends parameters to the forwarded/included page.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 33 -->
+        <section id="lec33">
+            <h2>Lecture 33: JavaBeans & JSP (The MVC Approach)</h2>
+
+            <div class="card">
+                <h3>1. What is a JavaBean?</h3>
+                <p><strong>Technical Definition:</strong> A JavaBean is a standard, reusable Java class used to encapsulate many objects into a single object (the bean). In Web Development, it is used as a "Model" to hold data temporarily (like a Student's data) between the database and the JSP UI.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    JavaBean koi nayi language ya technology nahi hai, yeh sirf ek simple Java class likhne ka standard tareeqa hai. Agar humare paas form mein 10 inputs hain (name, age, address, etc.), tou JSP mein 10 alag variables banane ke bajaye, hum ek "UserBean" class banate hain. Us class ka object saara data apne andar save kar leta hai. Yeh code ko saaf aur maintainable banata hai.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. Rules to create a JavaBean</h3>
+                <p>To qualify as a JavaBean, a Java class MUST follow three strict rules:</p>
+                <ol>
+                    <li>It must have a <strong>public default (no-argument) constructor</strong>.</li>
+                    <li>All variables (attributes) must be <strong>private</strong>.</li>
+                    <li>It must have <strong>public Getter and Setter methods</strong> for all variables.</li>
+                </ol>
+                
+                <div class="syntax-box">
+<pre><code>// EmployeeBean.java
+public class EmployeeBean {
+    private String name; // Private attribute
+
+    public EmployeeBean() {} // No-arg constructor
+
+    // Public Setter
+    public void setName(String n) { this.name = n; }
+
+    // Public Getter
+    public String getName() { return this.name; }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>3. Using JavaBeans in JSP (Action Tags)</h3>
+                <p>JSP provides three special Standard Actions specifically to work with Beans without writing scriptlet Java code.</p>
+
+                <h4>1. <code>&lt;jsp:useBean&gt;</code></h4>
+                <p>Creates an object (instance) of the JavaBean class.</p>
+                <div class="syntax-box">&lt;jsp:useBean id="emp" class="EmployeeBean" scope="request" /&gt;</div>
+                <p><em>(Equivalent Java: <code>EmployeeBean emp = new EmployeeBean();</code>)</em></p>
+
+                <h4>2. <code>&lt;jsp:setProperty&gt;</code></h4>
+                <p>Sets the value of a property inside the Bean.</p>
+                <div class="syntax-box">&lt;jsp:setProperty name="emp" property="name" value="Ali" /&gt;</div>
+                <p><em>(Equivalent Java: <code>emp.setName("Ali");</code>)</em></p>
+
+                <h4>3. <code>&lt;jsp:getProperty&gt;</code></h4>
+                <p>Gets the value from the Bean and prints it on the screen.</p>
+                <div class="syntax-box">&lt;jsp:getProperty name="emp" property="name" /&gt;</div>
+                <p><em>(Equivalent Java: <code>out.print(emp.getName());</code>)</em></p>
+            </div>
+
+            <div class="card">
+                <h3>4. Complete Example</h3>
+<pre><code>&lt;!-- 1. Instantiate the Bean --&gt;
+&lt;jsp:useBean id="user" class="MyPackage.UserBean" /&gt;
+
+&lt;!-- 2. Suppose a form was submitted, we capture 'username' --&gt;
+&lt;jsp:setProperty name="user" property="name" param="username" /&gt;
+
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h2&gt;JavaBeans Demo&lt;/h2&gt;
+    
+    &lt;!-- 3. Display the stored data --&gt;
+    &lt;p&gt;The logged-in user is: 
+       &lt;strong&gt; &lt;jsp:getProperty name="user" property="name" /&gt; &lt;/strong&gt;
+    &lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+                <h4>Explanation:</h4>
+                <ul>
+                    <li><code>useBean</code> creates the object named "user".</li>
+                    <li><code>setProperty</code> looks for an HTML form parameter called "username" and automatically passes it to the Bean's <code>setName()</code> method.</li>
+                    <li><code>getProperty</code> calls the Bean's <code>getName()</code> method and prints the output in the paragraph tag.</li>
+                </ul>
+            </div>
+
+            <div class="info-box mistakes">
+                <strong>Magic Syntax Trick:</strong> <br>
+                If your HTML form input <code>name</code> attributes exactly match the JavaBean property names, you can use a shortcut to set all properties at once:<br>
+                <code>&lt;jsp:setProperty name="user" property="*" /&gt;</code>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 33</h3>
+                <ul>
+                    <li><strong>JavaBean:</strong> A reusable Java class with private fields, public getters/setters, and a no-arg constructor.</li>
+                    <li><strong>useBean:</strong> Action tag to instantiate a Bean.</li>
+                    <li><strong>setProperty:</strong> Action tag to call a setter method.</li>
+                    <li><strong>getProperty:</strong> Action tag to call a getter method and display data.</li>
+                    <li><strong>MVC Basics:</strong> Model = JavaBean, View = JSP, Controller = Servlet.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS506 Study Notes - Lectures 39 to 42</title>
+    <style>
+        :root {
+            --primary: #5b21b6; /* Deep Purple */
+            --secondary: #8b5cf6; /* Lighter Purple */
+            --accent: #f59e0b; /* Amber */
+            --bg: #f5f3ff; /* Very Light Purple Background */
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --roman-urdu-bg: #faf5ff;
+            --roman-urdu-border: #d946ef; /* Fuchsia border for Urdu */
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+            --border: #ede9fe;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            line-height: 1.6;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            padding: 20px 0;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 15px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #ede9fe;
+            text-decoration: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--secondary);
+            color: white;
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Main Content */
+        .content {
+            margin-left: 280px;
+            padding: 40px;
+            width: calc(100% - 280px);
+        }
+
+        .header-banner {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        /* Concept Cards */
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .card h3 {
+            color: var(--secondary);
+            margin-top: 0;
+        }
+
+        /* Roman Urdu Explanation Box */
+        .roman-urdu {
+            background-color: var(--roman-urdu-bg);
+            border-left: 5px solid var(--roman-urdu-border);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+            font-style: italic;
+            color: #4c1d95;
+        }
+        
+        .roman-urdu strong {
+            color: var(--roman-urdu-border);
+            font-style: normal;
+        }
+
+        /* Syntax & Code Blocks */
+        .syntax-box {
+            background-color: #f3e8ff;
+            border: 1px solid #d8b4fe;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #6b21a8;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+
+        /* Inline Code */
+        p code, li code {
+            background-color: #f1f5f9;
+            color: #b91c1c; 
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Comparison Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid #ddd6fe;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        tr:nth-child(even) { background-color: #faf5ff; }
+
+        /* Rules & Mistakes Info Boxes */
+        .info-box {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .rules {
+            background-color: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            color: #92400e;
+        }
+
+        .mistakes {
+            background-color: #fee2e2;
+            border-left: 5px solid #ef4444;
+            color: #991b1b;
+        }
+
+        /* Quick Revision Box */
+        .revision-box {
+            background: linear-gradient(to right, #f5f3ff, #ffffff);
+            border: 2px dashed var(--secondary);
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .revision-box h3 {
+            color: var(--primary);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media(max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 10px 0; display: flex; flex-wrap: wrap; justify-content: center; }
+            .sidebar h2 { width: 100%; }
+            .sidebar a { padding: 10px 15px; font-size: 1rem; border-left: none; border-bottom: 2px solid transparent; }
+            .sidebar a:hover { border-bottom: 2px solid var(--accent); }
+            .content { margin-left: 0; width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h2>CS506 Notes</h2>
+        <a href="#lec39">Lecture 39: Intro to RMI</a>
+        <a href="#lec40">Lecture 40: RMI Architecture & Code</a>
+        <a href="#lec41">Lecture 41: Intro to EJB</a>
+        <a href="#lec42">Lecture 42: Session Beans</a>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content">
+
+        <div class="header-banner">
+            <h1>CS506 - Web Design & Development</h1>
+            <p>Study Notes for Lectures 39 to 42 (RMI & Enterprise JavaBeans)</p>
+        </div>
+
+        <!-- LECTURE 39 -->
+        <section id="lec39">
+            <h2>Lecture 39: Introduction to RMI (Remote Method Invocation)</h2>
+
+            <div class="card">
+                <h3>1. What is RMI?</h3>
+                <p><strong>Technical Definition:</strong> Remote Method Invocation (RMI) is a Java API that allows an object running in one Java Virtual Machine (JVM) to invoke methods on an object running in another JVM (even on a different physical computer over a network).</p>
+                <p><strong>Why is it used?</strong> It is the foundation for creating <strong>Distributed Applications</strong> in Java. Instead of writing complex, low-level Socket code (like we did in Lecture 21) where you have to manually parse bytes, RMI allows you to call a remote method exactly as if it were a local method.</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Normal Java mein, ek object sirf usi computer ki RAM (JVM) mein maujood doosre objects ke functions call kar sakta hai. Lekin agar aap chahein ke Lahore mein baithe ek computer (Client) ka program, Karachi mein chalte hue Server ke kisi method/function ko call kare aur result wapas laye, tou uske liye <strong>RMI</strong> use hota hai. RMI background mein sockets khud handle karta hai, aapko lagta hai jaise function aapke apne hi computer par chal raha ho.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. The RMI Architecture (Stubs & Skeletons)</h3>
+                <p>RMI hides the network complexity using two proxy objects:</p>
+                <ul>
+                    <li><strong>Stub (Client-side proxy):</strong> It acts as a gateway for the client. The client calls a method on the Stub. The Stub converts the parameters into bytes (Serialization), sends them over the network, waits for the result, and returns it to the client.</li>
+                    <li><strong>Skeleton (Server-side proxy):</strong> It listens on the server side. It receives the bytes from the Stub, converts them back to data (Deserialization), calls the actual function on the server, and sends the result back to the Stub.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>3. RMI Registry</h3>
+                <p><strong>Technical Definition:</strong> The RMI Registry is a simple directory service. The Server registers its remote objects here, giving them unique names (like a phonebook). The Client looks up the RMI registry using a name to get a reference to the Stub.</p>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 39</h3>
+                <ul>
+                    <li><strong>RMI:</strong> Remote Method Invocation. Used for distributed computing.</li>
+                    <li><strong>Stub:</strong> Client-side proxy object. Marshals (serializes) parameters.</li>
+                    <li><strong>Skeleton:</strong> Server-side proxy object. Unmarshals parameters and invokes the real method.</li>
+                    <li><strong>Registry:</strong> The phonebook where server objects are stored by name.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 40 -->
+        <section id="lec40">
+            <h2>Lecture 40: RMI Architecture & Code Implementation</h2>
+
+            <div class="card">
+                <h3>1. Steps to Create an RMI Application</h3>
+                <p>Creating an RMI application strictly follows these 5 steps:</p>
+                <ol>
+                    <li>Create a <strong>Remote Interface</strong>.</li>
+                    <li>Provide the <strong>Implementation</strong> for that interface.</li>
+                    <li>Create the <strong>Server</strong> application to host the object.</li>
+                    <li>Create the <strong>Client</strong> application to call the object.</li>
+                    <li>Generate Stubs and Skeletons using the <strong>rmic</strong> tool.</li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h3>2. RMI Code Example (Step-by-Step)</h3>
+                
+                <h4>Step 1: The Remote Interface</h4>
+                <p>Must extend <code>java.rmi.Remote</code> and every method must throw <code>RemoteException</code>.</p>
+<pre><code>import java.rmi.*;
+
+// 1. Interface must extend Remote
+public interface Calculator extends Remote {
+    // 2. All methods must throw RemoteException
+    public int add(int a, int b) throws RemoteException;
+}
+</code></pre>
+
+                <h4>Step 2: The Implementation Class</h4>
+                <p>Must extend <code>UnicastRemoteObject</code> so it can be exported to the network.</p>
+<pre><code>import java.rmi.server.*;
+import java.rmi.*;
+
+// 1. Extend UnicastRemoteObject and implement our interface
+public class CalculatorImpl extends UnicastRemoteObject implements Calculator {
+    
+    // 2. Default constructor throwing RemoteException is mandatory
+    public CalculatorImpl() throws RemoteException {
+        super();
+    }
+    
+    // 3. The actual business logic
+    public int add(int a, int b) throws RemoteException {
+        return a + b;
+    }
+}
+</code></pre>
+
+                <h4>Step 3: The Server</h4>
+<pre><code>import java.rmi.*;
+
+public class RMIServer {
+    public static void main(String args[]) {
+        try {
+            // 1. Create the remote object
+            Calculator stub = new CalculatorImpl();
+            
+            // 2. Bind (register) it in the RMI Registry with a unique name
+            Naming.rebind("rmi://localhost:1099/MyCalc", stub);
+            
+            System.out.println("Server is Ready!");
+        } catch(Exception e) { System.out.println(e); }
+    }
+}
+</code></pre>
+
+                <h4>Step 4: The Client</h4>
+<pre><code>import java.rmi.*;
+
+public class RMIClient {
+    public static void main(String args[]) {
+        try {
+            // 1. Lookup the object in the registry using the exact name
+            Calculator remoteObj = (Calculator) Naming.lookup("rmi://localhost:1099/MyCalc");
+            
+            // 2. Call the method as if it's running locally!
+            int result = remoteObj.add(10, 20);
+            System.out.println("Result from server: " + result);
+            
+        } catch(Exception e) { System.out.println(e); }
+    }
+}
+</code></pre>
+            </div>
+
+            <div class="info-box rules">
+                <strong>Important Rule (rmic tool):</strong>
+                After compiling your <code>.java</code> files into <code>.class</code> files, you MUST run a special command in the terminal/command prompt: <code>rmic CalculatorImpl</code>. This generates the internal Stub and Skeleton files required by RMI. (Note: In newer Java versions this is automated, but it is a core exam point in CS506).
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 40</h3>
+                <ul>
+                    <li><strong>java.rmi.Remote:</strong> Interface required for remote methods.</li>
+                    <li><strong>RemoteException:</strong> Must be thrown by all remote methods to handle network failures.</li>
+                    <li><strong>UnicastRemoteObject:</strong> Class used to export the object to the RMI runtime.</li>
+                    <li><strong>Naming.rebind():</strong> Used by server to register the object.</li>
+                    <li><strong>Naming.lookup():</strong> Used by client to find the object.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 41 -->
+        <section id="lec41">
+            <h2>Lecture 41: Introduction to EJB (Enterprise JavaBeans)</h2>
+
+            <div class="card">
+                <h3>1. What is EJB?</h3>
+                <p><strong>Technical Definition:</strong> Enterprise JavaBeans (EJB) is a server-side component architecture for Java Enterprise Edition (Java EE). It encapsulates the business logic of an application and runs inside a special environment called an <strong>EJB Container</strong> (like JBoss or GlassFish).</p>
+                
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Jab aap koi bohat bada software banate hain (jaise Bank ka system), tou sirf business logic likhna kafi nahi hota. Aapko Security, Database Transactions, Multiple users ka load (Concurrency), aur network connection bhi khud code karna parta hai. <strong>EJB</strong> yeh saari extra tension khatam kar deta hai. EJB ka "Container" security aur memory khud handle karta hai, developer sirf business rules (e.g. account se paise minus karna) likhne par focus karta hai.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. Standard JavaBeans vs Enterprise JavaBeans (EJB)</h3>
+                <p>This is a crucial comparison for exams.</p>
+                <table>
+                    <tr>
+                        <th>Standard JavaBean (Lecture 33)</th>
+                        <th>Enterprise JavaBean (EJB)</th>
+                    </tr>
+                    <tr>
+                        <td>Runs in a standard JVM (client or basic server).</td>
+                        <td>Requires an Enterprise Server/EJB Container (e.g., GlassFish).</td>
+                    </tr>
+                    <tr>
+                        <td>Used as a simple Data Structure (Model) to carry data.</td>
+                        <td>Used to write heavy Business Logic and Distributed systems.</td>
+                    </tr>
+                    <tr>
+                        <td>Developer handles thread safety and transactions.</td>
+                        <td>Container automatically manages transactions and concurrency.</td>
+                    </tr>
+                    <tr>
+                        <td>Does not support Remote network calls by default.</td>
+                        <td>Built specifically to be called remotely (RMI is used internally).</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>3. Types of Enterprise Beans</h3>
+                <ul>
+                    <li><strong>Session Beans:</strong> Perform tasks for a client (business logic). Can be Stateful or Stateless.</li>
+                    <li><strong>Entity Beans:</strong> Represent persistent data stored in a database (like a row in a table). <i>(Note: Largely replaced by JPA in modern Java, but heavily tested in CS506).</i></li>
+                    <li><strong>Message-Driven Beans:</strong> Used for asynchronous communication (background processing without making the user wait).</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 41</h3>
+                <ul>
+                    <li><strong>EJB:</strong> Server-side architecture for enterprise business logic.</li>
+                    <li><strong>Container:</strong> The environment that runs EJBs and provides system-level services (security, transactions).</li>
+                    <li><strong>Separation of Logic:</strong> Developers write logic; Container handles middleware services.</li>
+                    <li><strong>Three Types:</strong> Session, Entity, and Message-Driven Beans.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LECTURE 42 -->
+        <section id="lec42">
+            <h2>Lecture 42: EJB Architecture & Session Beans</h2>
+
+            <div class="card">
+                <h3>1. EJB Component Architecture (EJB 2.x Model)</h3>
+                <p>Writing an EJB is more complex than a standard class. In the classic EJB model taught in CS506, one EJB component requires three different files:</p>
+                
+                <ol>
+                    <li><strong>Remote Interface:</strong> Contains the business methods that the client can call (e.g., <code>depositMoney()</code>).</li>
+                    <li><strong>Home Interface:</strong> Contains lifecycle methods. Used by the client to <code>create()</code>, find, or remove the EJB object.</li>
+                    <li><strong>Bean Class:</strong> The actual Java code that implements the logic.</li>
+                </ol>
+
+                <div class="roman-urdu">
+                    <strong>Roman Urdu Explanation:</strong>
+                    Client seedha EJB ki class (Bean) ko haath nahi laga sakta. Agar client ko EJB use karni hai, tou wo pehle <strong>Home Interface</strong> se kehta hai "Mujhe ek EJB create kar ke do". Jab EJB ban jati hai, tou client uske functions ko <strong>Remote Interface</strong> ke zariye call karta hai. Yeh strict rules isliye hain taake EJB Container in calls ke darmayan apni security aur transactions apply kar sake.
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. Deep Dive: Session Beans</h3>
+                <p>Session beans execute tasks for a specific client. They are divided into two main categories:</p>
+
+                <h4>A. Stateless Session Beans</h4>
+                <p><strong>Definition:</strong> A bean that does NOT maintain a conversational state with the client. When a client calls a method, the bean executes it and forgets everything about the client immediately after.</p>
+                <p><strong>Use Case:</strong> Credit card verification, converting Fahrenheit to Celsius, Calculator. (Tasks that only depend on the input parameters of that specific method).</p>
+                <p><strong>Advantage:</strong> Highly scalable. The server can use a pool of 10 beans to serve 100 clients, picking a random bean for every request.</p>
+
+                <h4>B. Stateful Session Beans</h4>
+                <p><strong>Definition:</strong> A bean that maintains a conversational state (memory) with a specific client across multiple method calls. The container assigns a unique bean instance to a specific client.</p>
+                <p><strong>Use Case:</strong> Shopping Cart (where adding Item 1 and Item 2 across different clicks must be remembered by the server).</p>
+                <p><strong>Disadvantage:</strong> Consumes more RAM. The server must keep the bean alive as long as the client is active.</p>
+            </div>
+
+            <div class="info-box mistakes">
+                <strong>Important Rules / Exam Tips:</strong>
+                <ul>
+                    <li><strong>Lifecycle difference:</strong> Stateless beans only have two states: <i>Does Not Exist</i> and <i>Method-Ready</i>. Stateful beans have three: <i>Does Not Exist</i>, <i>Method-Ready</i>, and <i>Passivated (Sleeping in hard drive to save RAM)</i>.</li>
+                    <li><strong>EJB uses RMI internally:</strong> You don't have to write Stub and Skeleton code manually in EJB; the EJB container handles the RMI network communication for you automatically.</li>
+                </ul>
+            </div>
+
+            <div class="revision-box">
+                <h3>Quick Revision - Lecture 42</h3>
+                <ul>
+                    <li><strong>Home Interface:</strong> Used for creating/finding beans.</li>
+                    <li><strong>Remote Interface:</strong> Used for executing business logic.</li>
+                    <li><strong>Stateless Bean:</strong> No memory of past requests. Fast, scalable. (e.g., Calculator).</li>
+                    <li><strong>Stateful Bean:</strong> Remembers past requests for a specific client. Uses more memory. (e.g., Shopping Cart).</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>
